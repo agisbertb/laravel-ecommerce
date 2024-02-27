@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +39,6 @@ Route::middleware([
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
-Route::get('/categories', [ProductController::class, 'index'])->name('categories');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 
-Route::get('/tags', [ProductController::class, 'index'])->name('tags');
+Route::get('/tags', [TagController::class, 'index'])->name('tags');

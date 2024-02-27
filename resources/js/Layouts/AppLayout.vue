@@ -57,11 +57,11 @@ const logout = () => {
                                 </NavLink>
                                 
                                 <NavLink :href="route('categories')" :active="route().current('categories')">
-                                    Dashboard
+                                    Categories
                                 </NavLink>
                                 
                                 <NavLink :href="route('tags')" :active="route().current('tags')">
-                                    Products
+                                    Tags
                                 </NavLink>
 
                             </div>
@@ -213,11 +213,11 @@ const logout = () => {
                         </ResponsiveNavLink>
 
                         <ResponsiveNavLink :href="route('categories')" :active="route().current('categories')">
-                            Products
+                            Categories
                         </ResponsiveNavLink>
                         
                         <ResponsiveNavLink :href="route('tags')" :active="route().current('tags')">
-                            Products
+                            Tags
                         </ResponsiveNavLink>
 
                     </div>
