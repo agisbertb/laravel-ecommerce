@@ -11,7 +11,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+        return Inertia::render('Tags/Index', ['tags' => $tags]);
     }
 
     /**

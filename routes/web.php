@@ -36,3 +36,7 @@ Route::middleware([
 });
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+
+Route::get('/categories', [ProductController::class, 'index'])->name('categories');
+
+Route::get('/tags', [ProductController::class, 'index'])->name('tags');

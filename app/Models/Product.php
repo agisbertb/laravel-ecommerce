@@ -29,11 +29,11 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_product');
+        return $this->belongsToMany(Category::class);
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'product_tags');
+        return $this->belongsToMany(Tag::class);
     }
 }
