@@ -1,6 +1,12 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { Link } from '@inertiajs/inertia-vue3'
+
+
+const props = defineProps({
+  tags: Array,
+});
+
 </script>
 
 <template>
@@ -32,28 +38,38 @@ import { Head, Link } from '@inertiajs/inertia-vue3'
               <table class="min-w-full divide-y divide-gray-300">
                 <thead class="bg-gray-50">
                   <tr>
+                    <th scope="col"
+                      class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-center text-gray-900 sm:pl-6">Id</th>
                     <th scope="col" class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Name
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                       Description</th>
-                      
                   </tr>
-                
+
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
                   <tr v-for="tag in tags" :key="tag.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+
                     <td class="border-t">
-                      
-                      <Link class="flex items-center px-6 py-4 focus:text-indigo-500" :href="`/tags/${tag.id}/edit`">
+                      <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
+                        :href="`/tags/${tag.id}/edit`">
+                      {{ tag.id }}
+                      </Link>
+                    </td>
+
+                    <td class="border-t">
+                      <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
+                        :href="`/tags/${tag.id}/edit`">
                       {{ tag.name }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex items-center px-6 py-4" :href="`/tags/${tag.id}/edit`" tabindex="-1">
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/tags/${tag.id}/edit`"
+                        tabindex="-1">
                       {{ tag.description }}
                       </Link>
+
                     </td>
-                    
                   </tr>
                 </tbody>
               </table>
@@ -63,15 +79,5 @@ import { Head, Link } from '@inertiajs/inertia-vue3'
       </div>
     </div>
 
-
-
   </AppLayout>
 </template>
-  
-<script>
-export default {
-  props: {
-    tags: Array,
-  },
-}
-</script>

@@ -83,6 +83,6 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-    return redirect()->route('tags.index');
+        return redirect()->route('tags.index');
     }
 }
