@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -22,7 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Products/Create');
     }
 
     /**
@@ -30,7 +31,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'price' => 'required|numeric',
+        //    'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|numeric',
+            'image' => 'nullable|image|max:1024',
+        ]);
+
+        $product = Product::create($request->all());
+
+        return Redirect::route('products.index');
     }
 
     /**
@@ -38,7 +50,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //    $tag = Tag::findOrFail($id);
+        //    return Inertia::render('Products/Show', ['product' => $product]);
     }
 
     /**
@@ -46,7 +59,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::find($id);
+        return Inertia::render('Products/Edit', ['product' => $product]);
     }
 
     /**
@@ -54,7 +68,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'price' => 'required|numeric',
+        //    'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|numeric',
+            'image' => 'nullable|image|max:1024',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -62,6 +88,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('products.index');
     }
 }
