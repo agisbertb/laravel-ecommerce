@@ -37,8 +37,24 @@ Route::middleware([
     })->name('dashboard');
 });
 
+// products route
+
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+
+// categories route
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 
-Route::get('/tags', [TagController::class, 'index'])->name('tags');
+// tags route
+
+Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
+Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+//Route::get('/tags/{id}', [TagController::class, 'show'])->name('tags.show');
+Route::get('/tags/{id}/edit', [TagController::class, 'edit'])->name('tags.edit');
+
+Route::put('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
+Route::delete('/tags/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
+
+
+

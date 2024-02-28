@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TagController extends Controller
@@ -22,7 +23,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Tags/Create');
     }
 
     /**
@@ -30,7 +31,14 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+        ]);
+
+        $tag = Tag::create($request->all());
+
+        return Redirect::route('tags.index');
     }
 
     /**
@@ -38,7 +46,8 @@ class TagController extends Controller
      */
     public function show(string $id)
     {
-        //
+    //    $tag = Tag::findOrFail($id);
+    //    return Inertia::render('Tags/Show', ['tag' => $tag]);
     }
 
     /**
@@ -46,7 +55,8 @@ class TagController extends Controller
      */
     public function edit(string $id)
     {
-        //
+     $tag = Tag::find($id);
+     return Inertia::render('Tags/Edit', ['tag' => $tag]);
     }
 
     /**
@@ -54,7 +64,15 @@ class TagController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+        ]);
+
+        $tag = Tag::findOrFail($id);
+        $tag->update($request->all());
+
+        return redirect()->route('tags.index');
     }
 
     /**
@@ -62,6 +80,9 @@ class TagController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+
+    return redirect()->route('tags.index');
     }
 }

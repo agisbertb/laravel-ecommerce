@@ -60,7 +60,7 @@ const logout = () => {
                                     Categories
                                 </NavLink>
                                 
-                                <NavLink :href="route('tags')" :active="route().current('tags')">
+                                <NavLink :href="route('tags.index')" :active="route().current('tags.index')">
                                     Tags
                                 </NavLink>
 
@@ -216,7 +216,7 @@ const logout = () => {
                             Categories
                         </ResponsiveNavLink>
                         
-                        <ResponsiveNavLink :href="route('tags')" :active="route().current('tags')">
+                        <ResponsiveNavLink :href="route('tags.index')" :active="route().current('tags.index')">
                             Tags
                         </ResponsiveNavLink>
 
