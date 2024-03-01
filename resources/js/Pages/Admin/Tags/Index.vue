@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 
 
 const props = defineProps({
-  categories: Array,
+  tags: Array,
 });
 
 </script>
@@ -13,21 +13,21 @@ const props = defineProps({
   <AppLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Categories
+        Tags
       </h2>
     </template>
 
     <div class="p-16 px-4 sm:px-6 lg:px-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <h1 class="text-base font-semibold leading-6 text-gray-900">Categories</h1>
+          <h1 class="text-base font-semibold leading-6 text-gray-900">Tags</h1>
           <p class="mt-2 text-sm text-gray-700">bla bla bla</p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <a href="/categories/create">
+          <a href="/admin/tags/create">
             <button type="button"
               class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
-              category</button>
+              Tag</button>
           </a>
         </div>
       </div>
@@ -48,27 +48,27 @@ const props = defineProps({
 
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
-                  <tr v-for="category in categories" :key="category.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+                  <tr v-for="tag in tags" :key="tag.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
 
                     <td class="border-t">
                       <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
-                        :href="`/categories/${category.id}/edit`">
-                      {{ category.id }}
+                        :href="`/admin/tags/${tag.id}/edit`">
+                      {{ tag.id }}
                       </Link>
                     </td>
 
                     <td class="border-t">
                       <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
-                        :href="`/categories/${category.id}/edit`">
-                      {{ category.name }}
+                        :href="`/admin/tags/${tag.id}/edit`">
+                      {{ tag.name }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex justify-center items-center px-6 py-4" :href="`/categories/${category.id}/edit`"
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/tags/${tag.id}/edit`"
                         tabindex="-1">
-                      {{ category.description }}
+                      {{ tag.description }}
                       </Link>
-                      
+
                     </td>
                   </tr>
                 </tbody>

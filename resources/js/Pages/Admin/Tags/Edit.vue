@@ -16,12 +16,12 @@ const form = useForm({
 });
 
 const update = () => {
-  form.put(`/tags/${props.tag.id}`);
+  form.put(`/admin/tags/${props.tag.id}`);
 };
 
 const destroy = () => {
   if (confirm('Are you sure you want to delete this tag?')) {
-    form.delete(`/tags/${props.tag.id}`);
+    form.delete(`/admin/tags/${props.tag.id}`);
   }
 };
 </script>
@@ -38,7 +38,7 @@ const destroy = () => {
 
         <Head title="Update Tag" />
         <h1 class="mb-8 text-3xl font-bold">
-          <Link :href="route('tags.index')" class="text-indigo-400 hover:text-indigo-600">Tags</Link>
+          <Link :href="route('admin.tags.index')" class="text-indigo-400 hover:text-indigo-600">Tags</Link>
           <span class="text-indigo-400 font-medium">/</span> Update
         </h1>
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">

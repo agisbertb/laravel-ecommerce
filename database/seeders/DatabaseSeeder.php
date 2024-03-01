@@ -25,9 +25,17 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         User::create([
-            'name' => 'Test User',
+            'name' => 'Admin User',
             'email' => 'agisbert@iesebre.com',
             'password' => Hash::make('12345678'),
+            'admin' => 1,
+        ]);
+
+        User::create([
+            'name' => 'Test User',
+            'email' => 'pringao@iesebre.com',
+            'password' => Hash::make('12345678'),
+            'admin' => null,
         ]);
 
         $categories = [

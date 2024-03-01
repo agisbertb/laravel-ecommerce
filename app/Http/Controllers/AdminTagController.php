@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class TagController extends Controller
+class AdminTagController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::all();
-        return Inertia::render('Tags/Index', ['tags' => $tags]);
+        return Inertia::render('Admin/Tags/Index', ['tags' => $tags]);
     }
 
     /**
@@ -23,7 +23,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Tags/Create');
+        return Inertia::render('Admin/Tags/Create');
     }
 
     /**
@@ -38,7 +38,7 @@ class TagController extends Controller
 
         $tag = Tag::create($request->all());
 
-        return Redirect::route('tags.index');
+        return Redirect::route('admin.tags.index');
     }
 
     /**
@@ -47,7 +47,7 @@ class TagController extends Controller
     public function show(string $id)
     {
     //    $tag = Tag::findOrFail($id);
-    //    return Inertia::render('Tags/Show', ['tag' => $tag]);
+    //    return Inertia::render('Admin/Tags/Show', ['tag' => $tag]);
     }
 
     /**
@@ -56,7 +56,7 @@ class TagController extends Controller
     public function edit(string $id)
     {
      $tag = Tag::find($id);
-     return Inertia::render('Tags/Edit', ['tag' => $tag]);
+     return Inertia::render('Admin/Tags/Edit', ['tag' => $tag]);
     }
 
     /**
@@ -72,7 +72,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->update($request->all());
 
-        return redirect()->route('tags.index');
+        return redirect()->route('admin.tags.index');
     }
 
     /**
@@ -83,6 +83,6 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return redirect()->route('tags.index');
+        return redirect()->route('admin.tags.index');
     }
 }

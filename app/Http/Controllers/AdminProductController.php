@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return Inertia::render('Products/Index', ['products' => $products]);
+        return Inertia::render('Admin/Products/Index', ['products' => $products]);
     }
 
     /**
@@ -23,7 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Products/Create');
+        return Inertia::render('Admin/Products/Create');
     }
 
     /**
@@ -42,7 +42,7 @@ class ProductController extends Controller
 
         $product = Product::create($request->all());
 
-        return Redirect::route('products.index');
+        return Redirect::route('admin.products.index');
     }
 
     /**
@@ -51,7 +51,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         //    $tag = Tag::findOrFail($id);
-        //    return Inertia::render('Products/Show', ['product' => $product]);
+        //    return Inertia::render('Admin/Products/Show', ['product' => $product]);
     }
 
     /**
@@ -60,7 +60,7 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::find($id);
-        return Inertia::render('Products/Edit', ['product' => $product]);
+        return Inertia::render('Admin/Products/Edit', ['product' => $product]);
     }
 
     /**
@@ -80,7 +80,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->update($request->all());
 
-        return redirect()->route('products.index');
+        return redirect()->route('admin.products.index');
     }
 
     /**
@@ -91,6 +91,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index');
+        return redirect()->route('admin.products.index');
     }
 }

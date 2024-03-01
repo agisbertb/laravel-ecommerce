@@ -7,15 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class CategoryController extends Controller
+class AdminCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::all();
-        return Inertia::render('Categories/Index', ['categories' => $categories]);
+        $categories = Category::with('parent')->get();
+        return Inertia::render('Admin/Categories/Index', ['categories' => $categories]);
     }
 
     /**
@@ -23,7 +23,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Categories/Create');
+        $categories = Category::all();
+        return Inertia::render('Admin/Categories/Create', [
+        'categories' => $categories
+    ]);
     }
 
     /**
@@ -34,11 +37,12 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         $category = Category::create($request->all());
 
-        return Redirect::route('categories.index');
+        return Redirect::route('admin.categories.index');
     }
 
     /**
@@ -47,7 +51,7 @@ class CategoryController extends Controller
     public function show(string $id)
     {
     //    $category = Category::findOrFail($id);
-    //    return Inertia::render('Categories/Show', ['category' => $category]);
+    //    return Inertia::render('Admin/Categories/Show', ['category' => $category]);
     }
 
     /**
@@ -56,7 +60,8 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category = Category::find($id);
-        return Inertia::render('Categories/Edit', ['category' => $category]);
+        $categories = Category::where('parent_id', null)->get();
+        return Inertia::render('Admin/Categories/Edit', ['category' => $category, 'categories' => $categories]);
     }
 
     /**
@@ -67,12 +72,13 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         $category = Category::findOrFail($id);
         $category->update($request->all());
 
-        return redirect()->route('categories.index');
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -83,6 +89,6 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return redirect()->route('categories.index');
+        return redirect()->route('admin.categories.index');
     }
 }

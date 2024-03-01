@@ -14,7 +14,7 @@ const form = useForm({
 });
 
 const store = () => {
-  form.post('/products');
+  form.post('/admin/products');
 };
 </script>
 
@@ -30,7 +30,7 @@ const store = () => {
 
         <Head title="Create product" />
         <h1 class="mb-8 text-3xl font-bold">
-          <Link :href="route('products.index')" class="text-indigo-400 hover:text-indigo-600">products</Link>
+          <Link :href="route('admin.products.index')" class="text-indigo-400 hover:text-indigo-600">products</Link>
           <span class="text-indigo-400 font-medium">/</span> Create
         </h1>
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">

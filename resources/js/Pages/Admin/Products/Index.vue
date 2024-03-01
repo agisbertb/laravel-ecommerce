@@ -24,7 +24,7 @@ const props = defineProps({
           <p class="mt-2 text-sm text-gray-700">bla bla bla</p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <a href="/products/create">
+          <a href="/admin/products/create">
             <button type="button"
               class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
               product</button>
@@ -57,37 +57,37 @@ const props = defineProps({
 
                     <td class="border-t">
                       <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
-                        :href="`/pro/${product.id}/edit`">
+                        :href="`/admin/products/${product.id}/edit`">
                       {{ product.id }}
                       </Link>
                     </td>
 
                     <td class="border-t">
                       <Link class="flex justify-center items-center px-6 py-4 focus:text-indigo-500"
-                        :href="`/products/${product.id}/edit`">
+                        :href="`/admin/products/${product.id}/edit`">
                       {{ product.name }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex justify-center items-center px-6 py-4" :href="`/products/${product.id}/edit`"
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/products/${product.id}/edit`"
                         tabindex="-1">
                       {{ product.description }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex justify-center items-center px-6 py-4" :href="`/products/${product.id}/edit`"
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/products/${product.id}/edit`"
                         tabindex="-1">
                       {{ product.price }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex justify-center items-center px-6 py-4" :href="`/products/${product.id}/edit`"
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/products/${product.id}/edit`"
                         tabindex="-1">
                       {{ product.stock }}
                       </Link>
                     </td>
                     <td class="border-t">
-                      <Link class="flex justify-center items-center px-6 py-4" :href="`/products/${product.id}/edit`"
+                      <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/products/${product.id}/edit`"
                         tabindex="-1">
                       {{ product.image }}
                       </Link>
