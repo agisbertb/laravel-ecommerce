@@ -43,38 +43,37 @@ Route::get('/', function () {
 
 Route::middleware(['admin'])->group(function () {
 
-Route::get('/dashboard', function () {
+    Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-// products route
+    // admin products route
 
-Route::get('/admin/products', [AdminProductController::class, 'index'])->name('admin.products.index');
-Route::get('/admin/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
-Route::post('/admin/products', [AdminProductController::class, 'store'])->name('admin.products.store');
-//Route::get('/admin/products/{id}', [AdminProductController::class, 'show'])->name('admin.products.show');
-Route::get('/admin/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
-Route::put('/admin/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
-Route::delete('/admin/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
+    Route::get('/admin/products', [AdminProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+    //Route::get('/admin/products/{id}', [AdminProductController::class, 'show'])->name('admin.products.show');
+    Route::get('/admin/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/admin/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
 
-// categories route
+    // admin categories route
 
-Route::get('/admin/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
-Route::get('/admin/categories/create', [AdminCategoryController::class, 'create'])->name('admin.categories.create');
-Route::post('/admin/categories', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
-//Route::get('/admin/categories/{id}', [AdminCategoryController::class, 'show'])->name('admin.categories.show');
-Route::get('/admin/categories/{id}/edit', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
-Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
-Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    Route::get('/admin/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/categories/create', [AdminCategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/admin/categories', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
+    //Route::get('/admin/categories/{id}', [AdminCategoryController::class, 'show'])->name('admin.categories.show');
+    Route::get('/admin/categories/{id}/edit', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
-// tags route
+    // admin tags route
 
-Route::get('/admin/tags', [AdminTagController::class, 'index'])->name('admin.tags.index');
-Route::get('/admin/tags/create', [AdminTagController::class, 'create'])->name('admin.tags.create');
-Route::post('/admin/tags', [AdminTagController::class, 'store'])->name('admin.tags.store');
-//Route::get('/admin/tags/{id}', [AdminTagController::class, 'show'])->name('admin.tags.show');
-Route::get('/admin/tags/{id}/edit', [AdminTagController::class, 'edit'])->name('admin.tags.edit');
-Route::put('/admin/tags/{id}', [AdminTagController::class, 'update'])->name('admin.tags.update');
-Route::delete('/admin/tags/{id}', [AdminTagController::class, 'destroy'])->name('admin.tags.destroy');
-
+    Route::get('/admin/tags', [AdminTagController::class, 'index'])->name('admin.tags.index');
+    Route::get('/admin/tags/create', [AdminTagController::class, 'create'])->name('admin.tags.create');
+    Route::post('/admin/tags', [AdminTagController::class, 'store'])->name('admin.tags.store');
+    //Route::get('/admin/tags/{id}', [AdminTagController::class, 'show'])->name('admin.tags.show');
+    Route::get('/admin/tags/{id}/edit', [AdminTagController::class, 'edit'])->name('admin.tags.edit');
+    Route::put('/admin/tags/{id}', [AdminTagController::class, 'update'])->name('admin.tags.update');
+    Route::delete('/admin/tags/{id}', [AdminTagController::class, 'destroy'])->name('admin.tags.destroy');
 });

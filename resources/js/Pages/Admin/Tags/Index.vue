@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3'
 
 
@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <AppLayout title="Dashboard">
+  <AdminLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Tags
@@ -79,5 +79,5 @@ const props = defineProps({
       </div>
     </div>
 
-  </AppLayout>
+  </AdminLayout>
 </template>

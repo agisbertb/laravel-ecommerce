@@ -33,19 +33,28 @@ const logout = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('welcome')">
+                                <Link :href="route('dashboard')">
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                               
-                                <NavLink :href="route('products.index')" :active="route().current('products.index')">
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                    Dashboard
+                                </NavLink>
+                                
+                                <NavLink :href="route('admin.products.index')" :active="route().current('admin.products.index')">
                                     Products
                                 </NavLink>
                                 
-
+                                <NavLink :href="route('admin.categories.index')" :active="route().current('admin.categories.index')">
+                                    Categories
+                                </NavLink>
+                                
+                                <NavLink :href="route('admin.tags.index')" :active="route().current('admin.tags.index')">
+                                    Tags
+                                </NavLink>
                             </div>
                         </div>
 

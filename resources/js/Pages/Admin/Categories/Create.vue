@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3'
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
 import { useForm } from '@inertiajs/inertia-vue3';
 
@@ -20,7 +20,7 @@ const store = () => {
 </script>
 
 <template>
-    <AppLayout title="Create categories">
+    <AdminLayout title="Create categories">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Categories
@@ -57,5 +57,5 @@ const store = () => {
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </AdminLayout>
 </template>

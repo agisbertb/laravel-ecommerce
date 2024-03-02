@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3'
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
 import { useForm } from '@inertiajs/inertia-vue3';
 import { defineProps } from 'vue';
@@ -31,7 +31,7 @@ const destroy = () => {
 </script>
 
 <template>
-  <AppLayout title="Edit products">
+  <AdminLayout title="Edit products">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Products
@@ -63,5 +63,5 @@ const destroy = () => {
         </div>
       </div>
     </div>
-  </AppLayout>
+  </AdminLayout>
 </template>
