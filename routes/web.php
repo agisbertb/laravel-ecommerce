@@ -42,6 +42,8 @@ use Inertia\Inertia;
 
 Route::get('/', [ProductController::class, 'index'])->name('welcome');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
 
 
 Route::middleware(['admin'])->group(function () {

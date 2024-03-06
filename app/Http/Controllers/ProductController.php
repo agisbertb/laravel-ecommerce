@@ -38,7 +38,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $products = Product::findOrFail($id);
+        return Inertia::render('Products/Show', ['products' => $products]);
     }
 
     /**
