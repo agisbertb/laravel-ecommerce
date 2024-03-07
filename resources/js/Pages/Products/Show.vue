@@ -1,11 +1,33 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
   products: Object,
 });
+
+const addToCart = () => {
+  console.log(props.products); 
+  if (!props.products || props.products.id === undefined) {
+    console.error('Product is undefined or lacks an ID.');
+    return;
+  }
+
+  Inertia.post('/cart/add', {
+    cartId: cartId, 
+    productId: props.products.id,
+    quantity: 1,
+    price: props.products.price,
+}, {
+    preserveScroll: true,
+    preserveState: true
+});
+
+};
+
 </script>
+
 
 <template>
   <AppLayout title="Dashboard">
@@ -25,9 +47,11 @@ const props = defineProps({
           <h1 class="text-2xl font-bold">{{ products.name }}</h1>
           <p class="text-lg">{{ products.description }}</p>
           <p class="text-xl font-semibold">${{ products.price }}</p>
-          <button class="px-6 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-700 transition duration-150 ease-in-out">
+          <button @click="addToCart"
+            class="px-6 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-700 transition duration-150 ease-in-out">
             Add to cart
           </button>
+
         </div>
       </div>
     </div>

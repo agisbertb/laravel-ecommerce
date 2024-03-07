@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class AdminTagController extends Controller
+class AdminUserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tags = Tag::all();
-        return Inertia::render('Admin/Tags/Index', ['tags' => $tags]);
+        $users = User::all();
+        return Inertia::render('Admin/Users/Index', ['users' => $users]);
     }
 
     /**
@@ -23,7 +23,7 @@ class AdminTagController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Tags/Create');
+        return Inertia::render('Admin/Users/Create');
     }
 
     /**
@@ -33,12 +33,12 @@ class AdminTagController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
         ]);
 
-        Tag::create($request->all());
+        User::create($request->all());
 
-        return Redirect::route('admin.tags.index');
+        return Redirect::route('admin.users.index');
     }
 
     /**
@@ -46,8 +46,8 @@ class AdminTagController extends Controller
      */
     public function show(string $id)
     {
-    //    $tag = Tag::findOrFail($id);
-    //    return Inertia::render('Admin/Tags/Show', ['tag' => $tag]);
+        $user = User::findOrFail($id);
+        return Inertia::render('Admin/Users/Show', ['user' => $user]);
     }
 
     /**
@@ -55,8 +55,8 @@ class AdminTagController extends Controller
      */
     public function edit(string $id)
     {
-     $tag = Tag::find($id);
-     return Inertia::render('Admin/Tags/Edit', ['tag' => $tag]);
+        $user = User::find($id);
+        return Inertia::render('Admin/Users/Edit', ['user' => $user]);
     }
 
     /**
@@ -66,13 +66,13 @@ class AdminTagController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
         ]);
 
-        $tag = Tag::findOrFail($id);
-        $tag->update($request->all());
+        $user = User::findOrFail($id);
+        $user->update($request->all());
 
-        return redirect()->route('admin.tags.index');
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -80,9 +80,9 @@ class AdminTagController extends Controller
      */
     public function destroy(string $id)
     {
-        $tag = Tag::findOrFail($id);
-        $tag->delete();
+        $user = User::findOrFail($id);
+        $user->delete();
 
-        return redirect()->route('admin.tags.index');
+        return redirect()->route('admin.users.index');
     }
 }

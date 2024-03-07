@@ -96,5 +96,7 @@ class DatabaseSeeder extends Seeder
 
         Product::insert($products);
 
+        
+
     }
 }

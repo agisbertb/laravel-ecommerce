@@ -10,7 +10,7 @@ class Address extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
+        'user_id',
         'name',
         'type',
         'address',
@@ -21,8 +21,8 @@ class Address extends Model
         'default',
     ];
 
-    public function client()
+    public function user()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
 }
