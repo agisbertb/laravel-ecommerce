@@ -14,6 +14,7 @@ class CartDetail extends Model
         'product_id',
         'quantity',
         'price',
+        'subtotal',
     ];
 
     public function cart()

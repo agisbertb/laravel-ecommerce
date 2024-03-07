@@ -41,12 +41,16 @@ use Inertia\Inertia;
 //    })->name('dashboard');
 //});
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::patch('/cart/update/{detail}', [CartController::class, 'updateCartDetail'])->name('cart.update');
+    Route::delete('/cart/remove/{detail}', [CartController::class, 'destroyCartDetail'])->name('cart.destroy');
+});
 
 Route::get('/', [ProductController::class, 'index'])->name('welcome');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-
 
 Route::middleware(['admin'])->group(function () {
    
