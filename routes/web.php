@@ -6,8 +6,7 @@ use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CartDetailController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -46,6 +45,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::patch('/cart/update/{detail}', [CartController::class, 'updateCartDetail'])->name('cart.update');
     Route::delete('/cart/remove/{detail}', [CartController::class, 'destroyCartDetail'])->name('cart.destroy');
+
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses/{id}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+
+
 });
 
 Route::get('/', [ProductController::class, 'index'])->name('welcome');
@@ -53,7 +61,7 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 Route::middleware(['admin'])->group(function () {
-   
+
     Route::get('/admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');

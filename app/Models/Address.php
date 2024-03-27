@@ -21,8 +21,20 @@ class Address extends Model
         'default',
     ];
 
+    protected $casts = [
+        'type' => AddressType::class,
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 }
+
+    enum AddressType: string
+    {
+        case Shipping = 'Shipping';
+        case Billing = 'Billing';
+    }
+
+

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -92,5 +93,49 @@ if (!function_exists('create_user')) {
 
         $user->save();
         return $user;
+    }
+
+    if (!function_exists('create_default_user_and_address')) {
+        function create_default_user_and_address()
+        {
+            $user = User::create([
+                'name' => 'User address',
+                'email' => 'useraddress@example.com',
+                'password' => Hash::make('12345678'),
+            ]);
+
+            $address = Address::create([
+                'user_id' => $user->id,
+                'name' => 'House',
+                'type' => 'Shipping',
+                'address' => 'Street 123',
+                'city' => 'Bcn',
+                'state' => 'Cat',
+                'country' => 'Spain',
+                'zip_code' => '12345',
+                'default' => true,
+            ]);
+
+            return ['user' => $user, 'address' => $address];
+        }
+    }
+
+    if (!function_exists('create_address')) {
+        function create_address($user)
+        {
+            $address = Address::create([
+                'user_id' => $user->id,
+                'name' => 'House',
+                'type' => 'Shipping',
+                'address' => 'Street 123',
+                'city' => 'Bcn',
+                'state' => 'Cat',
+                'country' => 'Spain',
+                'zip_code' => '12345',
+                'default' => true,
+            ]);
+
+            return $address;
+        }
     }
 }
