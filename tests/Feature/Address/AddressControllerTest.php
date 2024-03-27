@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Address;
+namespace Tests\Feature\Address;
 
 use App\Models\Address;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AddressController extends TestCase
+class AddressControllerTest extends TestCase
 {
 
     use RefreshDatabase;

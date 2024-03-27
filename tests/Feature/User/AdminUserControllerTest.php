@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\User;
+namespace Tests\Feature\User;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
-use App\Models\User;
 
 
 class AdminUserControllerTest extends TestCase

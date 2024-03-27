@@ -1,11 +1,9 @@
 <?php
 
-namespace Tests\Product;
+namespace Tests\Feature\Product;
 
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
