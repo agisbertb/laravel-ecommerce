@@ -1,10 +1,18 @@
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
-  cartDetails: Array
+  cartDetails: Array,
+    cartTotal: Number
+
+});
+
+const cartDetails = ref(props.cartDetails);
+
+const cartTotal = computed(() => {
+    return cartDetails.value.reduce((acc, detail) => acc + (detail.price * detail.quantity), 0);
 });
 
 const updateQuantity = (detailIndex, newQuantity) => {
@@ -27,10 +35,6 @@ const removeFromCart = (detailIndex) => {
   });
 };
 
-
-const total = computed(() => {
-  return props.cartDetails.reduce((acc, detail) => acc + (detail.price * detail.quantity), 0);
-});
 </script>
 
 <template>
@@ -78,10 +82,17 @@ const total = computed(() => {
               </button>
             </li>
           </ul>
-          <div class="px-4 py-4 flex justify-between sm:px-6">
-            <span>Total:</span>
-            <span class="font-bold">${{ total }}</span>
-          </div>
+            <div class="px-4 py-4 sm:px-6">
+                <div class="flex justify-between">
+                    <span>Total:</span>
+                    <span class="font-bold">${{ cartTotal }}</span>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <a href="/cart/address" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Checkout
+                    </a>
+                </div>
+            </div>
         </div>
       </div>
     </div>

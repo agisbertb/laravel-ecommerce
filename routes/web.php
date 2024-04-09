@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
@@ -41,10 +42,20 @@ use Inertia\Inertia;
 //});
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::patch('/cart/update/{detail}', [CartController::class, 'updateCartDetail'])->name('cart.update');
-    Route::delete('/cart/remove/{detail}', [CartController::class, 'destroyCartDetail'])->name('cart.destroy');
+
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/add', [CartController::class, 'addToCart'])->name('cart.address');
+        Route::patch('/update/{detail}', [CartController::class, 'updateCartDetail'])->name('cart.update');
+        Route::delete('/remove/{detail}', [CartController::class, 'destroyCartDetail'])->name('cart.destroy');
+
+
+        Route::get('/address', [CheckoutController::class, 'address']);
+        Route::get('/shipping', [CheckoutController::class, 'shipping']);
+        Route::get('/payment', [CheckoutController::class, 'payment']);
+        Route::get('/review', [CheckoutController::class, 'review']);
+
+    });
 
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');

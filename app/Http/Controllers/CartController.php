@@ -45,16 +45,14 @@ class CartController extends Controller
         $newQuantity = $request->input('quantity');
 
         if ($newQuantity > $detail->product->stock) {
-            return Inertia::render('Cart/Index'); // TODO add error message
+            return Inertia::render('Cart/Index');
         }
 
         $detail->quantity = $newQuantity;
-        $detail->subtotal = $detail->product->price * $newQuantity;
         $detail->save();
 
         return Inertia::render('Cart/Index');
     }
-
 
     public function destroyCartDetail($detailId)
     {

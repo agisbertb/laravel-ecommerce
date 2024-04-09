@@ -14,7 +14,6 @@ class CartDetail extends Model
         'product_id',
         'quantity',
         'price',
-        'subtotal',
     ];
 
     public function cart()
@@ -25,5 +24,10 @@ class CartDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->quantity * $this->product->price;
     }
 }
