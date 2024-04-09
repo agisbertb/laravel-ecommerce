@@ -26,12 +26,55 @@ class CheckoutController extends Controller
 
     public function shipping()
     {
-        return Inertia::render('Checkout/Shipping');
+        $user = Auth::user();
+        $cart = $user->cart;
+
+        // Fetch cart details to display products
+        $cartDetails = $cart->details->map(function ($detail) {
+            return [
+                'id' => $detail->id,
+                'product' => [
+                    'name' => $detail->product->name,
+                    'price' => $detail->price,
+                    'image' => $detail->product->image,
+                ],
+                'quantity' => $detail->quantity,
+                'subtotal' => $detail->subtotal,
+            ];
+        });
+
+        $cartTotal = $cartDetails->sum('subtotal');
+
+
+        $shippingOptions = [
+
+        ];
+
+        return Inertia::render('Checkout/Shipping', [
+            'cartDetails' => $cartDetails,
+            'cartTotal' => $cartTotal,
+            'shippingOptions' => $shippingOptions,
+        ]);
     }
+
 
     public function payment()
     {
-        return Inertia::render('Checkout/Payment');
+        $user = Auth::user();
+        $cart = $user->cart;
+
+        $cartTotal = $cart ? $cart->details->sum('subtotal') : 0;
+
+        $paymentMethods = [
+            ['id' => 'credit_card', 'name' => 'Credit or debit card'],
+            ['id' => 'paypal', 'name' => 'PayPal'],
+            ['id' => 'stripe', 'name' => 'Stripe'],
+        ];
+
+        return Inertia::render('Checkout/Payment', [
+            'cartTotal' => $cartTotal,
+            'paymentMethods' => $paymentMethods,
+        ]);
     }
 
     public function review()

@@ -84,9 +84,9 @@
                         <span class="font-bold text-lg">${{ cartTotal }}</span>
                     </div>
                 </div>
-                <button class="w-full px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <a href="/cart/shipping" class="w-full px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
                     Save and Continue
-                </button>
+                </a>
             </div>
         </div>
     </AppLayout>
