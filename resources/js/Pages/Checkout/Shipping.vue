@@ -1,3 +1,14 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    cartDetails: Array,
+    cartTotal: Number,
+    shippingOptions: Array
+});
+</script>
+
 <template>
     <AppLayout title="Shipping Options">
         <template #header>
@@ -59,14 +70,3 @@
         </div>
     </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps } from 'vue';
-
-const props = defineProps({
-    cartDetails: Array,
-    cartTotal: Number,
-    shippingOptions: Array
-});
-</script>

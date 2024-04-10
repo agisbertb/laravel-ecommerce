@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class AdminCategoryController extends Controller
@@ -42,7 +41,7 @@ class AdminCategoryController extends Controller
 
         $category = Category::create($request->all());
 
-        return Redirect::route('admin.categories.index');
+        return to_route('admin.categories.index');
     }
 
     /**
@@ -78,7 +77,7 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->update($request->all());
 
-        return redirect()->route('admin.categories.index');
+        return to_route('admin.categories.index');
     }
 
     /**
@@ -89,6 +88,6 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return redirect()->route('admin.categories.index');
+        return to_route('admin.categories.index');
     }
 }

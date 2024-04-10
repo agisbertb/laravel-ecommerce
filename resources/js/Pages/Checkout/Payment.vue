@@ -1,3 +1,18 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { ref } from 'vue';
+
+const props = defineProps({
+    cartTotal: Number,
+    paymentMethods: Array
+});
+
+const selectedPaymentMethod = ref('');
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
+};
+</script>
+
 <template>
     <AppLayout title="Payment Method">
         <template #header>
@@ -48,21 +63,3 @@
         </div>
     </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
-
-const props = defineProps({
-    cartTotal: Number,
-    paymentMethods: Array
-});
-
-
-const selectedPaymentMethod = ref('');
-
-// Format currency to display as Euro
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
-};
-</script>

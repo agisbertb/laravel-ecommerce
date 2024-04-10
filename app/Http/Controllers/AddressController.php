@@ -69,7 +69,7 @@ class AddressController extends Controller
             Address::create($validated);
         }
 
-        return redirect()->route('addresses.index');
+        return to_route('addresses.index');
     }
 
     /**
@@ -103,7 +103,7 @@ class AddressController extends Controller
         $this->authorize('update', $address);
         $address->update($request->all());
 
-        return redirect()->route('addresses.index');
+        return to_route('addresses.index');
     }
 
     /**
@@ -131,6 +131,6 @@ class AddressController extends Controller
         } else {
             $address->delete();
         }
-        return redirect()->route('addresses.index');
+        return to_route('addresses.index');
     }
 }

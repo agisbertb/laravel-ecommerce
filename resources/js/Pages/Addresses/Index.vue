@@ -1,31 +1,19 @@
 <script setup>
-import { Inertia } from '@inertiajs/inertia';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { Link, router } from '@inertiajs/vue3'
 import { defineProps } from 'vue';
 
 const props = defineProps({
   addresses: Object,
 });
 
-const handleAction = (url, method = 'get') => {
-  Inertia[method](url, {}, {
-    preserveScroll: true,
-    preserveState: true,
-    onSuccess: () => {
-      if (method !== 'get') {
-        Inertia.reload({ only: ['addresses'], preserveState: true });
-      }
-    }
-  });
-};
-
 const destroy = (id) => {
   if (confirm('Are you sure you want to delete this address?')) {
-    Inertia.delete(`/addresses/${id}`, {
+    router.delete(`/addresses/${id}`, {
       preserveScroll: true,
       preserveState: true,
       onSuccess: () => {
-        Inertia.reload({ only: ['addresses'] });
+        router.reload({ only: ['addresses'] });
       }
     });
   }
@@ -52,17 +40,14 @@ const destroy = (id) => {
             <p>{{ address.address }}</p>
             <p>{{ address.city }}, {{ address.state }}, {{ address.country }} {{ address.zip_code }}</p>
             <div class="flex justify-center space-x-2 mt-3">
-              <button @click="handleAction(`/addresses/${address.id}/edit`)"
-                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Edit</button>
+              <Link :href="`/addresses/${address.id}/edit`" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Edit</Link>
               <button @click="destroy(address.id)" class="text-red-600 hover:underline" tabindex="-1"
                 type="button">Delete</button>
             </div>
           </div>
         </div>
         <div class="flex justify-center">
-          <button @click="handleAction('/addresses/create/Shipping')"
-            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors">Add new shipping
-            address</button>
+          <Link :href="'/addresses/create/Shipping'" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors">Add new Shipping address</Link>
         </div>
       </div>
     </section>
@@ -79,17 +64,14 @@ const destroy = (id) => {
             <p>{{ address.address }}</p>
             <p>{{ address.city }}, {{ address.state }}, {{ address.country }} {{ address.zip_code }}</p>
             <div class="flex justify-center space-x-2 mt-3">
-              <button @click="handleAction(`/addresses/${address.id}/edit`)"
-                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Edit</button>
+              <Link :href="`/addresses/${address.id}/edit`" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Edit</Link>
               <button @click="destroy(address.id)" class="text-red-600 hover:underline" tabindex="-1"
                 type="button">Delete</button>
             </div>
           </div>
         </div>
         <div class="flex justify-center">
-          <button @click="handleAction('/addresses/create/Billing')"
-            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors">Add new billing
-            address</button>
+          <Link :href="'/addresses/create/Billing'" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors">Add new billing address</Link>
         </div>
       </div>
     </section>

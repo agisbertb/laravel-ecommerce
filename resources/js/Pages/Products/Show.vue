@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   products: Object,
@@ -14,7 +14,7 @@ const addToCart = () => {
     return;
   }
 
-  Inertia.post('/cart/add', {
+  router.post('/cart/add', {
     product_id: props.products.id, // Asegúrate de que este campo coincida con cómo tu backend espera recibir el ID del producto
     quantity: 1, // Este es un valor estático, puedes ajustarlo según necesites, por ejemplo, basado en una entrada del usuario
     price: props.products.price, // Asumo que el precio se maneja de esta forma, ajusta según tu modelo

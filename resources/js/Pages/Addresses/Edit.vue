@@ -1,13 +1,13 @@
 <script setup>
+import { reactive, defineProps } from 'vue';
+import { router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { useForm} from '@inertiajs/inertia-vue3';
-import { defineProps } from 'vue';
 
 const props = defineProps({
   address: Object,
 });
 
-const form = useForm({
+const form = reactive({
   id: props.address.id,
   name: props.address.name,
   type: props.address.type,
@@ -19,9 +19,9 @@ const form = useForm({
   default: !!props.address.default,
 });
 
-const update = () => {
-  form.put(`/addresses/${props.address.id}`);
-};
+function update ()  {
+  router.put(`/addresses/${props.address.id}`, form);
+}
 
 </script>
 

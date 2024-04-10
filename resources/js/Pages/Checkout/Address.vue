@@ -1,3 +1,17 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { defineProps, ref } from 'vue';
+
+const props = defineProps({
+    defaultShippingAddress: Array,
+    defaultBillingAddress: Array,
+    cartTotal: Number,
+});
+
+const selectedShippingAddress = ref('');
+const selectedBillingAddress = ref('');
+</script>
+
 <template>
     <AppLayout title="Select Address">
         <template #header>
@@ -91,17 +105,3 @@
         </div>
     </AppLayout>
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps, ref } from 'vue';
-
-const props = defineProps({
-    defaultShippingAddress: Array,
-    defaultBillingAddress: Array,
-    cartTotal: Number,
-});
-
-const selectedShippingAddress = ref('');
-const selectedBillingAddress = ref('');
-</script>

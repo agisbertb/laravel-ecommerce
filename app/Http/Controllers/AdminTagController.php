@@ -38,7 +38,7 @@ class AdminTagController extends Controller
 
         Tag::create($request->all());
 
-        return Redirect::route('admin.tags.index');
+        return to_route('admin.tags.index');
     }
 
     /**
@@ -72,7 +72,7 @@ class AdminTagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->update($request->all());
 
-        return redirect()->route('admin.tags.index');
+        return to_route('admin.tags.index');
     }
 
     /**
@@ -83,6 +83,6 @@ class AdminTagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return redirect()->route('admin.tags.index');
+        return to_route('admin.tags.index');
     }
 }

@@ -1,27 +1,25 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive, defineProps } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
-import { defineProps } from 'vue';
-
 
 const props = defineProps({
   user: Object,
 });
 
-const form = useForm({
+const form = reactive({
   name: props.user.name,
   email: props.user.email,
 });
 
-const update = () => {
-  form.put(`/admin/users/${props.user.id}`);
-};
+function update() {
+    router.put(`/admin/users/${props.user.id}`, form);
+}
 
 const destroy = () => {
   if (confirm('Are you sure you want to delete this user?')) {
-    form.delete(`/admin/users/${props.user.id}`);
+    router.delete(`/admin/users/${props.user.id}`);
   }
 };
 </script>

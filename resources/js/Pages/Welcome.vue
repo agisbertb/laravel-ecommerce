@@ -1,7 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineProps } from 'vue';
-import { Link as InertiaLink } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/vue3'
 
 const props = defineProps({
   products: Array,
@@ -34,16 +33,16 @@ const props = defineProps({
                   <div class="mt-4 flex justify-between">
                     <div>
                       <h3 class="text-sm text-gray-700">
-                        <InertiaLink :href="`/products/${product.id}`">
+                        <Link :href="`/products/${product.id}`">
                           {{ product.name }}
-                        </InertiaLink>
+                        </Link>
                       </h3>
                     </div>
                     <p class="text-sm font-medium text-gray-900">{{ product.price }}</p>
                   </div>
-                  <InertiaLink :href="`/products/${product.id}`" class="mt-2 text-indigo-600 hover:text-indigo-900">
+                  <Link :href="`/products/${product.id}`" class="mt-2 text-indigo-600 hover:text-indigo-900">
                     View Product
-                  </InertiaLink>
+                  </Link>
                 </div>
               </div>
             </div>

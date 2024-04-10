@@ -38,7 +38,7 @@ class AdminUserController extends Controller
 
         User::create($request->all());
 
-        return Redirect::route('admin.users.index');
+        return to_route('admin.users.index');
     }
 
     /**
@@ -72,7 +72,7 @@ class AdminUserController extends Controller
         $user = User::findOrFail($id);
         $user->update($request->all());
 
-        return redirect()->route('admin.users.index');
+        return to_route('admin.users.index');
     }
 
     /**
@@ -83,6 +83,6 @@ class AdminUserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users.index');
+        return to_route('admin.users.index');
     }
 }

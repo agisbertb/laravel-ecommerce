@@ -1,34 +1,31 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
-import { defineProps } from 'vue';
-
 
 const props = defineProps({
-  product: Object,
+    product: Object,
 });
 
-const form = useForm({
-  name: props.product.name,
-  description: props.product.description,
-  price: props.product.price,
-  //product_id: props.product.product_id,
-  stock: props.product.stock,
-  image: props.product.image,    
+const form = reactive({
+    name: props.product.name,
+    description: props.product.description,
+    price: props.product.price,
+    stock: props.product.stock,
+    image: props.product.image,
 });
 
-const update = () => {
-  form.put(`/admin/products/${props.product.id}`);
-};
-
-const destroy = () => {
-  if (confirm('Are you sure you want to delete this product?')) {
-    form.delete(`/admin/products/${props.product.id}`);
-  }
-};
+function update () {
+    router.put(`/admin/products/${props.product.id}`, form);
+}
+function destroy (){
+    if (confirm('Are you sure you want to delete this product?')) {
+        router.delete(`/admin/products/${props.product.id}`);
+    }
+}
 </script>
+
 
 <template>
   <AdminLayout title="Edit products">

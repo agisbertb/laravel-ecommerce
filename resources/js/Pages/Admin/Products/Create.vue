@@ -1,21 +1,20 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
 
-const form = useForm({
+const form = reactive({
   name: '',
   description: '',
   price: '',
   //product_id: '',
   stock: '',
-  image: '',    
+  image: '',
 });
-
-const store = () => {
-  form.post('/admin/products');
-};
+function submit() {
+  router.post('/admin/products', form);
+}
 </script>
 
 <template>
@@ -34,9 +33,9 @@ const store = () => {
           <span class="text-indigo-400 font-medium">/</span> Create
         </h1>
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-          <form @submit.prevent="store">
+          <form @submit.prevent="submit">
             <div class="flex flex-wrap -mb-4 -mr-3 p-4">
-            
+
               <TextInput v-model="form.name" class="pb-4 pr-3 w-full lg:w-1/2" label="Name" placeholder="name" />
 
               <TextInput v-model="form.description" class="pb-4 pr-3 w-full lg:w-1/2" label="Description" placeholder="description" />

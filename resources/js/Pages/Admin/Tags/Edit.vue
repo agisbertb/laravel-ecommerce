@@ -1,30 +1,29 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive, defineProps } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
-import { defineProps } from 'vue';
-
 
 const props = defineProps({
-  tag: Object,
+    tag: Object,
 });
 
-const form = useForm({
-  name: props.tag.name,
-  description: props.tag.description,
+const form = reactive({
+    name: props.tag.name,
+    description: props.tag.description,
 });
 
-const update = () => {
-  form.put(`/admin/tags/${props.tag.id}`);
-};
+function update() {
+    router.put(`/admin/tags/${props.tag.id}`, form);
+}
 
 const destroy = () => {
-  if (confirm('Are you sure you want to delete this tag?')) {
-    form.delete(`/admin/tags/${props.tag.id}`);
-  }
+    if (confirm('Are you sure you want to delete this tag?')) {
+        router.delete(`/admin/tags/${props.tag.id}`);
+    }
 };
 </script>
+
 
 <template>
   <AdminLayout title="Edit Tags">

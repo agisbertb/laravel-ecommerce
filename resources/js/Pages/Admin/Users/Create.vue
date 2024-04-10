@@ -1,23 +1,20 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
 
-const props = defineProps({
-    users: Array,
-});
-
-const form = useForm({
+const form = reactive({
     name: '',
     email: '',
     password: '',
 });
 
-const store = () => {
-    form.post('/admin/users');
+function store() {
+    router.post('/admin/users', form);
 };
 </script>
+
 
 <template>
     <AdminLayout title="Create users">

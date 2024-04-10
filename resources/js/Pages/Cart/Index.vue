@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
@@ -19,7 +19,7 @@ const updateQuantity = (detailIndex, newQuantity) => {
   const detail = props.cartDetails[detailIndex];
   if (newQuantity > 0) {
     detail.quantity = newQuantity;
-    Inertia.patch(`/cart/update/${detail.id}`, { quantity: newQuantity }, {
+    router.patch(`/cart/update/${detail.id}`, { quantity: newQuantity }, {
       preserveState: false
     });
   }
@@ -27,7 +27,7 @@ const updateQuantity = (detailIndex, newQuantity) => {
 
 const removeFromCart = (detailIndex) => {
   const detail = props.cartDetails[detailIndex];
-  Inertia.delete(`/cart/remove/${detail.id}`, {
+  router.delete(`/cart/remove/${detail.id}`, {
     preserveState: true,
     onSuccess: () => {
       props.cartDetails.splice(detailIndex, 1);

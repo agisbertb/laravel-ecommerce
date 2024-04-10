@@ -1,23 +1,24 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive, defineProps } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     categories: Array,
 });
 
-const form = useForm({
+const form = reactive({
     name: '',
     description: '',
     parent_id: null,
 });
 
-const store = () => {
-    form.post('/admin/categories');
-};
+function store () {
+    router.post('/admin/categories', form);
+}
 </script>
+
 
 <template>
     <AdminLayout title="Create categories">

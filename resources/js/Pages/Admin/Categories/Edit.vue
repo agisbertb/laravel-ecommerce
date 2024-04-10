@@ -1,30 +1,28 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive, defineProps } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
-import { defineProps } from 'vue';
-
 
 const props = defineProps({
-  category: Object,
+    category: Object,
 });
 
-const form = useForm({
-  name: props.category.name,
-  description: props.category.description,
+const form = reactive({
+    name: props.category.name,
+    description: props.category.description,
 });
 
-const update = () => {
-  form.put(`/admin/categories/${props.category.id}`);
-};
-
+function update() {
+    router.put(`/admin/categories/${props.category.id}`, form);
+}
 const destroy = () => {
-  if (confirm('Are you sure you want to delete this category?')) {
-    form.delete(`/admin/categories/${props.category.id}`);
-  }
+    if (confirm('Are you sure you want to delete this category?')) {
+        router.delete(`/admin/categories/${props.category.id}`);
+    }
 };
 </script>
+
 
 <template>
   <AdminLayout title="Edit categories">

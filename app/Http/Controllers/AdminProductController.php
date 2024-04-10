@@ -37,12 +37,12 @@ class AdminProductController extends Controller
             'price' => 'required|numeric',
         //    'category_id' => 'required|exists:categories,id',
             'stock' => 'required|numeric',
-            'image' => 'nullable|image|max:1024',
+            'image' => 'nullable|string|max:1024', //TODO change to image
         ]);
 
-        $product = Product::create($request->all());
+        Product::create($request->all());
 
-        return Redirect::route('admin.products.index');
+        return to_route('admin.products.index');
     }
 
     /**
@@ -74,13 +74,13 @@ class AdminProductController extends Controller
             'price' => 'required|numeric',
         //    'category_id' => 'required|exists:categories,id',
             'stock' => 'required|numeric',
-            'image' => 'nullable|image|max:1024',
+            'image' => 'nullable|string|max:1024', //TODO change to image
         ]);
 
         $product = Product::findOrFail($id);
         $product->update($request->all());
 
-        return redirect()->route('admin.products.index');
+        return to_route('admin.products.index');
     }
 
     /**
@@ -91,6 +91,6 @@ class AdminProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('admin.products.index');
+        return to_route('admin.products.index');
     }
 }

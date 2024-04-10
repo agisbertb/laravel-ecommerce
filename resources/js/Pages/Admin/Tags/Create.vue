@@ -1,18 +1,19 @@
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3'
+import { reactive } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import TextInput from '@/Components/TextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3';
 
-const form = useForm({
-  name: '',
-  description: '',
+const form = reactive({
+    name: '',
+    description: '',
 });
 
-const store = () => {
-  form.post('/admin/tags');
+function store() {
+    router.post('/admin/tags', form);
 };
 </script>
+
 
 <template>
   <AdminLayout title="Create Tags">
