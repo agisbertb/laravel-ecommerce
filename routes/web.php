@@ -8,6 +8,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RedsysController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,6 +42,15 @@ use Inertia\Inertia;
 //        return Inertia::render('Dashboard');
 //    })->name('dashboard');
 //});
+
+Route::prefix('redsys')->group(function () {
+    Route::get('/', [RedsysController::class, 'index']);
+    Route::post('/notification', [RedsysController::class, 'notification']);
+    Route::get('/success', [RedsysController::class, 'success'])->name('redsys.success');
+    Route::get('/error', [RedsysController::class, 'error'])->name('redsys.error');
+});
+
+
 
 Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
 Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');

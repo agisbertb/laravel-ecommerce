@@ -12,6 +12,7 @@
         "laravel/jetstream": "^4.2",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "ssheduardo/redsys-laravel": "~1.4.0",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

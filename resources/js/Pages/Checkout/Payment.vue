@@ -1,18 +1,3 @@
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
-
-const props = defineProps({
-    cartTotal: Number,
-    paymentMethods: Array
-});
-
-const selectedPaymentMethod = ref('');
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
-};
-</script>
-
 <template>
     <AppLayout title="Payment Method">
         <template #header>
@@ -39,6 +24,8 @@ const formatCurrency = (amount) => {
                 </button>
             </div>
 
+            <div v-if="form" v-html="form"></div>
+
             <!-- Order Summary Section -->
             <div class="w-full md:w-1/3 bg-white shadow rounded-lg p-6 sticky top-20">
                 <h3 class="text-lg font-semibold mb-4">Order Summary</h3>
@@ -63,3 +50,29 @@ const formatCurrency = (amount) => {
         </div>
     </AppLayout>
 </template>
+
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+  
+  const form = ref('');
+  
+  onMounted(async () => {
+    try {
+      const response = await axios.get('/redsys');
+      form.value = response.data.form;
+    } catch (error) {
+      console.error('Error fetching Redsys form:', error);
+    }
+  });
+
+const props = defineProps({
+    cartTotal: Number,
+    paymentMethods: Array
+});
+
+
+const selectedPaymentMethod = ref('');
+</script>
+

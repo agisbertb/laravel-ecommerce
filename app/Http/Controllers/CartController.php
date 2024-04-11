@@ -36,7 +36,7 @@ class CartController extends Controller
             $cart->details()->create($request->only(['product_id', 'quantity', 'price', 'subtotal']));
         }
 
-        return Inertia::render('Cart/Index');
+        //return Inertia::render('Cart/Index');
     }
 
     public function updateCartDetail(Request $request, $detailId)
@@ -51,7 +51,7 @@ class CartController extends Controller
         $detail->quantity = $newQuantity;
         $detail->save();
 
-        return Inertia::render('Cart/Index');
+        //return Inertia::render('Cart/Index');
     }
 
     public function destroyCartDetail($detailId)
