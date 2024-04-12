@@ -51,6 +51,9 @@ Route::prefix('redsys')->group(function () {
 });
 
 
+Route::get('/redsys/success', [RedsysController::class, 'success'])->name('redsys.success');
+Route::get('/redsys/error', [RedsysController::class, 'error'])->name('redsys.error');
+
 
 Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
 Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');

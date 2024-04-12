@@ -75,4 +75,3 @@ const props = defineProps({
 
 const selectedPaymentMethod = ref('');
 </script>
-
