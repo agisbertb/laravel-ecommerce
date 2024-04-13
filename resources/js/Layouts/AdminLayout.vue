@@ -1,157 +1,360 @@
-<script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import ApplicationMark from '@/Components/ApplicationMark.vue';
-import Banner from '@/Components/Banner.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-
-defineProps({
-    title: String,
-});
-
-const showingNavigationDropdown = ref(false);
-
-const logout = () => {
-    router.post(route('logout'));
-};
-</script>
-
 <template>
+    <!--
+      This example requires updating your template:
+
+      ```
+      <html class="h-full bg-white">
+      <body class="h-full">
+      ```
+    -->
     <div>
-        <Head :title="title" />
+        <TransitionRoot as="template" :show="sidebarOpen">
+            <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
+                <TransitionChild as="template" enter="transition-opacity ease-linear duration-300"
+                    enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300"
+                    leave-from="opacity-100" leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-gray-900/80" />
+                </TransitionChild>
 
-        <Banner />
-
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
-                <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('admin.dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
-                                </Link>
+                <div class="fixed inset-0 flex">
+                    <TransitionChild as="template" enter="transition ease-in-out duration-300 transform"
+                        enter-from="-translate-x-full" enter-to="translate-x-0"
+                        leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0"
+                        leave-to="-translate-x-full">
+                        <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
+                            <TransitionChild as="template" enter="ease-in-out duration-300" enter-from="opacity-0"
+                                enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100"
+                                leave-to="opacity-0">
+                                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+                                    <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
+                                        <span class="sr-only">Close sidebar</span>
+                                        <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                                    </button>
+                                </div>
+                            </TransitionChild>
+                            <!-- Sidebar component, swap this element with another sidebar if you like -->
+                            <div
+                                class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
+                                <div class="flex h-16 shrink-0 items-center">
+                                    <img class="h-8 w-auto"
+                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                        alt="Your Company" />
+                                </div>
+                                <nav class="flex flex-1 flex-col">
+                                    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                                        <li>
+                                            <ul role="list" class="-mx-2 space-y-1">
+                                                <li v-for="item in navigation" :key="item.name">
+                                                    <a :href="item.href"
+                                                        :class="[item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                                                        <component :is="item.icon" class="h-6 w-6 shrink-0"
+                                                            aria-hidden="true" />
+                                                        {{ item.name }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
+                                            <ul role="list" class="-mx-2 mt-2 space-y-1">
+                                                <li v-for="team in teams" :key="team.name">
+                                                    <a :href="team.href"
+                                                        :class="[team.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                                                        <span
+                                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">{{
+            team.initial }}</span>
+                                                        <span class="truncate">{{ team.name }}</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="mt-auto">
+                                            <a href="#"
+                                                class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
+                                                <Cog6ToothIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
+                                                Settings
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
+                        </DialogPanel>
+                    </TransitionChild>
+                </div>
+            </Dialog>
+        </TransitionRoot>
 
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
-                                    Dashboard
-                                </NavLink>
-
-                                <NavLink :href="route('admin.products.index')" :active="route().current('admin.products.index')">
-                                    Products
-                                </NavLink>
-
-                                <NavLink :href="route('admin.categories.index')" :active="route().current('admin.categories.index')">
-                                    Categories
-                                </NavLink>
-
-                                <NavLink :href="route('admin.tags.index')" :active="route().current('admin.tags.index')">
-                                    Tags
-                                </NavLink>
-
-                                <NavLink :href="route('admin.users.index')" :active="route().current('admin.users.index')">
-                                    Users
-                                </NavLink>
-
+        <!-- Static sidebar for desktop -->
+        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col h-screen">
+            <!-- Contenedor exterior con margen y bordes redondeados -->
+            <div class="m-4 rounded-lg overflow-hidden">
+            <!-- Sidebar component, swap this element with another sidebar if you like -->
+            <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 p-6 ring-1 ring-white/10 rounded-2xl h-screen">
+                <div class="flex h-16 shrink-0 items-center">
+                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                        alt="Your Company" />
+                </div>
+                <!-- Componente Sidebar -->
+                <nav class="flex flex-1 flex-col">
+                    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+                        <li v-for="item in navigation" :key="item.name" class="relative">
+                            <!-- Aseguramos que el enlace es clicable solo si no tiene submenús -->
+                            <div v-if="item.children && item.children.length"
+                                 :class="['group flex items-center justify-between gap-x-3 rounded-md p-2 text-sm font-semibold',
+                            item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800']"
+                                 @click="toggleSubMenu(item)">
+                                <div class="flex items-center gap-x-2">
+                                    <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                                    <span>{{ item.name }}</span>
+                                </div>
+                                <button class="text-gray-400 hover:text-white">
+                                    <ChevronDownIcon class="h-5 w-5 transform transition-transform duration-300"
+                                                     :class="{ 'rotate-180': item.isOpen }" aria-hidden="true" />
+                                </button>
                             </div>
-                        </div>
+                            <a v-else :href="item.href"
+                               :class="['flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold',
+                            item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800']">
+                                <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                                {{ item.name }}
+                            </a>
+                            <!-- Submenú -->
+                            <ul v-show="item.isOpen && item.children" class="mt-1 pl-4 space-y-1">
+                                <li v-for="subItem in item.children" :key="subItem.name">
+                                    <a :href="subItem.href"
+                                       :class="[subItem.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'block rounded-md p-2 text-sm leading-6']">
+                                        {{ subItem.name }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+<!--                        <li>-->
+<!--                            <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>-->
+<!--                            <ul role="list" class="-mx-2 mt-2 space-y-1">-->
+<!--                                <li v-for="team in teams" :key="team.name">-->
+<!--                                    <a :href="team.href"-->
+<!--                                        :class="[team.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">-->
+<!--                                        <span-->
+<!--                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">{{-->
+<!--            team.initial }}</span>-->
+<!--                                        <span class="truncate">{{ team.name }}</span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+                        <li class="mt-auto mb-4">
+                            <a href="#"
+                                class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
+                                <Cog6ToothIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            </div>
+        </div>
 
-                        <!-- Authentication Links -->
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <template v-if="!$page.props.auth.user">
-                                <NavLink :href="route('login')" class="text-sm text-gray-700 underline">Login</NavLink>
-                                <NavLink :href="route('register')" class="ml-4 text-sm text-gray-700 underline">Register</NavLink>
-                            </template>
+        <div class="lg:pl-72 lg:mr-4">
+            <div
+                class="sticky top-0 z-40 flex m-4 h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 ring-1 ring-white/10 rounded-2xl">
+                <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
+                    <span class="sr-only">Open sidebar</span>
+                    <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                </button>
 
-                            <!-- Settings Dropdown -->
-                            <div v-else class="ms-3 relative">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
-                                        </button>
+                <!-- Separator -->
+                <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
+                <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+                    <form class="relative flex flex-1" action="#" method="GET">
+                        <label for="search-field" class="sr-only">Search</label>
+                        <MagnifyingGlassIcon
+                            class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
+                            aria-hidden="true" />
+                        <input id="search-field"
+                            class="block h-full w-full border-0 py-0 pl-8 pr-0 bg-gray-900 text-gray-400 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                            placeholder="Search..." type="search" name="search" />
+                    </form>
+                    <div class="flex items-center gap-x-4 lg:gap-x-6">
+                        <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                            <span class="sr-only">View notifications</span>
+                            <BellIcon class="h-6 w-6" aria-hidden="true" />
+                        </button>
 
-                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
+                        <!-- Separator -->
+                        <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                                    <template #content>
-                                        <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
+                        <!-- Profile dropdown -->
+                        <Menu as="div" class="relative">
+                            <MenuButton class="-m-1.5 flex items-center p-1.5">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+
+                                <span class="hidden lg:flex lg:items-center">
+                                    <span class="ml-4 text-sm font-semibold leading-6 text-gray-400"
+                                        aria-hidden="true">{{ $page.props.auth.user.name }}</span>
+                                    <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                </span>
+
+                           </MenuButton>
+                            <transition enter-active-class="transition ease-out duration-100"
+                                enter-from-class="transform opacity-0 scale-95"
+                                enter-to-class="transform opacity-100 scale-100"
+                                leave-active-class="transition ease-in duration-75"
+                                leave-from-class="transform opacity-100 scale-100"
+                                leave-to-class="transform opacity-0 scale-95">
+                                <MenuItems
+                                    class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-gray-900 py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
                                             Manage Account
                                         </div>
-
-                                        <DropdownLink :href="route('profile.show')">
-                                            Profile
-                                        </DropdownLink>
-
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
-                                            API Tokens
-                                        </DropdownLink>
-
-                                        <div class="border-t border-gray-200" />
-
-                                        <!-- Authentication -->
-                                        <form @submit.prevent="logout">
-                                            <DropdownLink as="button">
-                                                Log Out
-                                            </DropdownLink>
-                                        </form>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button @click="showingNavigationDropdown = !showingNavigationDropdown" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path :class="{'hidden': showingNavigationDropdown, 'inline-flex': !showingNavigationDropdown}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                                    <path :class="{'hidden': !showingNavigationDropdown, 'inline-flex': showingNavigationDropdown}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                                    <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                                    <a :href="item.href"
+                                        :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-400 hover:text-white hover:bg-gray-800']">{{
+                                        item.name }}</a>
+                                    </MenuItem>
+                                </MenuItems>
+                            </transition>
+                        </Menu>
                     </div>
                 </div>
+            </div>
 
-                <!-- Responsive Navigation Menu -->
-                <div :class="{'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown}" class="sm:hidden">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <!-- Responsive NavLink for "Dashboard", "Products", etc -->
-                    </div>
+            <main class="py-10">
+                <div class="px-4 sm:px-6 lg:px-8">
 
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <!-- Include responsive nav links and logout option as above, adjusted for mobile if needed -->
-                    </div>
+                    <slot />
+
                 </div>
-            </nav>
-
-            <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main>
-                <slot />
             </main>
         </div>
     </div>
 </template>
+
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
+import {
+    Dialog,
+    DialogPanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    TransitionChild,
+    TransitionRoot,
+} from '@headlessui/vue'
+import {
+    Bars3Icon,
+    BellIcon,
+    CalendarIcon,
+    ChartPieIcon,
+    Cog6ToothIcon,
+    DocumentDuplicateIcon,
+    FolderIcon,
+    HomeIcon,
+    UsersIcon,
+    XMarkIcon,
+    TagIcon,
+    RectangleStackIcon,
+    RectangleGroupIcon
+
+} from '@heroicons/vue/24/outline'
+
+
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+
+const navigation = reactive([
+    {
+        name: 'Dashboard',
+        href: '/admin/dashboard',
+        icon: HomeIcon,
+        current: true,
+        isOpen: false,
+        children: []
+    },
+    {
+        name: 'Products',
+        href: '/admin/products',
+        icon: RectangleStackIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Products', href: '/admin/products', current: false },
+            { name: 'Add Product', href: '/admin/products/create', current: false },
+        ]
+    },
+
+    {
+        name: 'Categories',
+        href: '/admin/categories',
+        icon: FolderIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Categories', href: '/admin/categories', current: false },
+            { name: 'Add Category', href: '/admin/categories/create', current: false },
+        ]
+    },
+    {
+        name: 'Tags',
+        href: '/admin/tags',
+        icon: TagIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Tags', href: '/admin/tags', current: false },
+            { name: 'Add Tag', href: '/admin/tags/create', current: false },
+        ]
+    },
+    {
+        name: 'Users',
+        href: '/admin/users',
+        icon: UsersIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Users', href: '/admin/users', current: false },
+            { name: 'Add User', href: '/admin/users/create', current: false },
+        ]
+    },
+
+    {
+        name: 'Shipping Options',
+        href: '/admin/shipping',
+        icon: DocumentDuplicateIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Shipping Options', href: '/admin/shipping-options', current: false },
+            { name: 'Add Shipping Option', href: '/admin/shipping-options/create', current: false },
+
+        ]
+    },
+
+
+]);
+
+function toggleSubMenu(item) {
+    item.isOpen = !item.isOpen;
+}
+
+onMounted(() => {
+    navigation.forEach(item => {
+        item.isOpen = item.children.some(subItem => route.path === subItem.href);
+        item.current = route.path === item.href || item.children.some(subItem => route.path === subItem.href);
+    });
+});
+
+// const teams = [
+//     { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
+//     { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
+//     { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+// ]
+const userNavigation = [
+    { name: 'Your profile', href: '#' },
+    { name: 'Sign out', href: '#' },
+]
+
+const sidebarOpen = ref(false)
+</script>

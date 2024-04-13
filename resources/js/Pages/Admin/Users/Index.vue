@@ -42,9 +42,9 @@ const props = defineProps({
                       class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-center text-gray-900 sm:pl-6">Id</th>
                     <th scope="col" class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Name
                     </th>
-                    <th scope="col" class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Email</th>                      
+                    <th scope="col" class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Email</th>
                   </tr>
-                  
+
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
                   <tr v-for="user in users" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
@@ -66,8 +66,8 @@ const props = defineProps({
                       <Link class="flex justify-center items-center px-6 py-4" :href="`/admin/users/${user.id}/edit`"
                         tabindex="-1">
                         {{ user.email }}
-                      </Link>               
-                    </td>                    
+                      </Link>
+                    </td>
                   </tr>
                 </tbody>
               </table>

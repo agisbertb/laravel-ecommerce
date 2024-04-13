@@ -1,57 +1,81 @@
 <script setup>
 import { reactive } from 'vue'
-import { Head, Link, router } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import TextInput from '@/Components/TextInput.vue'
+
 
 const form = reactive({
-  name: '',
-  description: '',
-  price: '',
-  //product_id: '',
-  stock: '',
-  image: '',
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    image: '',
 });
-function submit() {
-  router.post('/admin/products', form);
-}
+
+function store() {
+    router.post('/admin/products', form);
+};
 </script>
 
 <template>
   <AdminLayout title="Create products">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Products
-      </h2>
-    </template>
-    <div class="flex justify-center items-center h-screen">
-      <div>
 
-        <Head title="Create product" />
-        <h1 class="mb-8 text-3xl font-bold">
-          <Link :href="route('admin.products.index')" class="text-indigo-400 hover:text-indigo-600">products</Link>
-          <span class="text-indigo-400 font-medium">/</span> Create
-        </h1>
-        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-          <form @submit.prevent="submit">
-            <div class="flex flex-wrap -mb-4 -mr-3 p-4">
 
-              <TextInput v-model="form.name" class="pb-4 pr-3 w-full lg:w-1/2" label="Name" placeholder="name" />
+  <div class="space-y-10 divide-y divide-gray-900/10">
 
-              <TextInput v-model="form.description" class="pb-4 pr-3 w-full lg:w-1/2" label="Description" placeholder="description" />
-
-              <TextInput v-model="form.price" class="pb-4 pr-3 w-full lg:w-1/2" label="Price" placeholder="price" />
-
-              <TextInput v-model="form.stock" class="pb-4 pr-3 w-full lg:w-1/2" label="Stock" placeholder="stock" />
-
-              <TextInput v-model="form.image" class="pb-4 pr-3 w-full lg:w-1/2" label="Image" placeholder="image" />
-            </div>
-            <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-              <button class="btn-indigo" type="submit">Create product</button>
-            </div>
-          </form>
-        </div>
+    <div class="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
+      <div class="px-4 sm:px-0">
+        <h2 class="text-base font-semibold leading-7 text-gray-900">Product information</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-600">bla bla bla</p>
       </div>
+
+      <form @submit.prevent="store" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+        <div class="px-4 py-6 sm:p-8">
+          <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+            <div class="col-span-full">
+              <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+              <div class="mt-2">
+                <input type="text" name="name" id="form.name" autocomplete="name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+              </div>
+            </div>
+
+            <div class="col-span-full">
+            <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+            <div class="mt-2">
+              <textarea id="form.description" name="description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
+            <div class="mt-2">
+              <input type="number" name="price" id="form.price" autocomplete="price" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="stock" class="block text-sm font-medium leading-6 text-gray-900">Stock</label>
+            <div class="mt-2">
+              <input type="number" name="stock" id="form.stock" autocomplete="stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            </div>
+          </div>
+
+            <div class="col-span-full">
+              <label for="image" class="block text-sm font-medium leading-6 text-gray-900">Image TODO</label>
+              <div class="mt-2">
+                <input type="text" name="image" id="form.image" autocomplete="image" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+          <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+          <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+        </div>
+      </form>
     </div>
+  </div>
   </AdminLayout>
 </template>

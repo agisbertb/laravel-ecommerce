@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RedsysController;
+use App\Http\Controllers\AdminShippingOptionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -132,5 +133,15 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/users/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+
+    // admin shipping options route
+
+    Route::get('/admin/shipping-options', [AdminShippingOptionController::class, 'index'])->name('admin.shipping-options.index');
+    Route::get('/admin/shipping-options/create', [AdminShippingOptionController::class, 'create'])->name('admin.shipping-options.create');
+    Route::post('/admin/shipping-options', [AdminShippingOptionController::class, 'store'])->name('admin.shipping-options.store');
+    //Route::get('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'show'])->name('admin.shipping-options.show');
+    Route::get('/admin/shipping-options/{id}/edit', [AdminShippingOptionController::class, 'edit'])->name('admin.shipping-options.edit');
+    Route::put('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'update'])->name('admin.shipping-options.update');
+    Route::delete('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'destroy'])->name('admin.shipping-options.destroy');
 
 });
