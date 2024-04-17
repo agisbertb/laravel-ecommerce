@@ -85,9 +85,10 @@
         </TransitionRoot>
 
         <!-- Static sidebar for desktop -->
-        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col h-screen">
-            <!-- Contenedor exterior con margen y bordes redondeados -->
-            <div class="m-4 rounded-lg overflow-hidden">
+        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col h-screen bg-gray-100">
+
+        <!-- Contenedor exterior con margen y bordes redondeados -->
+            <div class="m-4 rounded-lg overflow-hidden bg-gray-100">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 p-6 ring-1 ring-white/10 rounded-2xl h-screen">
                 <div class="flex h-16 shrink-0 items-center">
@@ -155,10 +156,10 @@
             </div>
         </div>
 
-        <div class="lg:pl-72 lg:mr-4">
-            <div
-                class="sticky top-0 z-40 flex m-4 h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 ring-1 ring-white/10 rounded-2xl">
-                <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
+        <div class="lg:pl-72 lg:mr-4 bg-gray-100">
+            <div class="z-40 flex m-4 h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 ring-1 ring-white/10 rounded-2xl">
+
+            <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
                     <span class="sr-only">Open sidebar</span>
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
@@ -173,7 +174,7 @@
                             class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
                             aria-hidden="true" />
                         <input id="search-field"
-                            class="block h-full w-full border-0 py-0 pl-8 pr-0 bg-gray-900 text-gray-400 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                            class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                             placeholder="Search..." type="search" name="search" />
                     </form>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
@@ -205,13 +206,13 @@
                                 leave-from-class="transform opacity-100 scale-100"
                                 leave-to-class="transform opacity-0 scale-95">
                                 <MenuItems
-                                    class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-gray-900 py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                                    class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                                     <div class="block px-4 py-2 text-xs text-gray-400">
                                             Manage Account
                                         </div>
                                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                                     <a :href="item.href"
-                                        :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-400 hover:text-white hover:bg-gray-800']">{{
+                                        :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-700 hover:bg-gray-100']">{{
                                         item.name }}</a>
                                     </MenuItem>
                                 </MenuItems>
@@ -222,7 +223,7 @@
             </div>
 
             <main class="py-10">
-                <div class="px-4 sm:px-6 lg:px-8">
+                <div class="">
 
                     <slot />
 

@@ -12,11 +12,32 @@ class AdminProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return Inertia::render('Admin/Products/Index', ['products' => $products]);
+        $query = $request->input('search');
+        $order = $request->input('order');
+
+        $products = Product::query();
+
+        if ($query) {
+            $products->where('name', 'like', '%' . $query . '%');
+        }
+
+        if ($order) {
+            [$criteria, $direction] = explode('_', $order);
+            $column = $criteria === 'price' ? 'price' : 'stock';
+            $products->orderBy($column, $direction);
+        }
+
+        return Inertia::render('Admin/Products/Index', [
+            'products' => $products->paginate(10),
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -41,6 +62,8 @@ class AdminProductController extends Controller
         ]);
 
         Product::create($request->all());
+
+        session()->flash('success', 'Product created successfully.');
 
         return to_route('admin.products.index');
     }
@@ -80,6 +103,8 @@ class AdminProductController extends Controller
         $product = Product::findOrFail($id);
         $product->update($request->all());
 
+        session()->flash('success', 'Product updated successfully.');
+
         return to_route('admin.products.index');
     }
 
@@ -90,6 +115,8 @@ class AdminProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
+
+        session()->flash('success', 'Product removed successfully.');
 
         return to_route('admin.products.index');
     }

@@ -1,10 +1,10 @@
 <script setup>
-import { reactive } from 'vue'
-import { Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Link, router } from '@inertiajs/vue3';
+import { ChevronRightIcon, HomeIcon, PlusIcon } from "@heroicons/vue/20/solid/index.js";
+import { ref } from 'vue';
 
-
-const form = reactive({
+const form = ref({
     name: '',
     description: '',
     price: '',
@@ -13,69 +13,104 @@ const form = reactive({
 });
 
 function store() {
-    router.post('/admin/products', form);
-};
+    router.post('/admin/products', form.value);
+}
 </script>
 
 <template>
-  <AdminLayout title="Create products">
-
-
-  <div class="space-y-10 divide-y divide-gray-900/10">
-
-    <div class="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
-      <div class="px-4 sm:px-0">
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Product information</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">bla bla bla</p>
-      </div>
-
-      <form @submit.prevent="store" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
-        <div class="px-4 py-6 sm:p-8">
-          <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-            <div class="col-span-full">
-              <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
-              <div class="mt-2">
-                <input type="text" name="name" id="form.name" autocomplete="name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-              </div>
-            </div>
-
-            <div class="col-span-full">
-            <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
-            <div class="mt-2">
-              <textarea id="form.description" name="description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
-            <div class="mt-2">
-              <input type="number" name="price" id="form.price" autocomplete="price" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <label for="stock" class="block text-sm font-medium leading-6 text-gray-900">Stock</label>
-            <div class="mt-2">
-              <input type="number" name="stock" id="form.stock" autocomplete="stock" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-            </div>
-          </div>
-
-            <div class="col-span-full">
-              <label for="image" class="block text-sm font-medium leading-6 text-gray-900">Image TODO</label>
-              <div class="mt-2">
-                <input type="text" name="image" id="form.image" autocomplete="image" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-              </div>
-            </div>
-
-          </div>
+    <AdminLayout title="Create Product">
+        <div class="mx-4 mt-4 mb-14">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol role="list" class="flex items-center space-x-4">
+                    <li>
+                        <div>
+                            <Link href="/admin/dashboard" class="text-gray-400 hover:text-gray-500">
+                            <HomeIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                            <span class="sr-only">Home</span>
+                            </Link>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <ChevronRightIcon class="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                            <Link href="/admin/dashboard"
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Admin</Link>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <ChevronRightIcon class="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                            <Link href="/admin/products"
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Products</Link>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <ChevronRightIcon class="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                            <Link href="/admin/products/create"
+                                class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Create</Link>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
         </div>
-        <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-          <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-          <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+
+        <div class="mt-4 mx-4">
+            <div class="bg-white p-6 rounded-2xl border-b shadow-2xl">
+
+                <div class="flex justify-center px-4 py-8">
+                    <div class="w-full max-w-4xl mx-auto bg-white p-8">
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-bold text-gray-700 mb-1 text-center">Add a New Product</h1>
+                            <p class="text-gray-600 text-sm text-center">Complete the form below to list a new product
+                                in your store.</p>
+                        </div>
+
+                        <form @submit.prevent="store" class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                                <input v-model="form.name" type="text" id="name" name="name"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Product...">
+                            </div>
+                            <div>
+                                <label for="description"
+                                    class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea v-model="form.description" id="description" name="description" rows="4"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Provide a detailed description of the product"></textarea>
+                            </div>
+                            <div class="md:flex md:gap-6 md:items-end">
+                                <div class="md:w-1/2">
+                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                    <input v-model="form.price" type="text" id="price" name="price"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="md:w-1/2">
+                                    <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+                                    <input v-model="form.stock" type="number" id="stock" name="stock"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Quantity">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
+                                <input v-model="form.image" type="text" id="image" name="image"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex justify-end mt-4">
+                                <button type="submit"
+                                    class="inline-flex items-center gap-x-2 rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                    <PlusIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
+                                    Create product
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </form>
-    </div>
-  </div>
-  </AdminLayout>
+
+    </AdminLayout>
 </template>
