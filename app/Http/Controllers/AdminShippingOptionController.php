@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ShippingOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,11 +13,34 @@ class AdminShippingOptionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $shippingOptions = ShippingOption::all();
-        return Inertia::render('Admin/ShippingOptions/Index', ['shippingOptions' => $shippingOptions]);
+        $query = $request->input('search');
+        $order = $request->input('order');
+
+        $shippingOptions = ShippingOption::query();
+
+        if ($query) {
+            $shippingOptions->where('name', 'like', '%' . $query . '%');
+        }
+
+        if ($order) {
+            [$criteria, $direction] = explode('_', $order);
+            $direction = $direction === 'desc' ? 'desc' : 'asc';
+
+            if (in_array($criteria, ['name', 'price'])) {
+                $shippingOptions->orderBy($criteria, $direction);
+            }
+        }
+
+        return Inertia::render('Admin/ShippingOptions/Index', [
+            'shippingOptions' => $shippingOptions->paginate(10),
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,6 +62,8 @@ class AdminShippingOptionController extends Controller
         ]);
 
         ShippingOption::create($request->all());
+
+        session()->flash('success', 'Shipping option created successfully.');
 
         return to_route('admin.shipping-options.index');
     }
@@ -65,6 +91,8 @@ class AdminShippingOptionController extends Controller
         $shippingOption = ShippingOption::findOrFail($id);
         $shippingOption->update($request->all());
 
+        session()->flash('success', 'Shipping option updated successfully.');
+
         return to_route('admin.shipping-options.index');
     }
 
@@ -75,6 +103,8 @@ class AdminShippingOptionController extends Controller
     {
         $shippingOption = ShippingOption::findOrFail($id);
         $shippingOption->delete();
+
+        session()->flash('success', 'Shipping option removed successfully.');
 
         return to_route('admin.shipping-options.index');
     }

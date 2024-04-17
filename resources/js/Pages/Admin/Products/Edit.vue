@@ -28,7 +28,7 @@ function destroy() {
 </script>
 
 <template>
-    <AdminLayout title="Create Product">
+    <AdminLayout title="Update Product">
         <div class="mx-4 mt-4 mb-14">
             <nav class="flex" aria-label="Breadcrumb">
                 <ol role="list" class="flex items-center space-x-4">
@@ -69,7 +69,7 @@ function destroy() {
                 <div class="flex justify-center px-4 py-8">
                     <div class="w-full max-w-4xl mx-auto bg-white p-8">
                         <div class="mb-8">
-                            <h1 class="text-2xl font-bold text-gray-700 mb-1 text-center">Update this Product</h1>
+                            <h1 class="text-2xl font-bold text-gray-700 mb-1 text-center">Update {{ form.name }}</h1>
                             <p class="text-gray-600 text-sm text-center">Complete the form below to update a product in
                                 your store.</p>
                         </div>

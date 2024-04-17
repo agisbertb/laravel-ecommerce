@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,10 +12,29 @@ class AdminCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('parent')->get();
-        return Inertia::render('Admin/Categories/Index', ['categories' => $categories]);
+        $query = $request->input('search');
+        $order = $request->input('order');
+
+        $categories = Category::with('parent');
+
+        if ($query) {
+            $categories->where('name', 'like', '%' . $query . '%');
+        }
+
+        if ($order) {
+            $parts = explode('_', $order);
+            $direction = $parts[1] ?? 'asc';
+            $categories->orderBy('name', $direction);
+        }
+
+        return Inertia::render('Admin/Categories/Index', [
+            'categories' => $categories->paginate(10),
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
     }
 
     /**
@@ -40,6 +60,8 @@ class AdminCategoryController extends Controller
         ]);
 
         $category = Category::create($request->all());
+
+        session()->flash('success', 'Category created successfully.');
 
         return to_route('admin.categories.index');
     }
@@ -77,6 +99,8 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->update($request->all());
 
+        session()->flash('success', 'Category updated successfully.');
+
         return to_route('admin.categories.index');
     }
 
@@ -87,6 +111,8 @@ class AdminCategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
+
+        session()->flash('success', 'Category removed successfully.');
 
         return to_route('admin.categories.index');
     }

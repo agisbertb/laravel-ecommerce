@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ShippingOption;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,10 +13,29 @@ class AdminTagController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::all();
-        return Inertia::render('Admin/Tags/Index', ['tags' => $tags]);
+        $query = $request->input('search');
+        $order = $request->input('order');
+
+        $tags = Tag::query();
+
+        if ($query) {
+            $tags->where('name', 'like', '%' . $query . '%');
+        }
+
+        if ($order) {
+            $parts = explode('_', $order);
+            $direction = $parts[1] ?? 'asc';
+            $tags->orderBy('name', $direction);
+        }
+
+        return Inertia::render('Admin/Tags/Index', [
+            'tags' => $tags->paginate(10),
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
     }
 
     /**
@@ -37,6 +57,8 @@ class AdminTagController extends Controller
         ]);
 
         Tag::create($request->all());
+
+        session()->flash('success', 'Tag created successfully.');
 
         return to_route('admin.tags.index');
     }
@@ -72,6 +94,8 @@ class AdminTagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->update($request->all());
 
+        session()->flash('success', 'Tag updated successfully.');
+
         return to_route('admin.tags.index');
     }
 
@@ -82,6 +106,8 @@ class AdminTagController extends Controller
     {
         $tag = Tag::findOrFail($id);
         $tag->delete();
+
+        session()->flash('success', 'Tag removed successfully.');
 
         return to_route('admin.tags.index');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,10 +13,29 @@ class AdminUserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return Inertia::render('Admin/Users/Index', ['users' => $users]);
+        $query = $request->input('search');
+        $order = $request->input('order');
+
+        $users = User::query();
+
+        if ($query) {
+            $users->where('name', 'like', '%' . $query . '%');
+        }
+
+        if ($order) {
+            $parts = explode('_', $order);
+            $direction = $parts[1] ?? 'asc';
+            $users->orderBy('name', $direction);
+        }
+
+        return Inertia::render('Admin/Users/Index', [
+            'users' => $users->paginate(10),
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
     }
 
     /**
@@ -37,6 +57,8 @@ class AdminUserController extends Controller
         ]);
 
         User::create($request->all());
+
+        session()->flash('success', 'User created successfully.');
 
         return to_route('admin.users.index');
     }
@@ -72,6 +94,8 @@ class AdminUserController extends Controller
         $user = User::findOrFail($id);
         $user->update($request->all());
 
+        session()->flash('success', 'User updated successfully.');
+
         return to_route('admin.users.index');
     }
 
@@ -82,6 +106,8 @@ class AdminUserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        session()->flash('success', 'User removed successfully.');
 
         return to_route('admin.users.index');
     }
