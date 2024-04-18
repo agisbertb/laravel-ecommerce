@@ -40,7 +40,8 @@ class RedsysController extends Controller
             // Creem una nova comanda
             $order = Order::create([
                 'user_id' => $user->id,
-                'address_id' => 1,
+                'billing_address_id' => 1, // TODO: Canviar per l'adreça de facturació de l'usuari
+                'shipping_address_id' => 2, // TODO: Canviar per l'adreça d'enviament de l'usuari
                 'total' => $orderAmount,
                 'status' => 'pending',
             ]);
