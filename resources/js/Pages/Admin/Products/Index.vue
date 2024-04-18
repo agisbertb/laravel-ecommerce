@@ -97,7 +97,6 @@ const paginationRange = (current, last) => {
     return range;
 };
 
-
 function fetchProducts(query, order = orderBy.value) {
     router.get('/admin/products', { search: query, order: order }, {
         preserveState: true,
@@ -118,10 +117,7 @@ function destroy(productId) {
     }
 }
 
-
-
 </script>
-
 
 <template>
     <AdminLayout title="Products">
@@ -253,7 +249,8 @@ function destroy(productId) {
                                             <td class="border-t">
                                                 <Link class="flex justify-center items-center px-6 py-4"
                                                     :href="`/admin/products/${product.id}/edit`" tabindex="-1">
-                                                {{ product.image }}
+                                                <img v-if="product.image_url" :src="product.image_url"
+                                                    alt="Product Image" class="w-20 h-20 object-cover rounded-full">
                                                 </Link>
                                             </td>
                                             <td class="border-t">

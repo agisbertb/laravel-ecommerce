@@ -1,25 +1,80 @@
 <script setup>
-import { reactive } from 'vue'
-import { router, Link } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { ChevronRightIcon, HomeIcon, TrashIcon, ArrowPathIcon } from "@heroicons/vue/20/solid/index.js";
-
+import { Link, router } from '@inertiajs/vue3';
+import { ChevronRightIcon, HomeIcon, TrashIcon, ArrowPathIcon, PhotoIcon } from "@heroicons/vue/20/solid/index.js";
+import { ref } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Pagination, Navigation } from 'swiper/modules';
 
 const props = defineProps({
-    product: Object,
+    product: Object
 });
 
-const form = reactive({
+const form = ref({
     name: props.product.name,
     description: props.product.description,
     price: props.product.price,
     stock: props.product.stock,
-    image: props.product.image,
+    images: [],
+    imagePreviews: [],
+    existingImages: props.product.images || [],
+    deleteImages: []
 });
 
-function update() {
-    router.put(`/admin/products/${props.product.id}`, form);
+function handleFiles(event) {
+    const newFiles = event.target.files;
+    if (newFiles) {
+        for (let i = 0; i < newFiles.length; i++) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                form.value.imagePreviews.push(e.target.result);
+                form.value.images.push(newFiles[i]);
+            };
+            reader.readAsDataURL(newFiles[i]);
+        }
+    }
 }
+
+function removeImage(index) {
+    form.value.imagePreviews.splice(index, 1);
+    form.value.images.splice(index, 1);
+}
+
+function removeExistingImage(index) {
+    const imageId = form.value.existingImages[index].id;
+    form.value.deleteImages.push(imageId);
+    form.value.existingImages.splice(index, 1);
+}
+
+function update() {
+    const formData = new FormData();
+    formData.append('name', form.value.name);
+    formData.append('description', form.value.description);
+    formData.append('price', form.value.price);
+    formData.append('stock', form.value.stock);
+
+    // Añadir archivos de imágenes nuevas
+    form.value.images.forEach(image => {
+        if (image instanceof File) {
+            formData.append('images[]', image);
+        }
+    });
+
+    form.value.deleteImages.forEach(id => {
+        formData.append('deleteImages[]', id);
+    });
+
+    formData.append('_method', 'PUT');
+    router.post(`/admin/products/${props.product.id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
 function destroy() {
     if (confirm('Are you sure you want to delete this product?')) {
         router.delete(`/admin/products/${props.product.id}`);
@@ -101,11 +156,62 @@ function destroy() {
                                         placeholder="Quantity">
                                 </div>
                             </div>
-                            <div>
-                                <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
-                                <input v-model="form.image" type="text" id="image" name="image"
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+
+                            <div class="col-span-full">
+                                <label for="cover-photo"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+                                <div
+                                    class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div class="text-center">
+                                        <PhotoIcon class="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                        <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                                            <label for="images"
+                                                class="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500">
+                                                <span>Upload a file</span>
+                                                <input id="images" name="images[]" type="file" class="sr-only" multiple
+                                                    @change="handleFiles">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                </div>
                             </div>
+
+                            <Swiper :slidesPerView="1" :spaceBetween="30" :loop="form.existingImages.length > 1"
+                                :pagination="{ clickable: true, el: '.swiper-pagination' }"
+                                :navigation="{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }"
+                                :modules="[Pagination, Navigation]" class="mySwiper">
+                                <!-- Slides for exists images  -->
+                                <SwiperSlide v-for="(image, index) in form.existingImages" :key="index">
+                                    <img :src="image.url" alt="Product Image"
+                                        class="object-cover rounded-lg shadow-md h-96">
+                                    <button v-if="!image.delete" @click="removeExistingImage(index)"
+                                        class="absolute top-0 right-0 m-2 bg-red-500 text-white p-1 rounded-full">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </SwiperSlide>
+
+                                <!-- Slides for new images -->
+                                <SwiperSlide v-for="(image, index) in form.imagePreviews" :key="index">
+                                    <img :src="image" alt="New image" class="object-cover rounded-lg shadow-md h-96">
+                                    <button @click="removeImage(index)"
+                                        class="absolute top-0 right-0 m-2 bg-red-500 text-white p-1 rounded-full">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </SwiperSlide>
+
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </Swiper>
+
                             <div class="flex justify-end mt-4 space-x-4">
                                 <button type="button" @click="destroy"
                                     class="inline-flex items-center gap-x-2 rounded-md bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">

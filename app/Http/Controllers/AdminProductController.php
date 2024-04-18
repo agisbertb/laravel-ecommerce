@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AdminProductController extends Controller
@@ -17,20 +19,25 @@ class AdminProductController extends Controller
         $query = $request->input('search');
         $order = $request->input('order');
 
-        $products = Product::query();
-
-        if ($query) {
-            $products->where('name', 'like', '%' . $query . '%');
-        }
-
-        if ($order) {
-            [$criteria, $direction] = explode('_', $order);
-            $column = $criteria === 'price' ? 'price' : 'stock';
-            $products->orderBy($column, $direction);
-        }
+        $products = Product::with('images')
+        ->when($query, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })
+            ->when($order, function ($query, $order) {
+                [$criteria, $direction] = explode('_', $order);
+                $column = $criteria === 'price' ? 'price' : 'stock';
+                return $query->orderBy($column, $direction);
+            })
+            ->paginate(10)
+            ->through(function ($product) {
+                if ($product->images->isNotEmpty()) {
+                    $product->image_url = Storage::url($product->images->first()->image_path);
+                }
+                return $product;
+            });
 
         return Inertia::render('Admin/Products/Index', [
-            'products' => $products->paginate(10),
+            'products' => $products,
             'flash' => [
                 'success' => session('success')
             ]
@@ -56,17 +63,29 @@ class AdminProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'price' => 'required|numeric',
-        //    'category_id' => 'required|exists:categories,id',
             'stock' => 'required|numeric',
-            'image' => 'nullable|string|max:1024', //TODO change to image
+            //'category_id' => 'required|exists:categories,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ]);
 
-        Product::create($request->all());
+        $product = Product::create($request->except(['images']));
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('public/images');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path
+                ]);
+            }
+        }
 
         session()->flash('success', 'Product created successfully.');
-
         return to_route('admin.products.index');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -82,7 +101,7 @@ class AdminProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::find($id);
+        $product = Product::with('images')->find($id);
         return Inertia::render('Admin/Products/Edit', ['product' => $product]);
     }
 
@@ -95,18 +114,33 @@ class AdminProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'price' => 'required|numeric',
-        //    'category_id' => 'required|exists:categories,id',
             'stock' => 'required|numeric',
-            'image' => 'nullable|string|max:1024', //TODO change to image
+            //'category_id' => 'required|exists:categories,id',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'deleteImages' => 'nullable|array',
+            'deleteImages.*' => 'exists:product_images,id'
         ]);
 
         $product = Product::findOrFail($id);
-        $product->update($request->all());
+        $product->update($request->only(['name', 'description', 'price', 'stock']));
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('public/images');
+                $product->images()->create(['image_path' => $path]);
+            }
+        }
+
+        if ($request->has('deleteImages')) {
+            foreach ($request->input('deleteImages') as $imageId) {
+                ProductImage::findOrFail($imageId)->delete();
+            }
+        }
 
         session()->flash('success', 'Product updated successfully.');
-
         return to_route('admin.products.index');
     }
+
 
     /**
      * Remove the specified resource from storage.
