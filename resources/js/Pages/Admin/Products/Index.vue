@@ -116,7 +116,6 @@ function destroy(productId) {
         router.delete(`/admin/products/${productId}`);
     }
 }
-
 </script>
 
 <template>
@@ -239,6 +238,9 @@ function destroy(productId) {
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                                                 Stock</th>
                                             <th scope="col"
+                                                class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Tags
+                                            </th>
+                                            <th scope="col"
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                                                 Action</th>
                                         </tr>
@@ -277,6 +279,22 @@ function destroy(productId) {
                                                     :href="`/admin/products/${product.id}/edit`" tabindex="-1">
                                                 {{ product.stock }}
                                                 </Link>
+                                            </td>
+                                            <td class="border-t">
+                                                <div class="flex flex-wrap items-center justify-center gap-2 px-6 py-4">
+                                                    <template v-for="(tagName, index) in product.tagNames">
+                                                        <span v-if="index < 2 || product.isTagsExpanded"
+                                                            :key="`tag-${index}`"
+                                                            class="bg-blue-600 text-white rounded-full text-xs leading-4 py-1 px-2">
+                                                            {{ tagName }}
+                                                        </span>
+                                                    </template>
+                                                    <button v-if="product.tagNames.length > 2"
+                                                        @click="product.isTagsExpanded = !product.isTagsExpanded"
+                                                        class="text-xs text-blue-600 hover:underline">
+                                                        {{ product.isTagsExpanded ? 'Less' : 'More' }}
+                                                    </button>
+                                                </div>
                                             </td>
                                             <td class="border-t">
                                                 <div class="flex justify-center space-x-4">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -19,10 +20,10 @@ class AdminProductController extends Controller
         $query = $request->input('search');
         $order = $request->input('order');
 
-        $products = Product::with('images')
-        ->when($query, function ($query, $search) {
-            return $query->where('name', 'like', '%' . $search . '%');
-        })
+        $products = Product::with('images', 'tags')
+            ->when($query, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
             ->when($order, function ($query, $order) {
                 [$criteria, $direction] = explode('_', $order);
                 $column = $criteria === 'price' ? 'price' : 'stock';
@@ -30,9 +31,11 @@ class AdminProductController extends Controller
             })
             ->paginate(10)
             ->through(function ($product) {
-                if ($product->images->isNotEmpty()) {
-                    $product->image_url = Storage::url($product->images->first()->image_path);
-                }
+                $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+                $product->tagNames = $product->tags->pluck('name')->toArray();
+
+                unset($product->images);
+
                 return $product;
             });
 
@@ -44,14 +47,15 @@ class AdminProductController extends Controller
         ]);
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return Inertia::render('Admin/Products/Create');
+        $tags = Tag::all();
+        return Inertia::render('Admin/Products/Create', [
+            'tags' => $tags
+        ]);
     }
 
     /**
@@ -66,10 +70,12 @@ class AdminProductController extends Controller
             'stock' => 'required|numeric',
             //'category_id' => 'required|exists:categories,id',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id'
         ]);
 
-        $product = Product::create($request->except(['images']));
+        $product = Product::create($request->except(['images', 'tags']));
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -79,6 +85,10 @@ class AdminProductController extends Controller
                     'image_path' => $path
                 ]);
             }
+        }
+
+        if ($request->has('tags')) {
+            $product->tags()->sync($request->tags);
         }
 
         session()->flash('success', 'Product created successfully.');
@@ -101,8 +111,15 @@ class AdminProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::with('images')->find($id);
-        return Inertia::render('Admin/Products/Edit', ['product' => $product]);
+        $product = Product::with('images', 'tags')->findOrFail($id);
+        $tags = Tag::all();
+        $productTags = $product->tags->pluck('id');
+
+        return Inertia::render('Admin/Products/Edit', [
+            'product' => $product,
+            'tags' => $tags,
+            'productTags' => $productTags,
+        ]);
     }
 
     /**
@@ -118,7 +135,9 @@ class AdminProductController extends Controller
             //'category_id' => 'required|exists:categories,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'deleteImages' => 'nullable|array',
-            'deleteImages.*' => 'exists:product_images,id'
+            'deleteImages.*' => 'exists:product_images,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id'
         ]);
 
         $product = Product::findOrFail($id);
@@ -135,6 +154,10 @@ class AdminProductController extends Controller
             foreach ($request->input('deleteImages') as $imageId) {
                 ProductImage::findOrFail($imageId)->delete();
             }
+        }
+
+        if ($request->has('tags')) {
+            $product->tags()->sync($request->tags);
         }
 
         session()->flash('success', 'Product updated successfully.');

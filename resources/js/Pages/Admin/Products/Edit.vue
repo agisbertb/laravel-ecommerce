@@ -2,7 +2,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ChevronRightIcon, HomeIcon, TrashIcon, ArrowPathIcon, PhotoIcon } from "@heroicons/vue/20/solid/index.js";
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -10,8 +10,13 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
 
 const props = defineProps({
-    product: Object
+    product: Object,
+    tags: Array,
+    productTags: Array
 });
+
+// Convertir IDs de tags a objetos de tags para visualización
+const initialTags = props.productTags.map(tagId => props.tags.find(tag => tag.id === tagId));
 
 const form = ref({
     name: props.product.name,
@@ -21,7 +26,8 @@ const form = ref({
     images: [],
     imagePreviews: [],
     existingImages: props.product.images || [],
-    deleteImages: []
+    deleteImages: [],
+    tags: initialTags
 });
 
 function handleFiles(event) {
@@ -56,7 +62,10 @@ function update() {
     formData.append('price', form.value.price);
     formData.append('stock', form.value.stock);
 
-    // Añadir archivos de imágenes nuevas
+    form.value.tags.forEach(tag => {
+        formData.append('tags[]', tag.id); // Asegúrate de enviar el ID del tag
+    });
+
     form.value.images.forEach(image => {
         if (image instanceof File) {
             formData.append('images[]', image);
@@ -68,10 +77,17 @@ function update() {
     });
 
     formData.append('_method', 'PUT');
+
     router.post(`/admin/products/${props.product.id}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
+    }).then(() => {
+        alert('Producto actualizado correctamente');
+        router.replace(`/admin/products`);
+    }).catch(error => {
+        console.error('Error al actualizar:', error);
+        alert('Error al actualizar el producto');
     });
 }
 
@@ -80,7 +96,39 @@ function destroy() {
         router.delete(`/admin/products/${props.product.id}`);
     }
 }
+
+// A ref for the selected tag from the dropdown
+const selectedTag = ref('');
+
+// Function to add a selected tag to the list
+const findTagById = (tagId) => {
+    return props.tags.find(tag => tag.id === tagId);
+};
+
+// Agrega un tag a la lista de tags del producto
+const addTag = () => {
+    if (selectedTag.value) {
+        const tagToAdd = findTagById(selectedTag.value);
+        if (tagToAdd && !form.value.tags.some(t => t.id === tagToAdd.id)) {
+            form.value.tags.push(tagToAdd);
+        }
+        selectedTag.value = ''; // Reset the dropdown after adding a tag
+    }
+};
+
+// Elimina un tag de la lista de tags del producto
+const removeTag = (tagId) => {
+    const index = form.value.tags.findIndex(t => t.id === tagId);
+    if (index > -1) {
+        form.value.tags.splice(index, 1);
+    }
+};
+
+const availableTags = computed(() => {
+    return props.tags.filter(tag => !form.value.tags.some(t => t.id === tag.id));
+});
 </script>
+
 
 <template>
     <AdminLayout title="Update Product">
@@ -154,6 +202,38 @@ function destroy() {
                                     <input v-model="form.stock" type="number" id="stock" name="stock"
                                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Quantity">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                                <div class="my-4 p-4 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="flex items-center">
+                                        <select v-model="selectedTag"
+                                            class="flex-grow bg-gray-100 border-none rounded-l-lg py-2 px-4 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+                                            <option disabled value="">Select a tag</option>
+                                            <option v-for="tag in availableTags" :key="tag.id" :value="tag.id">{{
+                                tag.name }}</option>
+                                        </select>
+                                        <button type="button" @click="addTag"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-r-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            Add
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2 mt-4">
+                                        <div v-for="(tag, index) in form.tags" :key="tag.id"
+                                            class="flex items-center bg-blue-600 text-white rounded-full py-2 px-3 text-sm font-semibold cursor-pointer hover:bg-blue-700">
+                                            {{ tag.name }}
+                                            <button @click="removeTag(tag.id)"
+                                                class="ml-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
