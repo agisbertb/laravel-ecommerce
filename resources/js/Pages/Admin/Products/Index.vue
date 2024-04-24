@@ -116,6 +116,11 @@ function destroy(productId) {
         router.delete(`/admin/products/${productId}`);
     }
 }
+
+const toggleCategories = (product) => {
+    product.isCategoriesExpanded = !product.isCategoriesExpanded;
+};
+
 </script>
 
 <template>
@@ -230,16 +235,17 @@ function destroy(productId) {
                                             </th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
-                                                Description</th>
+                                                Categories
+                                            </th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Tags
+                                            </th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                                                 Price</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                                                 Stock</th>
-                                            <th scope="col"
-                                                class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">Tags
-                                            </th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-sm font-semibold text-center text-gray-900">
                                                 Action</th>
@@ -262,24 +268,24 @@ function destroy(productId) {
                                                 {{ product.name }}
                                                 </Link>
                                             </td>
+
                                             <td class="border-t">
-                                                <Link class="flex justify-center items-center px-6 py-4"
-                                                    :href="`/admin/products/${product.id}/edit`" tabindex="-1">
-                                                {{ product.description }}
-                                                </Link>
+                                                <div class="flex flex-wrap items-center justify-center gap-2 px-6 py-4">
+                                                    <template v-for="(categoryName, index) in product.categoryNames">
+                                                        <span v-if="index < 2 || product.isCategoriesExpanded"
+                                                            :key="`category-${index}`"
+                                                            class="bg-green-600 text-white rounded text-xs leading-4 py-1 px-2">
+                                                            {{ categoryName }}
+                                                        </span>
+                                                    </template>
+                                                    <button v-if="product.categoryNames.length > 2"
+                                                        @click="toggleCategories(product)"
+                                                        class="text-xs text-blue-600 hover:underline">
+                                                        {{ product.isCategoriesExpanded ? 'Less' : 'More' }}
+                                                    </button>
+                                                </div>
                                             </td>
-                                            <td class="border-t">
-                                                <Link class="flex justify-center items-center px-6 py-4"
-                                                    :href="`/admin/products/${product.id}/edit`" tabindex="-1">
-                                                {{ product.price }}
-                                                </Link>
-                                            </td>
-                                            <td class="border-t">
-                                                <Link class="flex justify-center items-center px-6 py-4"
-                                                    :href="`/admin/products/${product.id}/edit`" tabindex="-1">
-                                                {{ product.stock }}
-                                                </Link>
-                                            </td>
+
                                             <td class="border-t">
                                                 <div class="flex flex-wrap items-center justify-center gap-2 px-6 py-4">
                                                     <template v-for="(tagName, index) in product.tagNames">
@@ -296,6 +302,20 @@ function destroy(productId) {
                                                     </button>
                                                 </div>
                                             </td>
+
+                                            <td class="border-t">
+                                                <Link class="flex justify-center items-center px-6 py-4"
+                                                    :href="`/admin/products/${product.id}/edit`" tabindex="-1">
+                                                {{ product.price }}
+                                                </Link>
+                                            </td>
+                                            <td class="border-t">
+                                                <Link class="flex justify-center items-center px-6 py-4"
+                                                    :href="`/admin/products/${product.id}/edit`" tabindex="-1">
+                                                {{ product.stock }}
+                                                </Link>
+                                            </td>
+
                                             <td class="border-t">
                                                 <div class="flex justify-center space-x-4">
 

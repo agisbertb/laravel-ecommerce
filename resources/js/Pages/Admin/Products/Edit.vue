@@ -12,11 +12,13 @@ import { Pagination, Navigation } from 'swiper/modules';
 const props = defineProps({
     product: Object,
     tags: Array,
-    productTags: Array
+    productTags: Array,
+    categories: Array,
+    productCategories: Array
 });
 
-// Convertir IDs de tags a objetos de tags para visualización
 const initialTags = props.productTags.map(tagId => props.tags.find(tag => tag.id === tagId));
+const initialCategories = props.productCategories.map(categoryId => props.categories.find(category => category.id === categoryId));
 
 const form = ref({
     name: props.product.name,
@@ -27,8 +29,12 @@ const form = ref({
     imagePreviews: [],
     existingImages: props.product.images || [],
     deleteImages: [],
-    tags: initialTags
+    tags: initialTags,
+    categories: initialCategories
 });
+
+const selectedTag = ref('');
+const selectedCategory = ref('');
 
 function handleFiles(event) {
     const newFiles = event.target.files;
@@ -61,6 +67,11 @@ function update() {
     formData.append('description', form.value.description);
     formData.append('price', form.value.price);
     formData.append('stock', form.value.stock);
+
+    form.value.categories.forEach(category => {
+        formData.append('categories[]', category.id);
+    });
+
 
     form.value.tags.forEach(tag => {
         formData.append('tags[]', tag.id); // Asegúrate de enviar el ID del tag
@@ -97,15 +108,10 @@ function destroy() {
     }
 }
 
-// A ref for the selected tag from the dropdown
-const selectedTag = ref('');
-
-// Function to add a selected tag to the list
 const findTagById = (tagId) => {
     return props.tags.find(tag => tag.id === tagId);
 };
 
-// Agrega un tag a la lista de tags del producto
 const addTag = () => {
     if (selectedTag.value) {
         const tagToAdd = findTagById(selectedTag.value);
@@ -116,7 +122,6 @@ const addTag = () => {
     }
 };
 
-// Elimina un tag de la lista de tags del producto
 const removeTag = (tagId) => {
     const index = form.value.tags.findIndex(t => t.id === tagId);
     if (index > -1) {
@@ -127,6 +132,24 @@ const removeTag = (tagId) => {
 const availableTags = computed(() => {
     return props.tags.filter(tag => !form.value.tags.some(t => t.id === tag.id));
 });
+
+
+function addCategory() {
+    if (selectedCategory.value) {
+        const categoryToAdd = props.categories.find(category => category.id === selectedCategory.value);
+        if (categoryToAdd && !form.value.categories.some(c => c.id === categoryToAdd.id)) {
+            form.value.categories.push(categoryToAdd);
+        }
+        selectedCategory.value = '';
+    }
+}
+
+function removeCategory(categoryId) {
+    const index = form.value.categories.findIndex(c => c.id === categoryId);
+    if (index > -1) {
+        form.value.categories.splice(index, 1);
+    }
+}
 </script>
 
 
@@ -172,41 +195,76 @@ const availableTags = computed(() => {
                 <div class="flex justify-center px-4 py-8">
                     <div class="w-full max-w-4xl mx-auto bg-white p-8">
                         <div class="mb-8">
-                            <h1 class="text-2xl font-bold text-gray-700 mb-1 text-center">Update {{ form.name }}</h1>
+                            <h1 class="text-2xl font-bold text-gray-900 mb-1 text-center">Update {{ form.name }}</h1>
                             <p class="text-gray-600 text-sm text-center">Complete the form below to update a product in
                                 your store.</p>
                         </div>
                         <form @submit.prevent="update" class="space-y-6">
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                                <label for="name" class="block text-base font-bold text-gray-900">Product Name</label>
                                 <input v-model="form.name" type="text" id="name" name="name"
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    class="my-4 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Product...">
                             </div>
                             <div>
                                 <label for="description"
-                                    class="block text-sm font-medium text-gray-700">Description</label>
+                                    class="block text-base font-bold text-gray-900">Description</label>
                                 <textarea v-model="form.description" id="description" name="description" rows="4"
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    class="my-4 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Provide a detailed description of the product"></textarea>
                             </div>
                             <div class="md:flex md:gap-6 md:items-end">
                                 <div class="md:w-1/2">
-                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                    <label for="price" class="block text-base font-bold text-gray-900">Price</label>
                                     <input v-model="form.price" type="text" id="price" name="price"
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                        class="my-4 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="0.00">
                                 </div>
                                 <div class="md:w-1/2">
-                                    <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+                                    <label for="stock" class="block text-base font-bold text-gray-900">Stock</label>
                                     <input v-model="form.stock" type="number" id="stock" name="stock"
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                        class="my-4 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="Quantity">
                                 </div>
                             </div>
 
                             <div>
-                                <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                                <label for="categories"
+                                    class="block text-base font-bold text-gray-900">Categories</label>
+                                <div class="my-4 p-4 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="flex items-center">
+                                        <select v-model="selectedCategory"
+                                            class="flex-grow bg-gray-100 border-none rounded-l-lg py-2 px-4 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+                                            <option disabled value="">Select a category</option>
+                                            <option v-for="category in categories" :key="category.id"
+                                                :value="category.id">
+                                                {{ category.name }}
+                                            </option>
+                                        </select>
+                                        <button type="button" @click="addCategory"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-r-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            Add
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2 mt-4">
+                                        <div v-for="(category, index) in form.categories" :key="category.id"
+                                            class="flex items-center bg-green-600 text-white rounded py-2 px-3 text-sm font-semibold cursor-pointer hover:bg-green-700">
+                                            {{ category.name }}
+                                            <button @click="removeCategory(category.id)"
+                                                class="ml-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="tags" class="block text-base font-bold text-gray-900">Tags</label>
                                 <div class="my-4 p-4 bg-white border border-gray-200 rounded-lg shadow">
                                     <div class="flex items-center">
                                         <select v-model="selectedTag"
@@ -239,9 +297,9 @@ const availableTags = computed(() => {
 
                             <div class="col-span-full">
                                 <label for="cover-photo"
-                                    class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+                                    class="block text-base font-bold leading-6 text-gray-900">Photo</label>
                                 <div
-                                    class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    class="my-4 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                                     <div class="text-center">
                                         <PhotoIcon class="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
                                         <div class="mt-4 flex text-sm leading-6 text-gray-600">

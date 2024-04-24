@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -20,7 +20,7 @@ class AdminProductController extends Controller
         $query = $request->input('search');
         $order = $request->input('order');
 
-        $products = Product::with('images', 'tags')
+        $products = Product::with('images', 'tags', 'categories')
             ->when($query, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
@@ -33,6 +33,7 @@ class AdminProductController extends Controller
             ->through(function ($product) {
                 $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
                 $product->tagNames = $product->tags->pluck('name')->toArray();
+                $product->categoryNames = $product->categories->pluck('name')->toArray();
 
                 unset($product->images);
 
@@ -53,8 +54,11 @@ class AdminProductController extends Controller
     public function create()
     {
         $tags = Tag::all();
+        $categories = Category::all();
+
         return Inertia::render('Admin/Products/Create', [
-            'tags' => $tags
+            'tags' => $tags,
+            'categories' => $categories
         ]);
     }
 
@@ -63,19 +67,28 @@ class AdminProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
-            //'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id'
         ]);
 
-        $product = Product::create($request->except(['images', 'tags']));
+        $product = Product::create($validated);
+
+        if ($request->has('categories')) {
+            $product->categories()->sync($validated['categories']);
+        }
+
+        if ($request->has('tags')) {
+            $product->tags()->sync($validated['tags']);
+        }
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -87,11 +100,8 @@ class AdminProductController extends Controller
             }
         }
 
-        if ($request->has('tags')) {
-            $product->tags()->sync($request->tags);
-        }
-
         session()->flash('success', 'Product created successfully.');
+
         return to_route('admin.products.index');
     }
 
@@ -113,12 +123,16 @@ class AdminProductController extends Controller
     {
         $product = Product::with('images', 'tags')->findOrFail($id);
         $tags = Tag::all();
+        $categories = Category::all();
         $productTags = $product->tags->pluck('id');
+        $prouctCategories = $product->categories->pluck('id');
 
         return Inertia::render('Admin/Products/Edit', [
             'product' => $product,
             'tags' => $tags,
+            'categories' => $categories,
             'productTags' => $productTags,
+            'productCategories' => $prouctCategories,
         ]);
     }
 
@@ -132,7 +146,8 @@ class AdminProductController extends Controller
             'description' => 'nullable|string|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
-            //'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'deleteImages' => 'nullable|array',
             'deleteImages.*' => 'exists:product_images,id',
@@ -142,6 +157,10 @@ class AdminProductController extends Controller
 
         $product = Product::findOrFail($id);
         $product->update($request->only(['name', 'description', 'price', 'stock']));
+
+        if ($request->has('categories')) {
+            $product->categories()->sync($request->input('categories'));
+        }
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -161,6 +180,7 @@ class AdminProductController extends Controller
         }
 
         session()->flash('success', 'Product updated successfully.');
+
         return to_route('admin.products.index');
     }
 
