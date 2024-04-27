@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -14,6 +15,12 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
+
+        foreach ($products as $product) {
+            $product->load('images');
+            $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+        }
+
         return Inertia::render('Welcome', ['products' => $products]);
     }
 

@@ -3,7 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  products: Array,
+    products: Array,
 });
 
 

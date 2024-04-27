@@ -1,82 +1,154 @@
-<script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import ApplicationMark from '@/Components/ApplicationMark.vue';
-import Banner from '@/Components/Banner.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-
-defineProps({
-    title: String,
-});
-
-const showingNavigationDropdown = ref(false);
-
-const logout = () => {
-    router.post(route('logout'));
-};
-</script>
-
 <template>
-    <div>
-        <Head :title="title" />
+    <div class="bg-white">
+        <!-- Mobile menu -->
+        <TransitionRoot as="template" :show="open">
+            <Dialog as="div" class="relative z-40 lg:hidden" @close="open = false">
+                <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-black bg-opacity-25" />
+                </TransitionChild>
 
-        <Banner />
-
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
-                <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('welcome')">
-                                    <ApplicationMark class="block h-9 w-auto" />
-                                </Link>
+                <div class="fixed inset-0 z-40 flex">
+                    <TransitionChild as="template" enter="transition ease-in-out duration-300 transform" enter-from="-translate-x-full" enter-to="translate-x-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0" leave-to="-translate-x-full">
+                        <DialogPanel class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
+                            <div class="flex px-4 pb-2 pt-5">
+                                <button type="button" class="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400" @click="open = false">
+                                    <span class="absolute -inset-0.5" />
+                                    <span class="sr-only">Close menu</span>
+                                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                                </button>
                             </div>
 
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <!-- Links -->
+                            <TabGroup as="div" class="mt-2">
+                                <div class="border-b border-gray-200">
+                                    <TabList class="-mb-px flex space-x-8 px-4">
+                                        <Tab as="template" v-for="category in navigation.categories" :key="category.name" v-slot="{ selected }">
+                                            <button :class="[selected ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-900', 'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium']">{{ category.name }}</button>
+                                        </Tab>
+                                    </TabList>
+                                </div>
+                                <TabPanels as="template">
+                                    <TabPanel v-for="category in navigation.categories" :key="category.name" class="space-y-10 px-4 pb-8 pt-10">
+                                        <div class="grid grid-cols-2 gap-x-4">
+                                            <div v-for="item in category.featured" :key="item.name" class="group relative text-sm">
+                                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                                    <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center" />
+                                                </div>
+                                                <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                                                    <span class="absolute inset-0 z-10" aria-hidden="true" />
+                                                    {{ item.name }}
+                                                </a>
+                                                <p aria-hidden="true" class="mt-1">Shop now</p>
+                                            </div>
+                                        </div>
+                                        <div v-for="section in category.sections" :key="section.name">
+                                            <p :id="`${category.id}-${section.id}-heading-mobile`" class="font-medium text-gray-900">{{ section.name }}</p>
+                                            <ul role="list" :aria-labelledby="`${category.id}-${section.id}-heading-mobile`" class="mt-6 flex flex-col space-y-6">
+                                                <li v-for="item in section.items" :key="item.name" class="flow-root">
+                                                    <a :href="item.href" class="-m-2 block p-2 text-gray-500">{{ item.name }}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </TabPanel>
+                                </TabPanels>
+                            </TabGroup>
 
-                                <NavLink :href="route('products.index')" :active="route().current('products.index')">
-                                    Products
-                                </NavLink>
+                            <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+                                <div v-for="page in navigation.pages" :key="page.name" class="flow-root">
+                                    <a :href="page.href" class="-m-2 block p-2 font-medium text-gray-900">{{ page.name }}</a>
+                                </div>
+                            </div>
 
-                                <NavLink :href="route('cart.index')" :active="route().current('cart.index')">
-                                    Cart
-                                </NavLink>
+                            <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+                                <div class="flow-root">
+                                    <a href="#" class="-m-2 block p-2 font-medium text-gray-900">Sign in</a>
+                                </div>
+                                <div class="flow-root">
+                                    <a href="#" class="-m-2 block p-2 font-medium text-gray-900">Create account</a>
+                                </div>
+                            </div>
 
+                        </DialogPanel>
+                    </TransitionChild>
+                </div>
+            </Dialog>
+        </TransitionRoot>
 
+        <header class="relative bg-white">
+            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">Get free delivery on orders over $100</p>
 
+            <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="border-b border-gray-200">
+                    <div class="flex h-16 items-center">
+                        <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="open = true">
+                            <span class="absolute -inset-0.5" />
+                            <span class="sr-only">Open menu</span>
+                            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                        </button>
+
+                        <!-- Logo -->
+                        <div class="ml-4 flex lg:ml-0">
+                            <a href="#">
+                                <span class="sr-only">Your Company</span>
+<!--                                <img class="h-20 w-auto" src="" alt="" />-->
+                                TODO
+                            </a>
+                        </div>
+
+                        <!-- Search bar -->
+
+                        <div class="flex justify-center items-center w-full px-4 sm:px-6 lg:px-8">
+                            <div class="w-full max-w-lg">
+                                <label for="search" class="sr-only">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <MagnifyingGlassIcon class="h-4 w-4 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
+                                    </div>
+                                    <input id="search" name="search"
+                                           class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                           placeholder="Searching for..." type="search">
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Authentication Links -->
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <div class="ml-auto flex items-center">
+
+
+                            <!-- Wishlist -->
+                            <div class="flex lg:ml-6">
+                                <NavLink href="#" class="group -m-2 p-2 flex items-center">
+                                    <HeartIcon class="h-8 w-8 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
+                                    <span class="sr-only">Wishlist</span>
+                                </NavLink>
+                            </div>
+
+                            <!-- Cart -->
+                            <div class="ml-4 flow-root lg:ml-6">
+                                <NavLink :href="route('cart.index')" class="group flex items-center p-2">
+                                    <ShoppingBagIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
+                                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                                    <span class="sr-only">items in cart, view bag</span>
+                                </NavLink>
+                            </div>
+
+                            <!-- Login/Register -->
                             <template v-if="!$page.props.auth.user">
-                                <NavLink :href="route('login')" class="text-sm text-gray-700 underline">Login</NavLink>
-                                <NavLink :href="route('register')" class="ml-4 text-sm text-gray-700 underline">Register</NavLink>
+                            <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
+                                <NavLink :href="route('login')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Login</NavLink>
+                                <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
+                                <NavLink :href="route('register')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Register</NavLink>
+                            </div>
                             </template>
 
                             <!-- Settings Dropdown -->
                             <div v-else class="ms-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
-                                        </button>
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
 
-                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                                </svg>
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                                <UserCircleIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
                                             </button>
-                                        </span>
+
                                     </template>
 
                                     <template #content>
@@ -108,44 +180,247 @@ const logout = () => {
                                     </template>
                                 </Dropdown>
                             </div>
-                        </div>
 
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button @click="showingNavigationDropdown = !showingNavigationDropdown" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path :class="{'hidden': showingNavigationDropdown, 'inline-flex': !showingNavigationDropdown}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                                    <path :class="{'hidden': !showingNavigationDropdown, 'inline-flex': showingNavigationDropdown}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
-                <div :class="{'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown}" class="sm:hidden">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <!-- Responsive NavLink for "Dashboard", "Products", etc -->
-                    </div>
 
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <!-- Include responsive nav links and logout option as above, adjusted for mobile if needed -->
-                    </div>
-                </div>
+
             </nav>
 
-            <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
-                </div>
-            </header>
 
-            <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
-        </div>
+            <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="border-b border-gray-200">
+                    <div class="flex h-16 items-center">
+
+                <!-- Flyout menus -->
+                <PopoverGroup class="hidden lg:ml-8 lg:block lg:self-stretch">
+                    <div class="flex h-full space-x-8">
+                        <Popover v-for="category in navigation.categories" :key="category.name" class="flex" v-slot="{ open }">
+                            <div class="relative flex">
+                                <PopoverButton :class="[open ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800', 'relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out']">{{ category.name }}</PopoverButton>
+                            </div>
+
+                            <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                <PopoverPanel class="absolute inset-x-0 top-full text-sm text-gray-500">
+                                    <!-- Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow -->
+                                    <div class="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+
+                                    <div class="relative bg-white">
+                                        <div class="mx-auto max-w-7xl px-8">
+                                            <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                                                <div class="col-start-2 grid grid-cols-2 gap-x-8">
+                                                    <div v-for="item in category.featured" :key="item.name" class="group relative text-base sm:text-sm">
+                                                        <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                                            <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center" />
+                                                        </div>
+                                                        <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                                                            <span class="absolute inset-0 z-10" aria-hidden="true" />
+                                                            {{ item.name }}
+                                                        </a>
+                                                        <p aria-hidden="true" class="mt-1">Shop now</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                                                    <div v-for="section in category.sections" :key="section.name">
+                                                        <p :id="`${section.name}-heading`" class="font-medium text-gray-900">{{ section.name }}</p>
+                                                        <ul role="list" :aria-labelledby="`${section.name}-heading`" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                                                            <li v-for="item in section.items" :key="item.name" class="flex">
+                                                                <a :href="item.href" class="hover:text-gray-800">{{ item.name }}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </PopoverPanel>
+                            </transition>
+                        </Popover>
+
+                        <a v-for="page in navigation.pages" :key="page.name" :href="page.href" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">{{ page.name }}</a>
+                    </div>
+                </PopoverGroup>
+                    </div>
+                </div>
+
+            </nav>
+        </header>
     </div>
+
+
+    <main>
+        <slot />
+    </main>
+
+    <FooterSection />
+
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import {
+    Dialog,
+    DialogPanel,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    TransitionChild,
+    TransitionRoot,
+} from '@headlessui/vue'
+import { Bars3Icon, HeartIcon, ShoppingBagIcon, UserCircleIcon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import NavLink from "@/Components/NavLink.vue";
+import {router} from "@inertiajs/vue3";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import Dropdown from '@/Components/Dropdown.vue';
+import FooterSection from "@/Components/FooterSection.vue";
+import HeroSection from "@/Components/HeroSection.vue";
+import TrendingProducts from "@/Components/LatestProductsSection.vue";
+import ShopByCategories from "@/Components/ShopByCategoriesSection.vue";
+import FavoriteProducts from "@/Components/FavoriteProductsSection.vue";
+import NewsletterSection from "@/Components/NewsletterSection.vue";
+
+const navigation = {
+    categories: [
+        {
+            id: 'women',
+            name: 'Women',
+            featured: [
+                {
+                    name: 'New Arrivals',
+                    href: '#',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
+                    imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+                },
+                {
+                    name: 'Basic Tees',
+                    href: '#',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
+                    imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+                },
+            ],
+            sections: [
+                {
+                    id: 'clothing',
+                    name: 'Clothing',
+                    items: [
+                        { name: 'Tops', href: '#' },
+                        { name: 'Dresses', href: '#' },
+                        { name: 'Pants', href: '#' },
+                        { name: 'Denim', href: '#' },
+                        { name: 'Sweaters', href: '#' },
+                        { name: 'T-Shirts', href: '#' },
+                        { name: 'Jackets', href: '#' },
+                        { name: 'Activewear', href: '#' },
+                        { name: 'Browse All', href: '#' },
+                    ],
+                },
+                {
+                    id: 'accessories',
+                    name: 'Accessories',
+                    items: [
+                        { name: 'Watches', href: '#' },
+                        { name: 'Wallets', href: '#' },
+                        { name: 'Bags', href: '#' },
+                        { name: 'Sunglasses', href: '#' },
+                        { name: 'Hats', href: '#' },
+                        { name: 'Belts', href: '#' },
+                    ],
+                },
+                {
+                    id: 'brands',
+                    name: 'Brands',
+                    items: [
+                        { name: 'Full Nelson', href: '#' },
+                        { name: 'My Way', href: '#' },
+                        { name: 'Re-Arranged', href: '#' },
+                        { name: 'Counterfeit', href: '#' },
+                        { name: 'Significant Other', href: '#' },
+                    ],
+                },
+            ],
+        },
+        {
+            id: 'men',
+            name: 'Men',
+            featured: [
+                {
+                    name: 'New Arrivals',
+                    href: '#',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
+                    imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+                },
+                {
+                    name: 'Artwork Tees',
+                    href: '#',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
+                    imageAlt:
+                        'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+                },
+            ],
+            sections: [
+                {
+                    id: 'clothing',
+                    name: 'Clothing',
+                    items: [
+                        { name: 'Tops', href: '#' },
+                        { name: 'Pants', href: '#' },
+                        { name: 'Sweaters', href: '#' },
+                        { name: 'T-Shirts', href: '#' },
+                        { name: 'Jackets', href: '#' },
+                        { name: 'Activewear', href: '#' },
+                        { name: 'Browse All', href: '#' },
+                    ],
+                },
+                {
+                    id: 'accessories',
+                    name: 'Accessories',
+                    items: [
+                        { name: 'Watches', href: '#' },
+                        { name: 'Wallets', href: '#' },
+                        { name: 'Bags', href: '#' },
+                        { name: 'Sunglasses', href: '#' },
+                        { name: 'Hats', href: '#' },
+                        { name: 'Belts', href: '#' },
+                    ],
+                },
+                {
+                    id: 'brands',
+                    name: 'Brands',
+                    items: [
+                        { name: 'Re-Arranged', href: '#' },
+                        { name: 'Counterfeit', href: '#' },
+                        { name: 'Full Nelson', href: '#' },
+                        { name: 'My Way', href: '#' },
+                    ],
+                },
+            ],
+        },
+    ],
+    pages: [
+        { name: 'Company', href: '#' },
+        { name: 'Stores', href: '#' },
+    ],
+}
+
+const open = ref(false)
+
+defineProps({
+    title: String,
+});
+
+const showingNavigationDropdown = ref(false);
+
+const logout = () => {
+    router.post(route('logout'));
+};
+
+</script>
