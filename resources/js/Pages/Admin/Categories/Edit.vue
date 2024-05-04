@@ -1,9 +1,13 @@
 <script setup>
-import { reactive } from 'vue'
-import { router, Link } from '@inertiajs/vue3'
+import { reactive, ref } from 'vue';
+import { router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { ChevronRightIcon, HomeIcon, TrashIcon, ArrowPathIcon } from "@heroicons/vue/20/solid/index.js";
-
+import { ChevronRightIcon, HomeIcon, TrashIcon, ArrowPathIcon, PhotoIcon } from "@heroicons/vue/20/solid/index.js";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Pagination, Navigation } from 'swiper/modules';
 
 const props = defineProps({
     category: Object,
@@ -14,10 +18,41 @@ const form = reactive({
     name: props.category.name,
     description: props.category.description,
     parent_id: props.category.parent_id,
+    image: null
 });
 
+const imagePreview = ref(props.category.image ? `/storage/${props.category.image}` : '');
+
 function update() {
-    router.put(`/admin/categories/${props.category.id}`, form);
+    const formData = new FormData();
+    formData.append('name', form.name);
+    formData.append('description', form.description);
+    formData.append('parent_id', form.parent_id || '');
+    if (form.image instanceof File) {
+        formData.append('image', form.image);
+    }
+
+    router.put(`/admin/categories/${props.category.id}`, formData, {
+        onBefore: () => ({
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }),
+        onSuccess: () => alert('Category updated successfully.'),
+        onError: error => alert('Error updating the category.')
+    });
+}
+
+function handleImageChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        form.image = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
 function destroy() {
@@ -25,7 +60,13 @@ function destroy() {
         router.delete(`/admin/categories/${props.category.id}`);
     }
 }
+
+function removeImage() {
+    form.image = null;
+    imagePreview.value = '';
+}
 </script>
+
 
 <template>
     <AdminLayout title="Update category">
@@ -97,6 +138,37 @@ function destroy() {
                                     <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                                 </select>
                             </div>
+
+                            <div>
+                                <label for="image" class="block text-base font-bold text-gray-900">Category Image</label>
+                                <div class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <PhotoIcon class="mx-auto h-12 w-12 text-gray-400" />
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <span>Upload a file</span>
+                                                <input id="image" name="image" type="file" class="sr-only" @change="handleImageChange">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">
+                                            PNG, JPG, GIF up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Swiper for image preview -->
+                            <Swiper :modules="[Pagination, Navigation]" class="mySwiper" spaceBetween={30} slidesPerView={1} navigation pagination>
+                                <SwiperSlide v-if="imagePreview">
+                                    <img :src="imagePreview" alt="Preview" class="object-cover rounded-lg shadow-md h-96" />
+                                    <button @click="removeImage" class="absolute top-0 right-0 m-2 bg-red-500 text-white p-1 rounded-full">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </SwiperSlide>
+                            </Swiper>
 
                             <div class="flex justify-end mt-4 space-x-4">
                                 <button type="button" @click="destroy"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class AdminCategoryController extends Controller
@@ -57,9 +58,18 @@ class AdminCategoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $category = Category::create($request->all());
+        $category = new Category($request->except(['image']));
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/categories');
+            $category->image = Str::replaceFirst('public/', '', $path);
+        }
+
+
+        $category->save();
 
         session()->flash('success', 'Category created successfully.');
 
@@ -94,10 +104,18 @@ class AdminCategoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $category = Category::findOrFail($id);
-        $category->update($request->all());
+        $data = $request->except(['image']);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/categories');
+            $category->image = Str::replaceFirst('public/', '', $path);
+        }
+
+        $category->update($data);
 
         session()->flash('success', 'Category updated successfully.');
 
@@ -116,4 +134,49 @@ class AdminCategoryController extends Controller
 
         return to_route('admin.categories.index');
     }
+
+    public function featuredIndex()
+    {
+        $featuredCategories = Category::where('featured', true)->get();
+        return Inertia::render('Admin/Categories/FeaturedIndex', [
+            'categories' => $featuredCategories,
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
+    }
+
+    public function featuredManage()
+    {
+        $allCategories = Category::all();
+        $featuredCategories = Category::where('featured', true)->get();
+        return Inertia::render('Admin/Categories/FeaturedManage', [
+            'categories' => $allCategories,
+            'featuredCategories' => $featuredCategories->pluck('id')
+        ]);
+    }
+
+
+    public function featuredStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'featured' => 'required|array|size:3',
+            'featured.*' => 'exists:categories,id'
+        ]);
+
+        Category::where('featured', true)->update(['featured' => false]);
+
+        foreach ($validatedData['featured'] as $categoryId) {
+            $category = Category::findOrFail($categoryId);
+            $category->featured = true;
+            $category->save();
+        }
+
+        session()->flash('success', 'Categories Featured updated successfully.');
+
+        return Inertia::location(route('admin.featured.categories.index'));
+    }
+
+
+
 }

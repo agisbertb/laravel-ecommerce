@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('image')->nullable();
+            $table->boolean('featured')->default(false);
             $table->timestamps();
         });
     }

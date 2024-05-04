@@ -2,13 +2,14 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import NewsletterSection from "@/Components/NewsletterSection.vue";
 import ShopByCategories from "@/Components/ShopByCategoriesSection.vue";
-import HeroSection from "@/Components/HeroSection.vue";
 import FavoriteProducts from "@/Components/FavoriteProductsSection.vue";
 import LatestProductsSection from "@/Components/LatestProductsSection.vue";
 import { defineProps } from 'vue';
+import FeaturedCategoriesSection from "@/Components/FeaturedCategoriesSection.vue";
 
 const props = defineProps({
     products: Array,
+    featuredCategories: Array,
 });
 
 </script>
@@ -20,7 +21,7 @@ const props = defineProps({
 
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        <HeroSection />
+        <FeaturedCategoriesSection :categories="featuredCategories"/>
 
           <FavoriteProducts />
 

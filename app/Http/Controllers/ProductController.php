@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,12 @@ class ProductController extends Controller
             $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
         }
 
-        return Inertia::render('Welcome', ['products' => $products]);
+        $featuredCategories = Category::where('featured', true)->get();
+
+        return Inertia::render('Welcome', [
+            'products' => $products,
+            'featuredCategories' => $featuredCategories
+        ]);
     }
 
     /**

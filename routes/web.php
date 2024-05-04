@@ -114,6 +114,11 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
+    //featured
+
+    Route::get('/admin/categories/featured', [AdminCategoryController::class, 'featuredIndex'])->name('admin.featured.categories.index');
+    Route::get('/admin/categories/featured/manage', [AdminCategoryController::class, 'featuredManage'])->name('admin.categories.featured.manage');
+    Route::put('/admin/categories/featured/save', [AdminCategoryController::class, 'featuredStore'])->name('admin.categories.featured.store');
     // admin tags route
 
     Route::get('/admin/tags', [AdminTagController::class, 'index'])->name('admin.tags.index');

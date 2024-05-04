@@ -1,12 +1,4 @@
 <template>
-    <!--
-      This example requires updating your template:
-
-      ```
-      <html class="h-full bg-white">
-      <body class="h-full">
-      ```
-    -->
     <div>
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -295,6 +287,7 @@ const navigation = reactive([
         children: [
             { name: 'All Categories', href: '/admin/categories', current: false },
             { name: 'Add Category', href: '/admin/categories/create', current: false },
+            { name: 'Featured Categories', href: '/admin/categories/featured', current: false },
         ]
     },
     {
