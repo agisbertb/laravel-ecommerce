@@ -12,14 +12,14 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $cart = $user->cart;
 
-        $defaultShippingAddress = $user->addresses()->where('type', 'Shipping')->where('default', true)->get();
-        $defaultBillingAddress = $user->addresses()->where('type', 'Billing')->where('default', true)->get();
+        $shippingAddresses = $user->addresses()->where('type', 'Shipping')->get();
+        $billingAddresses = $user->addresses()->where('type', 'Billing')->get();
 
         $cartTotal = $cart ? $cart->details->sum('subtotal') : 0;
 
         return Inertia::render('Checkout/Address', [
-            'defaultShippingAddress' => $defaultShippingAddress,
-            'defaultBillingAddress' => $defaultBillingAddress,
+            'shippingAddresses' => $shippingAddresses,
+            'billingAddresses' => $billingAddresses,
             'cartTotal' => $cartTotal,
         ]);
     }
