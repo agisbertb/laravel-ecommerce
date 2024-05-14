@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import CartLayout from '@/Layouts/CartLayout.vue';
 import { defineProps, ref } from 'vue';
 
 const props = defineProps({
@@ -13,7 +13,7 @@ const selectedBillingAddress = ref('');
 </script>
 
 <template>
-    <AppLayout title="Select Address">
+    <CartLayout title="Select Address">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Select Address
@@ -103,5 +103,5 @@ const selectedBillingAddress = ref('');
                 </a>
             </div>
         </div>
-    </AppLayout>
+    </CartLayout>
 </template>

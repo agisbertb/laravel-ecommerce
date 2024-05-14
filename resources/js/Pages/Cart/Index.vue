@@ -1,12 +1,90 @@
+<template>
+    <CartLayout title="Shopping Cart">
+
+    <div class="bg-white">
+        <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
+            <form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+                <section aria-labelledby="cart-heading" class="lg:col-span-7">
+                    <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+
+                    <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
+                        <li v-for="(detail, index) in cartDetails" :key="detail.id" class="flex py-6 sm:py-10">
+                            <div class="flex-shrink-0">
+                                <img :src="detail.product.image_url" :alt="detail.product.name" class="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48" />
+                            </div>
+
+                            <div class="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+                                <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <h3 class="text-sm">
+                                                <a :href="`/products/${detail.product.id}`" class="font-medium text-gray-700 hover:text-gray-800">{{ detail.product.name }}</a>
+                                            </h3>
+                                        </div>
+                                        <p class="mt-1 text-sm font-medium text-gray-900">${{ detail.price }}</p>
+                                    </div>
+
+                                    <div class="mt-4 sm:mt-0 sm:pr-9">
+                                        <label :for="`quantity-${index}`" class="sr-only">Quantity, {{ detail.product.name }}</label>
+                                        <select :id="`quantity-${index}`" :name="`quantity-${index}`" class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm" v-model="detail.quantity" @change="updateQuantity(index, detail.quantity)">
+                                            <option v-for="n in detail.product.stock" :key="n" :value="n">{{ n }}</option>
+                                        </select>
+
+                                        <div class="absolute right-0 top-0">
+                                            <button type="button" class="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500" @click="removeFromCart(index)">
+                                                <span class="sr-only">Remove</span>
+                                                <XMarkIcon class="h-5 w-5" aria-hidden="true" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mt-4 flex space-x-2 text-sm text-gray-700">
+                                    <CheckIcon v-if="detail.product.stock > 0" class="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
+                                    <ClockIcon v-else class="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                                    <span>{{ detail.product.stock > 0 ? 'In stock' : 'Out of stock' }}</span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Order summary -->
+                <section aria-labelledby="summary-heading" class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+                    <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+
+                    <dl class="mt-6 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <dt class="text-sm text-gray-600">Subtotal</dt>
+                            <dd class="text-sm font-medium text-gray-900">${{ cartTotal }}</dd>
+                        </div>
+                        <!-- Add shipping and tax if needed -->
+                        <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+                            <dt class="text-base font-medium text-gray-900">Order total</dt>
+                            <dd class="text-base font-medium text-gray-900">${{ cartTotal }}</dd>
+                        </div>
+                    </dl>
+
+                    <div class="mt-6">
+                        <a href="/cart/address" class="w-full block rounded-md border border-transparent bg-blue-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-50">Checkout</a>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+    </CartLayout>
+</template>
+
 <script setup>
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
+import { CheckIcon, ClockIcon, XMarkIcon } from '@heroicons/vue/20/solid';
+import CartLayout from '@/Layouts/CartLayout.vue';
 
 const props = defineProps({
     cartDetails: Array,
     cartTotal: Number
-
 });
 
 const cartDetails = ref(props.cartDetails);
@@ -16,7 +94,7 @@ const cartTotal = computed(() => {
 });
 
 const updateQuantity = (detailIndex, newQuantity) => {
-    const detail = props.cartDetails[detailIndex];
+    const detail = cartDetails.value[detailIndex];
     if (newQuantity > 0) {
         detail.quantity = newQuantity;
         router.patch(`/cart/update/${detail.id}`, { quantity: newQuantity }, {
@@ -26,75 +104,12 @@ const updateQuantity = (detailIndex, newQuantity) => {
 };
 
 const removeFromCart = (detailIndex) => {
-    const detail = props.cartDetails[detailIndex];
+    const detail = cartDetails.value[detailIndex];
     router.delete(`/cart/remove/${detail.id}`, {
         preserveState: true,
         onSuccess: () => {
-            props.cartDetails.splice(detailIndex, 1);
+            cartDetails.value.splice(detailIndex, 1);
         }
     });
 };
-
 </script>
-
-<template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                CART
-            </h2>
-        </template>
-
-        <div class="py-6">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">My Cart</h1>
-                <div class="bg-white shadow overflow-hidden sm:rounded-md">
-                    <ul class="divide-y divide-gray-200">
-                        <li v-for="(detail, index) in cartDetails" :key="detail.id" class="px-4 py-4 flex justify-between sm:px-6">
-                            <div>
-                                <div class="text-sm font-medium text-indigo-600">
-                                    {{ detail.product.name }}
-                                </div>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        ${{ detail.price }} each
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <button @click="updateQuantity(index, detail.quantity - 1)" v-if="detail.quantity > 1"
-                                        class="px-2 py-1 mr-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded">
-                                    -
-                                </button>
-                                <span>{{ detail.quantity }}</span>
-                                <button @click="updateQuantity(index, detail.quantity + 1)"
-                                        v-if="detail.quantity < detail.product.stock"
-                                        class="px-2 py-1 ml-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded">
-                                    +
-                                </button>
-                                <span class="ml-4">
-                  Subtotal: ${{ detail.quantity * detail.price }}
-                </span>
-                            </div>
-                            <button @click="removeFromCart(index)"
-                                    class="ml-4 px-2 py-1 text-sm font-semibold text-red-700 bg-red-200 rounded">
-                                Remove
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="px-4 py-4 sm:px-6">
-                        <div class="flex justify-between">
-                            <span>Total:</span>
-                            <span class="font-bold">${{ cartTotal }}</span>
-                        </div>
-                        <div class="flex justify-end mt-4">
-                            <a href="/cart/address" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Checkout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </AppLayout>
-</template>

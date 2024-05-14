@@ -73,10 +73,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/get', [CartController::class, 'getCart'])->name('cart.get');
         Route::post('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
 
-        Route::get('/address', [CheckoutController::class, 'address']);
-        Route::get('/shipping', [CheckoutController::class, 'shipping']);
-        Route::get('/payment', [CheckoutController::class, 'payment']);
-        Route::get('/review', [CheckoutController::class, 'review']);
+        Route::get('/address', [CheckoutController::class, 'address'])->name('cart.address');
+        Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('cart.shipping');
+        Route::get('/payment', [CheckoutController::class, 'payment'])->name('cart.payment');
+        Route::get('/review', [CheckoutController::class, 'review'])->name('cart.review');
 
     });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,15 @@ class CartController extends Controller
 
         $cartDetails = $cart->details()->with('product')->get();
 
+        $cartDetails->each(function ($detail) {
+            $detail->product->image_url = $detail->product->images->isNotEmpty() ? Storage::url($detail->product->images->first()->image_path) : null;
+        });
+
         return Inertia::render('Cart/Index', [
             'cartDetails' => $cartDetails,
         ]);
     }
+
 
     public function getCart()
     {
