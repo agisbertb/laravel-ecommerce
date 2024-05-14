@@ -103,6 +103,11 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/admin/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
 
+    Route::get('/admin/products/favorite', [AdminProductController::class, 'favoriteIndex'])->name('admin.favorite.products.index');
+    Route::get('/admin/products/favorite/manage', [AdminProductController::class, 'favoriteManage'])->name('admin.favorite.products.manage');
+    Route::put('/admin/products/favorite/save', [AdminProductController::class, 'favoriteStore'])->name('admin.favorite.products.save');
+
+
     // admin categories route
 
     Route::get('/admin/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');

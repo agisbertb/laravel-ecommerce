@@ -176,7 +176,4 @@ class AdminCategoryController extends Controller
 
         return Inertia::location(route('admin.featured.categories.index'));
     }
-
-
-
 }

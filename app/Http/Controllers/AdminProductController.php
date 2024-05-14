@@ -77,7 +77,7 @@ class AdminProductController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $product = Product::create($validated);
@@ -196,5 +196,46 @@ class AdminProductController extends Controller
         session()->flash('success', 'Product removed successfully.');
 
         return to_route('admin.products.index');
+    }
+
+    public function favoriteIndex()
+    {
+        $favoriteProducts = Product::where('favorite', true)->get();
+        return Inertia::render('Admin/Products/FavoriteIndex', [
+            'products' => $favoriteProducts,
+            'flash' => [
+                'success' => session('success')
+            ]
+        ]);
+    }
+
+    public function favoriteManage()
+    {
+        $allProducts = Product::all();
+        $favoriteProducts = Product::where('favorite', true)->get();
+        return Inertia::render('Admin/Products/FavoriteManage', [
+            'products' => $allProducts,
+            'favoriteProducts' => $favoriteProducts->pluck('id')
+        ]);
+    }
+
+    public function favoriteStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'favorite' => 'required|array|size:3',
+            'favorite.*' => 'exists:products,id'
+        ]);
+
+        Product::where('favorite', true)->update(['favorite' => false]);
+
+        foreach ($validatedData['favorite'] as $productId) {
+            $product = Product::findOrFail($productId);
+            $product->favorite = true;
+            $product->save();
+        }
+
+        session()->flash('success', 'Favorite products updated successfully.');
+
+        return Inertia::location(route('admin.favorite.products.index'));
     }
 }

@@ -15,18 +15,31 @@ class ProductController extends Controller
      */
     public function index()
     {
+        // Obtener todos los productos
         $products = Product::all();
 
+        // Cargar las imágenes y la URL de la primera imagen para cada producto
         foreach ($products as $product) {
             $product->load('images');
             $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
         }
 
+        // Obtener las categorías destacadas
         $featuredCategories = Category::where('featured', true)->get();
+
+        // Obtener los productos favoritos
+        $favoriteProducts = Product::where('favorite', true)->get();
+
+        // Cargar las imágenes y la URL de la primera imagen para cada producto favorito
+        foreach ($favoriteProducts as $product) {
+            $product->load('images');
+            $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+        }
 
         return Inertia::render('Welcome', [
             'products' => $products,
-            'featuredCategories' => $featuredCategories
+            'featuredCategories' => $featuredCategories,
+            'favoriteProducts' => $favoriteProducts,
         ]);
     }
 

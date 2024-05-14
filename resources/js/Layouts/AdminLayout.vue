@@ -275,6 +275,7 @@ const navigation = reactive([
         children: [
             { name: 'All Products', href: '/admin/products', current: false },
             { name: 'Add Product', href: '/admin/products/create', current: false },
+            { name: 'Favorite Products', href: '/admin/products/favorite', current: false },
         ]
     },
 
