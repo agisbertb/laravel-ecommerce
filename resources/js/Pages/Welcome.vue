@@ -9,8 +9,10 @@ import FeaturedCategoriesSection from "@/Components/FeaturedCategoriesSection.vu
 
 const props = defineProps({
     products: Array,
+    categories: Array,
     featuredCategories: Array,
     favoriteProducts: Array,
+    latestProducts: Array,
 });
 
 </script>
@@ -26,9 +28,9 @@ const props = defineProps({
 
           <FavoriteProducts :products="favoriteProducts" />
 
-          <ShopByCategories />
+          <ShopByCategories :categories="categories" />
 
-        <LatestProductsSection :products="products" />
+          <LatestProductsSection :products="latestProducts" />
 
         <NewsletterSection />
 

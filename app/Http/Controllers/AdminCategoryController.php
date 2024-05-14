@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -100,7 +101,7 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
@@ -108,18 +109,20 @@ class AdminCategoryController extends Controller
         ]);
 
         $category = Category::findOrFail($id);
-        $data = $request->except(['image']);
 
         if ($request->hasFile('image')) {
+            if ($category->image) {
+                Storage::delete('public/' . $category->image);
+            }
             $path = $request->file('image')->store('public/categories');
-            $category->image = Str::replaceFirst('public/', '', $path);
+            $validatedData['image'] = Str::replaceFirst('public/', '', $path);
         }
 
-        $category->update($data);
+        $category->update($validatedData);
 
         session()->flash('success', 'Category updated successfully.');
 
-        return to_route('admin.categories.index');
+        return redirect()->route('admin.categories.index');
     }
 
     /**

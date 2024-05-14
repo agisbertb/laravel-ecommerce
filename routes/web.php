@@ -118,6 +118,7 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
+
     //featured
 
     Route::get('/admin/categories/featured', [AdminCategoryController::class, 'featuredIndex'])->name('admin.featured.categories.index');

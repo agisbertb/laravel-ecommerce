@@ -15,31 +15,33 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // Obtener todos los productos
-        $products = Product::all();
+        $categories = Category::all();
+        $featuredCategories = Category::where('featured', true)->get();
+        $favoriteProducts = Product::where('favorite', true)->get();
+        $latestProducts = Product::orderBy('created_at', 'desc')->take(4)->get();
 
-        // Cargar las imágenes y la URL de la primera imagen para cada producto
-        foreach ($products as $product) {
-            $product->load('images');
-            $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+        // Charge the category images
+        foreach ($categories as $category) {
+            $category->image_url = $category->image ? Storage::url($category->image) : null;
         }
 
-        // Obtener las categorías destacadas
-        $featuredCategories = Category::where('featured', true)->get();
-
-        // Obtener los productos favoritos
-        $favoriteProducts = Product::where('favorite', true)->get();
-
-        // Cargar las imágenes y la URL de la primera imagen para cada producto favorito
+        // Charge the favorite products images
         foreach ($favoriteProducts as $product) {
             $product->load('images');
             $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
         }
 
+        // Charge the latest products images
+        foreach ($latestProducts as $product) {
+            $product->load('images');
+            $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+        }
+
         return Inertia::render('Welcome', [
-            'products' => $products,
+            'categories' => $categories,
             'featuredCategories' => $featuredCategories,
             'favoriteProducts' => $favoriteProducts,
+            'latestProducts' => $latestProducts,
         ]);
     }
 
@@ -67,7 +69,6 @@ class ProductController extends Controller
         $product = Product::with(['images', 'categories', 'tags'])->findOrFail($id);
         return Inertia::render('Products/Show', ['product' => $product]);
     }
-
 
     /**
      * Show the form for editing the specified resource.

@@ -15,9 +15,9 @@ const props = defineProps({
 });
 
 const form = reactive({
-    name: props.category.name,
-    description: props.category.description,
-    parent_id: props.category.parent_id,
+    name: props.category.name || '',
+    description: props.category.description || '',
+    parent_id: props.category.parent_id || '',
     image: null
 });
 
@@ -30,16 +30,20 @@ function update() {
     formData.append('parent_id', form.parent_id || '');
     if (form.image instanceof File) {
         formData.append('image', form.image);
+    } else {
+        formData.append('image', '');
     }
 
-    router.put(`/admin/categories/${props.category.id}`, formData, {
-        onBefore: () => ({
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }),
-        onSuccess: () => alert('Category updated successfully.'),
-        onError: error => alert('Error updating the category.')
+    formData.append('_method', 'PUT');
+
+    router.post(`/admin/categories/${props.category.id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        onError: (error) => {
+            console.error('Error:', error);
+            alert('Error updating the category.');
+        }
     });
 }
 
@@ -66,7 +70,6 @@ function removeImage() {
     imagePreview.value = '';
 }
 </script>
-
 
 <template>
     <AdminLayout title="Update category">

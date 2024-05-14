@@ -15,7 +15,7 @@
                         <img v-if="product.image_url" :src="product.image_url" :alt="product.name" class="h-full w-full object-cover object-center" />
                     </div>
                     <h3 class="mt-4 text-sm text-gray-700">
-                        <a :href="product.href">
+                        <a :href="'/products/' + product.id">
                             <span class="absolute inset-0" />
                             {{ product.name }}
                         </a>
