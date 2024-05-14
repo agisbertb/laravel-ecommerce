@@ -1,7 +1,7 @@
 <script setup>
 import CartLayout from '@/Layouts/CartLayout.vue';
 import { defineProps, ref, watchEffect } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     shippingAddresses: {
@@ -26,9 +26,6 @@ const selectedBillingAddress = ref('');
 
 // Set the selected default addresses
 watchEffect(() => {
-    console.log("Shipping Addresses:", props.shippingAddresses);
-    console.log("Billing Addresses:", props.billingAddresses);
-
     if (props.shippingAddresses.length > 0) {
         selectedShippingAddress.value = props.shippingAddresses.find(address => address.default)?.id || props.shippingAddresses[0].id;
     }
@@ -37,6 +34,18 @@ watchEffect(() => {
         selectedBillingAddress.value = props.billingAddresses.find(address => address.default)?.id || props.billingAddresses[0].id;
     }
 });
+
+const form = useForm({
+    shipping_address_id: '',
+    billing_address_id: '',
+});
+
+const saveAndContinue = () => {
+    form.shipping_address_id = selectedShippingAddress.value;
+    form.billing_address_id = selectedBillingAddress.value;
+
+    form.post(route('cart.address.save'));
+};
 </script>
 
 <template>
@@ -67,7 +76,7 @@ watchEffect(() => {
                                             v-model="selectedShippingAddress"
                                         />
                                         <div>
-                                            <p class="text-md font-bold">{{ address.name }}<span v-if="address.default" class="text-green-500"> (Default)</span></p>
+                                            <p class="text-md font-bold">{{ address.name }}<span v-if="address.default" class="text-green-500">(Default)</span></p>
                                             <p>{{ address.line1 }}</p>
                                             <p>{{ address.line2 }}</p>
                                             <p>{{ `${address.city}, ${address.state}, ${address.zip}, ${address.country}` }}</p>
@@ -98,7 +107,7 @@ watchEffect(() => {
                                             v-model="selectedBillingAddress"
                                         />
                                         <div>
-                                            <p class="text-md font-bold">{{ address.name }}<span v-if="address.default" class="text-green-500"> (Default)</span></p>
+                                            <p class="text-md font-bold">{{ address.name }}<span v-if="address.default" class="text-green-500">(Default)</span></p>
                                             <p>{{ address.line1 }}</p>
                                             <p>{{ address.line2 }}</p>
                                             <p>{{ `${address.city}, ${address.state}, ${address.zip}, ${address.country}` }}</p>
@@ -130,9 +139,9 @@ watchEffect(() => {
                             </div>
                         </div>
                         <div class="mt-6 flex justify-center">
-                            <a href="/cart/shipping" class="w-full max-w-xs px-6 py-3 bg-blue-600 text-white text-center font-medium rounded hover:bg-blue-700">
+                            <button @click="saveAndContinue" class="w-full max-w-xs px-6 py-3 bg-blue-600 text-white text-center font-medium rounded hover:bg-blue-700">
                                 Save and Continue
-                            </a>
+                            </button>
                         </div>
                     </section>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
@@ -22,6 +23,23 @@ class CheckoutController extends Controller
             'billingAddresses' => $billingAddresses,
             'cartTotal' => $cartTotal,
         ]);
+    }
+
+    public function saveAddress(Request $request)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'shipping_address_id' => 'required|exists:addresses,id',
+            'billing_address_id' => 'required|exists:addresses,id',
+        ]);
+
+        // Guardar las direcciones en la sesión
+        session([
+            'shipping_address_id' => $request->input('shipping_address_id'),
+            'billing_address_id' => $request->input('billing_address_id'),
+        ]);
+
+        return redirect()->route('cart.shipping');
     }
 
     public function shipping()
