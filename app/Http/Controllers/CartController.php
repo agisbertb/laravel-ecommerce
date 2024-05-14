@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CartDetail;
 
-
 class CartController extends Controller
 {
     public function index()
@@ -20,6 +19,16 @@ class CartController extends Controller
         return Inertia::render('Cart/Index', [
             'cartDetails' => $cartDetails,
         ]);
+    }
+
+    public function getCart()
+    {
+        $user = Auth::user();
+        $cart = $user->cart ?? $user->cart()->create(['status' => 'active']);
+
+        $cartDetails = $cart->details()->with('product')->get();
+
+        return response()->json(['cartDetails' => $cartDetails]);
     }
 
     public function addToCart(Request $request)
@@ -35,8 +44,6 @@ class CartController extends Controller
             $request->merge(['subtotal' => $request->price]);
             $cart->details()->create($request->only(['product_id', 'quantity', 'price', 'subtotal']));
         }
-
-        //return Inertia::render('Cart/Index');
     }
 
     public function updateCartDetail(Request $request, $detailId)
@@ -45,18 +52,26 @@ class CartController extends Controller
         $newQuantity = $request->input('quantity');
 
         if ($newQuantity > $detail->product->stock) {
-            return Inertia::render('Cart/Index');
+            return response()->json(['success' => false, 'message' => 'Not enough stock'], 400);
         }
 
         $detail->quantity = $newQuantity;
         $detail->save();
-
-        //return Inertia::render('Cart/Index');
     }
 
     public function destroyCartDetail($detailId)
     {
         $detail = CartDetail::findOrFail($detailId);
         $detail->delete();
+    }
+
+    public function clearCart()
+    {
+        $user = Auth::user();
+        $cart = $user->cart;
+
+        if ($cart) {
+            $cart->details()->delete();
+        }
     }
 }

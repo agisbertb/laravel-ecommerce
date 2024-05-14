@@ -51,9 +51,10 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $products = Product::findOrFail($id);
-        return Inertia::render('Products/Show', ['products' => $products]);
+        $product = Product::with(['images', 'categories', 'tags'])->findOrFail($id);
+        return Inertia::render('Products/Show', ['product' => $product]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

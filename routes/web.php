@@ -70,7 +70,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add', [CartController::class, 'addToCart'])->name('cart.address');
         Route::patch('/update/{detail}', [CartController::class, 'updateCartDetail'])->name('cart.update');
         Route::delete('/remove/{detail}', [CartController::class, 'destroyCartDetail'])->name('cart.destroy');
-
+        Route::get('/get', [CartController::class, 'getCart'])->name('cart.get');
+        Route::post('/clear', [CartController::class, 'clearCart'])->name('cart.clear');
 
         Route::get('/address', [CheckoutController::class, 'address']);
         Route::get('/shipping', [CheckoutController::class, 'shipping']);
@@ -78,8 +79,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/review', [CheckoutController::class, 'review']);
 
     });
-
-
 
 
 });

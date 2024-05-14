@@ -120,7 +120,7 @@
                             <div class="ml-4 flow-root lg:ml-6">
                                 <NavLink :href="route('cart.index')" class="group flex items-center p-2">
                                     <ShoppingBagIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
-                                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{{ cartCount }}</span>
                                     <span class="sr-only">items in cart, view bag</span>
                                 </NavLink>
                             </div>
@@ -419,5 +419,9 @@ const logout = () => {
 };
 
 const openSearch = ref(false);
+
+import useCart from '@/Composables/useCart';
+
+const { cartCount } = useCart();
 
 </script>
