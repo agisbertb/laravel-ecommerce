@@ -52,6 +52,11 @@ Route::prefix('redsys')->group(function () {
 });
 
 
+//Route::post('/payment/process', [RedsysController::class, 'index'])->name('payment.process');
+//Route::post('/payment/redirect', [RedsysController::class, 'success'])->name('payment.success');
+//Route::post('/payment/error', [RedsysController::class, 'error'])->name('payment.error');
+
+
 Route::get('/redsys/success', [RedsysController::class, 'success'])->name('redsys.success');
 Route::get('/redsys/error', [RedsysController::class, 'error'])->name('redsys.error');
 
@@ -126,6 +131,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/categories/featured', [AdminCategoryController::class, 'featuredIndex'])->name('admin.featured.categories.index');
     Route::get('/admin/categories/featured/manage', [AdminCategoryController::class, 'featuredManage'])->name('admin.categories.featured.manage');
     Route::put('/admin/categories/featured/save', [AdminCategoryController::class, 'featuredStore'])->name('admin.categories.featured.store');
+
     // admin tags route
 
     Route::get('/admin/tags', [AdminTagController::class, 'index'])->name('admin.tags.index');

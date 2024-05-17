@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ShippingOption;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +14,9 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\RedirectResponse;
 
 class RedsysController extends Controller
 {
-
     public function index()
     {
         $user = Auth::user();
@@ -37,12 +36,20 @@ class RedsysController extends Controller
                 return $carry + ($item->quantity * $item->price);
             }, 0);
 
+            // Obtener el costo de envío de la sesión
+            $shippingOptionId = session('shipping_option_id');
+            $shippingOption = ShippingOption::find($shippingOptionId);
+            $shippingCost = $shippingOption ? $shippingOption->price : 0;
+
+            // Sumar el costo de envío al total de la orden
+            $totalAmount = $orderAmount + $shippingCost;
+
             // Creem una nova comanda
             $order = Order::create([
                 'user_id' => $user->id,
-                'billing_address_id' => 1, // TODO: Canviar per l'adreça de facturació de l'usuari
-                'shipping_address_id' => 2, // TODO: Canviar per l'adreça d'enviament de l'usuari
-                'total' => $orderAmount,
+                'billing_address_id' => session('billing_address_id'), // Updated
+                'shipping_address_id' => session('shipping_address_id'), // Updated
+                'total' => $totalAmount,
                 'status' => 'pending',
             ]);
 
@@ -62,7 +69,7 @@ class RedsysController extends Controller
             // Creem un nou pagament
             $payment = Payment::create([
                 'order_id' => $order->id,
-                'amount' => $orderAmount,
+                'amount' => $totalAmount, // Utilizar el monto total con envío
                 'status' => 'pending',
                 'method' => 'Redsys',
                 'transaction_id' => $orderCode,
@@ -72,7 +79,7 @@ class RedsysController extends Controller
             $key = config('redsys.key');
             $code = config('redsys.merchantcode');
 
-            Redsys::setAmount($orderAmount);
+            Redsys::setAmount($totalAmount); // Utilizar el monto total con envío
             Redsys::setOrder(time());
             Redsys::setMerchantcode($code);
             Redsys::setCurrency('978');
@@ -96,15 +103,17 @@ class RedsysController extends Controller
             $cart->update(['status' => 'processed']);
 
             DB::commit(); // Confirmem la transacció
+
+            return response()->json(['form' => $form]);
         } catch (Exception $e) {
             DB::rollBack(); // Revertim la transacció en caso d'error
+            Log::error('Error in RedsysController@index: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['form' => $form]);
     }
 
-    public function success(Request $request){
+    public function success(Request $request)
+    {
         $key = config('redsys.key');
         $parameters = Redsys::getMerchantParameters($request->input('Ds_MerchantParameters'));
 
@@ -153,8 +162,8 @@ class RedsysController extends Controller
         return Inertia::render('Checkout/Success', ['order' => $order]);
     }
 
-    public function error(Request $request){
-
+    public function error(Request $request)
+    {
         $key = config('redsys.key');
         $parameters = Redsys::getMerchantParameters($request->input('Ds_MerchantParameters'));
 

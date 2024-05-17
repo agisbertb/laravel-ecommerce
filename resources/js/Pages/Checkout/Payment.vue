@@ -1,77 +1,90 @@
 <template>
-    <AppLayout title="Payment Method">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Payment
-            </h2>
-        </template>
-        <div class="container mx-auto py-12 px-4 flex flex-wrap justify-between">
-            <!-- Payment Methods Section -->
-            <div class="w-full md:w-2/3 lg:w-1/2 p-4">
-                <h2 class="text-xl font-semibold mb-6">Payment Method</h2>
+    <CartLayout title="Payment Method">
+        <div class="bg-white">
+            <div class="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Payment Method</h1>
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <!-- Payment Methods Section -->
+                    <section aria-labelledby="payment-method-heading" class="lg:col-span-5">
+                        <h2 id="payment-method-heading" class="text-lg font-semibold mb-4">Payment Method</h2>
+                        <div class="space-y-4 bg-white p-6 rounded-lg shadow">
+                            <div v-for="method in paymentMethods" :key="method.id" class="flex items-center">
+                                <input type="radio" :id="method.id" name="paymentMethod" :value="method.id" v-model="selectedPaymentMethod" class="form-radio">
+                                <span class="ml-2">{{ method.name }}</span>
+                                <!-- Card Icons -->
+                                <div class="ml-auto flex space-x-2">
+                                    <img src="/storage/images/paymentlogos.png" alt="Payment logos" class="h-10">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-                <!-- Radio button for Credit Card option -->
-                <div class="mb-4" v-for="method in paymentMethods" :key="method.id">
-                    <input type="radio" :id="method.id" name="paymentMethod" :value="method.id" v-model="selectedPaymentMethod" class="form-radio h-5 w-5 text-blue-600">
-                    <label :for="method.id" class="ml-2">
-                        {{ method.name }}
-                    </label>
+                    <!-- Invisible block to maintain distance -->
+                    <section class="lg:col-span-3"></section>
+
+                    <!-- Order Summary Section -->
+                    <section aria-labelledby="summary-heading" class="lg:col-span-4">
+                        <div class="rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:p-8 shadow">
+                            <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order Summary</h2>
+                            <div class="mt-6">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Subtotal:</span>
+                                    <span class="font-bold">{{ cartTotal.toFixed(2) }} €</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Shipping:</span>
+                                    <span>{{ shippingPrice ? shippingPrice.toFixed(2) : '0.00' }} €</span>
+                                </div>
+                                <div class="flex justify-between mt-4 border-t border-gray-200 pt-4">
+                                    <span class="font-bold text-lg">Total:</span>
+                                    <span class="font-bold text-lg">{{ (cartTotal + (shippingPrice ? shippingPrice : 0)).toFixed(2) }} €</span>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button @click="savePaymentMethod" class="w-full block rounded-md border border-transparent bg-blue-600 px-4 py-3 text-base font-medium text-white text-center shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-50">
+                                    Save and Continue
+                                </button>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-
-                <!-- Confirm Button -->
-                <button class="mt-4 w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
-                    Save and Continue
-                </button>
-            </div>
-
-            <div v-if="form" v-html="form"></div>
-
-            <!-- Order Summary Section -->
-            <div class="w-full md:w-1/3 bg-white shadow rounded-lg p-6 sticky top-20">
-                <h3 class="text-lg font-semibold mb-4">Order Summary</h3>
-                <div class="mb-6">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal:</span>
-                        <span class="font-bold">${{ cartTotal }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Shipping:</span>
-                        <span>Free</span>
-                    </div>
-                    <div class="flex justify-between mt-4">
-                        <span class="font-bold text-lg">Total:</span>
-                        <span class="font-bold text-lg">${{ cartTotal }}</span>
-                    </div>
-                </div>
-                <a href="/cart/payment" class="w-full px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    Save and Continue
-                </a>
             </div>
         </div>
-    </AppLayout>
+    </CartLayout>
 </template>
 
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, onMounted } from 'vue';
+import CartLayout from "@/Layouts/CartLayout.vue";
+import {ref, defineProps} from 'vue';
 import axios from 'axios';
-  
-  const form = ref('');
-  
-  onMounted(async () => {
-    try {
-      const response = await axios.get('/redsys');
-      form.value = response.data.form;
-    } catch (error) {
-      console.error('Error fetching Redsys form:', error);
-    }
-  });
+
+const form = ref('');
+const selectedPaymentMethod = ref('');
 
 const props = defineProps({
     cartTotal: Number,
+    shippingPrice: Number,
     paymentMethods: Array
 });
 
+const savePaymentMethod = async () => {
+    if (!selectedPaymentMethod.value) {
+        alert('Please select a payment method.');
+        return;
+    }
 
-const selectedPaymentMethod = ref('');
+    try {
+        const response = await axios.get('/redsys');
+        const {form} = response.data;
+
+        // Create a form and submit it to the Redsys URL
+        const tempForm = document.createElement('div');
+        tempForm.innerHTML = form;
+        const actualForm = tempForm.querySelector('form');
+        document.body.appendChild(actualForm);
+        actualForm.submit();
+    } catch (error) {
+        console.error('Error fetching Redsys form:', error);
+    }
+};
 </script>

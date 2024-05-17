@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ShippingOption;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -63,9 +64,7 @@ class CheckoutController extends Controller
         });
 
         $cartTotal = $cartDetails->sum('subtotal');
-
-        // Fetch shipping options from the database
-        $shippingOptions = \App\Models\ShippingOption::all();
+        $shippingOptions = ShippingOption::all();
 
         return Inertia::render('Checkout/Shipping', [
             'cartDetails' => $cartDetails,
@@ -80,11 +79,17 @@ class CheckoutController extends Controller
             'shipping_option_id' => 'required|exists:shipping_options,id',
         ]);
 
-        // Guarda la opción de envío seleccionada en la sesión
-        session(['shipping_option_id' => $request->input('shipping_option_id')]);
+        $shippingOption = ShippingOption::find($request->input('shipping_option_id'));
+        $shippingPrice = $shippingOption ? $shippingOption->price : 0;
+
+        session([
+            'shipping_option_id' => $request->input('shipping_option_id'),
+            'shipping_price' => $shippingPrice
+        ]);
 
         return redirect()->route('cart.payment');
     }
+
 
 
     public function payment()
@@ -93,18 +98,19 @@ class CheckoutController extends Controller
         $cart = $user->cart;
 
         $cartTotal = $cart ? $cart->details->sum('subtotal') : 0;
+        $shippingPrice = session('shipping_price', 0);
 
         $paymentMethods = [
-            ['id' => 'credit_card', 'name' => 'Credit or debit card'],
-            ['id' => 'paypal', 'name' => 'PayPal'],
-            ['id' => 'stripe', 'name' => 'Stripe'],
+            ['id' => 'credit_card', 'name' => 'Credit or debit card']
         ];
 
         return Inertia::render('Checkout/Payment', [
             'cartTotal' => $cartTotal,
+            'shippingPrice' => $shippingPrice,
             'paymentMethods' => $paymentMethods,
         ]);
     }
+
 
     public function review()
     {
