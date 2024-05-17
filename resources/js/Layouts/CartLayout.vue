@@ -1,70 +1,69 @@
 <template>
-    <div class="bg-white">
+    <div class="flex flex-col min-h-screen bg-white">
         <header class="relative bg-white">
-            <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center border-b border-gray-200 py-4">
-                    <!-- Logo -->
-                    <div class="flex-shrink-0">
-                        <a href="#">
-                            <span class="sr-only">Your Company</span>
-                            <img class="h-10 w-auto" src="/path/to/logo.png" alt="Your Company Logo" />
-                        </a>
+            <div class="border-b border-gray-200">
+                <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center py-4">
+                        <!-- Logo -->
+                        <div class="flex-shrink-0">
+                            <a href="#">
+                                <span class="sr-only">Your Company</span>
+                                <img class="h-10 w-auto" src="https://cdn.pccomponentes.com/img/logos/logo-pccomponentes.svg" alt="Your Company Logo" />
+                            </a>
+                        </div>
+                        <!-- Steps Navigation -->
+                        <nav aria-label="Progress" class="ml-10 hidden w-full md:flex">
+                            <ol role="list" class="flex w-full space-x-4 md:space-x-8">
+                                <li v-for="(step, stepIdx) in steps" :key="step.name" class="relative flex-1">
+                                    <template v-if="step.status === 'complete'">
+                                        <a :href="step.href" class="group flex items-center">
+                                            <span class="flex items-center px-4 py-2 text-sm font-medium">
+                                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
+                                                    <CheckIcon class="h-4 w-4 text-white" aria-hidden="true" />
+                                                </span>
+                                                <span class="ml-4 text-sm font-medium text-gray-900">{{ step.name }}</span>
+                                            </span>
+                                        </a>
+                                    </template>
+                                    <template v-else-if="step.status === 'current'">
+                                        <a :href="step.href" class="flex items-center px-4 py-2 text-sm font-medium" aria-current="step">
+                                            <span class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600">
+                                                <span class="text-blue-600">{{ step.id }}</span>
+                                            </span>
+                                            <span class="ml-4 text-sm font-medium text-blue-600">{{ step.name }}</span>
+                                        </a>
+                                    </template>
+                                    <template v-else>
+                                        <span class="group flex items-center cursor-not-allowed">
+                                            <span class="flex items-center px-4 py-2 text-sm font-medium">
+                                                <span class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300">
+                                                    <span class="text-gray-500">{{ step.id }}</span>
+                                                </span>
+                                                <span class="ml-4 text-sm font-medium text-gray-500">{{ step.name }}</span>
+                                            </span>
+                                        </span>
+                                    </template>
+                                    <template v-if="stepIdx !== steps.length - 1">
+                                        <!-- Arrow separator for lg screens and up -->
+                                        <div class="absolute right-0 top-0 hidden h-full w-5 md:block" aria-hidden="true">
+                                            <svg class="h-full w-full text-gray-300" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
+                                                <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                    </template>
+                                </li>
+                            </ol>
+                        </nav>
                     </div>
-                    <!-- Steps Navigation -->
-                    <nav aria-label="Progress" class="ml-10 hidden w-full md:flex">
-                        <ol role="list" class="flex w-full space-x-4 md:space-x-8">
-                            <li v-for="(step, stepIdx) in steps" :key="step.name" class="relative flex-1">
-                                <template v-if="step.status === 'complete'">
-                                    <a :href="step.href" class="group flex items-center">
-                    <span class="flex items-center px-4 py-2 text-sm font-medium">
-                      <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 group-hover:bg-blue-800">
-                        <CheckIcon class="h-6 w-6 text-white" aria-hidden="true" />
-                      </span>
-                      <span class="ml-4 text-sm font-medium text-gray-900">{{ step.name }}</span>
-                    </span>
-                                    </a>
-                                </template>
-                                <template v-else-if="step.status === 'current'">
-                                    <a :href="step.href" class="flex items-center px-4 py-2 text-sm font-medium" aria-current="step">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600">
-                      <span class="text-blue-600">{{ step.id }}</span>
-                    </span>
-                                        <span class="ml-4 text-sm font-medium text-blue-600">{{ step.name }}</span>
-                                    </a>
-                                </template>
-                                <template v-else>
-                  <span class="group flex items-center cursor-not-allowed">
-                    <span class="flex items-center px-4 py-2 text-sm font-medium">
-                      <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-300">
-                        <span class="text-gray-500">{{ step.id }}</span>
-                      </span>
-                      <span class="ml-4 text-sm font-medium text-gray-500">{{ step.name }}</span>
-                    </span>
-                  </span>
-                                </template>
-                                <template v-if="stepIdx !== steps.length - 1">
-                                    <!-- Arrow separator for lg screens and up -->
-                                    <div class="absolute right-0 top-0 hidden h-full w-5 md:block" aria-hidden="true">
-                                        <svg class="h-full w-full text-gray-300" viewBox="0 0 22 80" fill="none" preserveAspectRatio="none">
-                                            <path d="M0 -2L20 40L0 82" vector-effect="non-scaling-stroke" stroke="currentcolor" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                </template>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </header>
 
-        <main class="py-6">
+        <main class="flex-grow py-6">
             <slot />
         </main>
 
-
         <FooterCartSection />
-
-
     </div>
 </template>
 

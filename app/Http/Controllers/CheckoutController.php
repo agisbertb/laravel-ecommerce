@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -27,13 +28,12 @@ class CheckoutController extends Controller
 
     public function saveAddress(Request $request)
     {
-        // Validar la solicitud
         $request->validate([
             'shipping_address_id' => 'required|exists:addresses,id',
             'billing_address_id' => 'required|exists:addresses,id',
         ]);
 
-        // Guardar las direcciones en la sesión
+        // save addresses on the session
         session([
             'shipping_address_id' => $request->input('shipping_address_id'),
             'billing_address_id' => $request->input('billing_address_id'),
@@ -54,7 +54,8 @@ class CheckoutController extends Controller
                 'product' => [
                     'name' => $detail->product->name,
                     'price' => $detail->price,
-                    'image' => $detail->product->image,
+                    'image' => $detail->product->image_url = $detail->product->images->isNotEmpty() ? Storage::url($detail->product->images->first()->image_path) : null,
+                    'stock' => $detail->product->stock,
                 ],
                 'quantity' => $detail->quantity,
                 'subtotal' => $detail->subtotal,
@@ -63,16 +64,26 @@ class CheckoutController extends Controller
 
         $cartTotal = $cartDetails->sum('subtotal');
 
-
-        $shippingOptions = [
-
-        ];
+        // Fetch shipping options from the database
+        $shippingOptions = \App\Models\ShippingOption::all();
 
         return Inertia::render('Checkout/Shipping', [
             'cartDetails' => $cartDetails,
             'cartTotal' => $cartTotal,
             'shippingOptions' => $shippingOptions,
         ]);
+    }
+
+    public function saveShippingOption(Request $request)
+    {
+        $request->validate([
+            'shipping_option_id' => 'required|exists:shipping_options,id',
+        ]);
+
+        // Guarda la opción de envío seleccionada en la sesión
+        session(['shipping_option_id' => $request->input('shipping_option_id')]);
+
+        return redirect()->route('cart.payment');
     }
 
 

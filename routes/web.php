@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/address', [CheckoutController::class, 'address'])->name('cart.address');
         Route::post('/address/save', [CheckoutController::class, 'saveAddress'])->name('cart.address.save');
         Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('cart.shipping');
+        Route::post('/shipping/save', [CheckoutController::class, 'saveShippingOption'])->name('cart.shipping.save');
         Route::get('/payment', [CheckoutController::class, 'payment'])->name('cart.payment');
         Route::get('/review', [CheckoutController::class, 'review'])->name('cart.review');
 
