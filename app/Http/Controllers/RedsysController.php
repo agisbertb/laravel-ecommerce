@@ -159,8 +159,11 @@ class RedsysController extends Controller
             $cart->delete();
         }
 
-        return Inertia::render('Checkout/Success', ['order' => $order]);
+        $request->session()->put('order_id', $order->id);
+
+        return redirect()->route('cart.success');
     }
+
 
     public function error(Request $request)
     {

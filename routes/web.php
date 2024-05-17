@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
@@ -68,6 +69,7 @@ Route::get('/addresses/{id}/edit', [AddressController::class, 'edit'])->name('ad
 Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
 Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
 
+
 Route::middleware(['auth'])->group(function () {
 
     Route::prefix('cart')->group(function () {
@@ -83,7 +85,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('cart.shipping');
         Route::post('/shipping/save', [CheckoutController::class, 'saveShippingOption'])->name('cart.shipping.save');
         Route::get('/payment', [CheckoutController::class, 'payment'])->name('cart.payment');
-        Route::get('/review', [CheckoutController::class, 'review'])->name('cart.review');
+        Route::get('/success', [OrderController::class, 'success'])->name('cart.success');
+
+
+
 
     });
 
