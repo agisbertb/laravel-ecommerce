@@ -19,13 +19,15 @@ class AdminTagControllerTest extends TestCase
     public function admin_can_see_admin_tags_index_test(): void
     {
         $adminUser = create_admin_user();
+        $tag = create_tag();
 
         $response = $this->actingAs($adminUser)->get(route('admin.tags.index'));
 
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Admin/Tags/Index')
-            ->has('tags', Tag::count())
+            ->has('tags.data', 1)
+            ->where('tags.data.0.id', $tag->id)
         );
     }
 
