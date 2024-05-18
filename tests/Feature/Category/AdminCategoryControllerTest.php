@@ -19,13 +19,15 @@ class AdminCategoryControllerTest extends TestCase
     public function admin_can_see_admin_categories_index_test(): void
     {
         $adminUser = create_admin_user();
+        $category = create_category();
 
         $response = $this->actingAs($adminUser)->get(route('admin.categories.index'));
 
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Admin/Categories/Index')
-            ->has('categories', Category::count())
+            ->has('categories.data', 1)
+            ->where('categories.data.0.id', $category->id)
         );
     }
 
