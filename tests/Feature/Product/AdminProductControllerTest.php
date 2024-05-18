@@ -14,18 +14,17 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-    public function admin_can_see_admin_products_index_test(): void
+    public function admin_can_see_users_index_test(): void
     {
         $adminUser = create_admin_user();
-        $product = create_product('unique');
 
-        $response = $this->actingAs($adminUser)->get(route('admin.products.index'));
+        $response = $this->actingAs($adminUser)->get(route('admin.users.index'));
 
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
-            ->component('Admin/Products/Index')
-            ->has('products.data', 1)
-            ->where('products.data.0.id', $product->id)
+            ->component('Admin/Users/Index')
+            ->has('users.data', 1)
+            ->where('users.data.0.id', $adminUser->id)
         );
     }
 
