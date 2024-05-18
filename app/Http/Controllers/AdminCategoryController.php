@@ -64,11 +64,12 @@ class AdminCategoryController extends Controller
 
         $category = new Category($request->except(['image']));
 
+        $category->slug = Str::slug($request->input('name'));
+
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('public/categories');
             $category->image = Str::replaceFirst('public/', '', $path);
         }
-
 
         $category->save();
 
@@ -116,6 +117,10 @@ class AdminCategoryController extends Controller
             }
             $path = $request->file('image')->store('public/categories');
             $validatedData['image'] = Str::replaceFirst('public/', '', $path);
+        }
+
+        if ($request->has('name')) {
+            $validatedData['slug'] = Str::slug($request->input('name'));
         }
 
         $category->update($validatedData);

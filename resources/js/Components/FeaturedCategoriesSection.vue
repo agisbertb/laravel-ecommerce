@@ -17,7 +17,7 @@
                     <div class="flex items-end p-6">
                         <div>
                             <h3 class="font-semibold text-white">
-                                <a :href="'/categories/' + categories[0].id">
+                                <a :href="'/categories/' + categories[0].slug">
                                     <span class="absolute inset-0" />
                                     {{ categories[0].name }}
                                 </a>
@@ -34,7 +34,7 @@
                     <div class="flex items-end p-6 sm:absolute sm:inset-0">
                         <div>
                             <h3 class="font-semibold text-white">
-                                <a :href="'/categories/' + categories[1].id">
+                                <a :href="'/categories/' + categories[1].slug">
                                     <span class="absolute inset-0" />
                                     {{ categories[1].name }}
                                 </a>
@@ -51,7 +51,7 @@
                     <div class="flex items-end p-6 sm:absolute sm:inset-0">
                         <div>
                             <h3 class="font-semibold text-white">
-                                <a :href="'/categories/' + categories[2].id">
+                                <a :href="'/categories/' + categories[2].slug">
                                     <span class="absolute inset-0" />
                                     {{ categories[2].name }}
                                 </a>

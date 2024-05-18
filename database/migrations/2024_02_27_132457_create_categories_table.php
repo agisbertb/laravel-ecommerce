@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('image')->nullable();
             $table->boolean('featured')->default(false);
+            $table->string('slug')->unique()->after('name')->nullable();
             $table->timestamps();
         });
     }
