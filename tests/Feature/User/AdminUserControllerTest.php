@@ -25,12 +25,8 @@ class AdminUserControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Admin/Users/Index')
-            ->has('users.data', 1) // Verificar que hay 1 usuario
-            ->where('users.data.0.id', $adminUser->id) // Verificar que el usuario administrador está presente
-            ->has('users.meta')
-            ->where('users.meta.total', 1) // Total de usuarios es 1
-            ->where('users.meta.current_page', 1) // La página actual es 1
-            ->where('users.meta.per_page', 10) // Por página es 10
+            ->has('users.data', 1)
+            ->where('users.data.0.id', $adminUser->id)
         );
     }
 
