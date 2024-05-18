@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Tag;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 if (!function_exists('create_admin_user')) {
@@ -41,13 +42,16 @@ if (!function_exists('create_default_user')) {
 }
 
 if (!function_exists('create_product')) {
-    function create_product()
+    function create_product($suffix = null)
     {
+        $suffix = $suffix ?? uniqid();
+        $name = 'Product ' . $suffix;
         $product = Product::create([
-            'name' => 'Product 1',
-            'description' => 'Description of product 1',
+            'name' => $name,
+            'description' => 'Description of ' . $name,
             'price' => 100,
             'stock' => 10,
+            'slug' => Str::slug($name),
         ]);
 
         $product->save();
@@ -55,12 +59,14 @@ if (!function_exists('create_product')) {
     }
 }
 
+
 if (!function_exists('create_category')) {
     function create_category()
     {
         $category = Category::create([
             'name' => 'Category 1',
             'description' => 'Description of category 1',
+            'slug' => 'category1',
         ]);
 
         $category->save();

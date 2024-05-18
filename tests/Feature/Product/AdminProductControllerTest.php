@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
-
 class AdminProductControllerTest extends TestCase
 {
     use RefreshDatabase;
@@ -15,24 +14,24 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function admin_can_see_admin_products_index_test(): void
     {
         $adminUser = create_admin_user();
+        $product = create_product('unique');
 
         $response = $this->actingAs($adminUser)->get(route('admin.products.index'));
 
         $response->assertStatus(200);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Admin/Products/Index')
-            ->has('products', Product::count())
+            ->has('products.data', 1)
+            ->where('products.data.0.id', $product->id)
         );
     }
 
     /**
      * @test
      */
-
     public function regular_user_cannot_see_admin_products_index_test(): void
     {
         $regularUser = create_default_user();
@@ -44,7 +43,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function admin_can_see_admin_products_create_test(): void
     {
         $adminUser = create_admin_user();
@@ -60,7 +58,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function regular_user_cannot_see_admin_products_create_test(): void
     {
         $regularUser = create_default_user();
@@ -72,7 +69,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function admin_can_see_admin_products_edit_test(): void
     {
         $adminUser = create_admin_user();
@@ -90,7 +86,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function regular_user_cannot_see_admin_products_edit_test(): void
     {
         $regularUser = create_default_user();
@@ -103,17 +98,18 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function admin_can_create_product_test(): void
-
     {
         $adminUser = create_admin_user();
+        $category = create_category();
 
         $response = $this->actingAs($adminUser)->post(route('admin.products.store'), [
             'name' => 'Product 1',
             'description' => 'Description of product 1',
             'price' => 100,
             'stock' => 10,
+            'categories' => [$category->id],
+            'tags' => [],
         ]);
 
         $response->assertStatus(302);
@@ -129,7 +125,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function regular_user_cannot_create_product_test(): void
     {
         $regularUser = create_default_user();
@@ -139,6 +134,8 @@ class AdminProductControllerTest extends TestCase
             'description' => 'Description of product 1',
             'price' => 100,
             'stock' => 10,
+            'categories' => [],
+            'tags' => [],
         ]);
 
         $response->assertStatus(302);
@@ -154,64 +151,68 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
+    public function admin_can_edit_product_test(): void
+    {
+        $adminUser = create_admin_user();
+        $product = create_product('unique-edit');
+        $category = create_category();
 
-     public function admin_can_edit_product_test(): void
-     {
-         $adminUser = create_admin_user();
-         $product = create_product();
+        $response = $this->actingAs($adminUser)->put(route('admin.products.update', $product->id), [
+            'name' => 'Product 1 Updated',
+            'description' => 'Updated description of product 1',
+            'price' => 150,
+            'stock' => 5,
+            'categories' => [$category->id],
+            'tags' => [],
+        ]);
 
-         $response = $this->actingAs($adminUser)->put(route('admin.products.update', $product->id), [
-             'name' => 'Product 1 Updated',
-             'description' => 'Updated description of product 1',
-             'price' => 150,
-             'stock' => 5,
-         ]);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('admin.products.index'));
 
-         $response->assertStatus(302);
-         $response->assertRedirect(route('admin.products.index'));
+        $this->assertDatabaseHas('products', [
+            'name' => 'Product 1 Updated',
+            'description' => 'Updated description of product 1',
+            'price' => 150,
+            'stock' => 5,
+        ]);
 
-         $this->assertDatabaseHas('products', [
-             'name' => 'Product 1 Updated',
-             'description' => 'Updated description of product 1',
-             'price' => 150,
-             'stock' => 5,
-         ]);
-
-         $this->assertDatabaseMissing('products', [
-             'name' => 'Product 1',
-             'description' => 'Description of product 1',
-             'price' => 100,
-             'stock' => 10,
-         ]);
-     }
-
+        $this->assertDatabaseMissing('products', [
+            'name' => 'Product 1',
+            'description' => 'Description of product 1',
+            'price' => 100,
+            'stock' => 10,
+        ]);
+    }
     /**
      * @test
      */
-
     public function regular_user_cannot_edit_product_test(): void
     {
         $regularUser = create_default_user();
-        $product = create_product();
+        $product = create_product('unique-edit');
 
         $response = $this->actingAs($regularUser)->put(route('admin.products.update', $product->id), [
             'name' => 'Product 1 Updated',
             'description' => 'Updated description of product 1',
             'price' => 150,
             'stock' => 5,
+            'categories' => [],
+            'tags' => [],
         ]);
 
         $response->assertStatus(302);
         $response->assertRedirect(route('welcome'));
 
         $this->assertDatabaseHas('products', [
-            'name' => 'Product 1',
-            'description' => 'Description of product 1',
-            'price' => 100,
-            'stock' => 10,
+            'id' => $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'price' => $product->price,
+            'stock' => $product->stock,
         ]);
 
         $this->assertDatabaseMissing('products', [
+            'id' => $product->id,
             'name' => 'Product 1 Updated',
             'description' => 'Updated description of product 1',
             'price' => 150,
@@ -222,7 +223,6 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function admin_can_delete_product_test(): void
     {
         $adminUser = create_admin_user();
@@ -244,11 +244,10 @@ class AdminProductControllerTest extends TestCase
     /**
      * @test
      */
-
     public function regular_user_cannot_delete_product_test(): void
     {
         $regularUser = create_default_user();
-        $product = create_product();
+        $product = create_product('unique-delete');
 
         $response = $this->actingAs($regularUser)->delete(route('admin.products.destroy', $product->id));
 
@@ -256,10 +255,11 @@ class AdminProductControllerTest extends TestCase
         $response->assertRedirect(route('welcome'));
 
         $this->assertDatabaseHas('products', [
-            'name' => 'Product 1',
-            'description' => 'Description of product 1',
-            'price' => 100,
-            'stock' => 10,
+            'id' => $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'price' => $product->price,
+            'stock' => $product->stock,
         ]);
     }
 }

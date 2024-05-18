@@ -53,7 +53,7 @@ class ProductControllerTest extends TestCase
          $adminUser = create_admin_user();
          $product = create_product();
 
-         $response = $this->actingAs($adminUser)->get(route('products.show', ['id' => $product->id]));
+         $response = $this->actingAs($adminUser)->get(route('products.show', ['slug' => $product->slug]));
          $response->assertStatus(200);
      }
 
@@ -66,7 +66,7 @@ class ProductControllerTest extends TestCase
         $regularUser = create_default_user();
         $product = create_product();
 
-        $response = $this->actingAs($regularUser)->get(route('products.show', ['id' => $product->id]));
+        $response = $this->actingAs($regularUser)->get(route('products.show', ['slug' => $product->slug]));
         $response->assertStatus(200);
     }
 
@@ -78,7 +78,7 @@ class ProductControllerTest extends TestCase
     {
         $product = create_product();
 
-        $response = $this->get(route('products.show', ['id' => $product->id]));
+        $response = $this->get(route('products.show', ['slug' => $product->slug]));
         $response->assertStatus(200);
     }
 }
