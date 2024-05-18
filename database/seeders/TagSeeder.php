@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
-use App\Models\Category;
 
 class TagSeeder extends Seeder
 {
@@ -13,20 +12,20 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
+        $tags = [
             [
-                'name' => 'category1',
+                'name' => 'tag1',
                 'description' => 'TEST1 TEST1 TEST1',
             ],
             [
-                'name' => 'category2',
+                'name' => 'tag2',
                 'description' => 'TEST2 TEST2 TEST2',
             ],
             [
-                'name' => 'category3',
+                'name' => 'tag3',
                 'description' => 'TEST3 TEST3 TEST3',
             ],
         ];
-        Category::insert($categories);
+        Tag::insert($tags);
     }
 }
