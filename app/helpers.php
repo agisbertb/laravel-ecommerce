@@ -4,6 +4,7 @@
 use App\Models\Address;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ShippingOption;
 use App\Models\User;
 use App\Models\Tag;
 
@@ -142,6 +143,17 @@ if (!function_exists('create_user')) {
             ]);
 
             return $address;
+        }
+    }
+
+    if (!function_exists('create_shipping_option')) {
+        function create_shipping_option($name = 'Standard Shipping')
+        {
+            return ShippingOption::create([
+                'name' => $name,
+                'price' => 10.00,
+                'estimated_delivery' => '3-5 business days',
+            ]);
         }
     }
 }
