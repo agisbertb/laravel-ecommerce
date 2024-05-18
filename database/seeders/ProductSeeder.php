@@ -20,6 +20,8 @@ class ProductSeeder extends Seeder
                 'price' => 10.0,
                 'stock' => 10,
                 'image' => 'product1.jpg',
+                'favorite' => false,
+                'slug' => 'product1',
             ],
             [
                 'name' => 'product2',
@@ -27,6 +29,8 @@ class ProductSeeder extends Seeder
                 'price' => 20.0,
                 'stock' => 20,
                 'image' => 'product2.jpg',
+                'favorite' => false,
+                'slug' => 'product2',
             ],
             [
                 'name' => 'product3',
@@ -34,6 +38,8 @@ class ProductSeeder extends Seeder
                 'price' => 30.0,
                 'stock' => 30,
                 'image' => 'product3.jpg',
+                'favorite' => false,
+                'slug' => 'product3',
             ],
         ];
 

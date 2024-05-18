@@ -8,6 +8,7 @@ use App\Models\ProductImage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class AdminProductController extends Controller
@@ -80,6 +81,8 @@ class AdminProductController extends Controller
             'tags.*' => 'exists:tags,id',
         ]);
 
+        $validated['slug'] = Str::slug($validated['name']);
+
         $product = Product::create($validated);
 
         if ($request->has('categories')) {
@@ -104,8 +107,6 @@ class AdminProductController extends Controller
 
         return to_route('admin.products.index');
     }
-
-
 
     /**
      * Display the specified resource.
@@ -177,6 +178,11 @@ class AdminProductController extends Controller
 
         if ($request->has('tags')) {
             $product->tags()->sync($request->tags);
+        }
+
+        if ($request->has('name')) {
+            $product->slug = Str::slug($request->input('name'));
+            $product->save();
         }
 
         session()->flash('success', 'Product updated successfully.');
