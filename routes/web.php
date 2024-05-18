@@ -61,15 +61,6 @@ Route::prefix('redsys')->group(function () {
 Route::get('/redsys/success', [RedsysController::class, 'success'])->name('redsys.success');
 Route::get('/redsys/error', [RedsysController::class, 'error'])->name('redsys.error');
 
-
-Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
-Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');
-Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
-Route::get('/addresses/{id}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
-Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
-Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
-
-
 Route::middleware(['auth'])->group(function () {
 
     Route::prefix('cart')->group(function () {
@@ -87,10 +78,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payment', [CheckoutController::class, 'payment'])->name('cart.payment');
         Route::get('/success', [OrderController::class, 'success'])->name('cart.success');
 
-
-
-
     });
+
+    // Address routes
+
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::get('/addresses/create/{type}', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses/{id}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+
 
 
 });
