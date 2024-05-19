@@ -13,6 +13,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RedsysController;
 use App\Http\Controllers\AdminShippingOptionController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -94,7 +95,8 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::get('/', [ProductController::class, 'index'])->name('welcome');
+Route::get('/', [SiteController::class, 'index'])->name('welcome');
+
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 
