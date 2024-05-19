@@ -75,11 +75,13 @@
         </TransitionRoot>
 
         <header class="relative bg-white">
-            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">Get free delivery on orders over $100</p>
+            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+                Get free delivery on orders over $100
+            </p>
 
             <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
-                    <div class="flex h-16 items-center">
+                    <div class="flex items-center h-24"> <!-- Ajuste la altura del contenedor -->
                         <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="open = true">
                             <span class="absolute -inset-0.5" />
                             <span class="sr-only">Open menu</span>
@@ -88,26 +90,20 @@
 
                         <!-- Logo -->
                         <div class="ml-4 flex lg:ml-0">
-                            <a href="#">
-                                <span class="sr-only">Your Company</span>
-<!--                                <img class="h-20 w-auto" src="" alt="" />-->
-                                TODO
+                            <a href="/">
+                                <span class="sr-only">{{ siteSettings.site_name }}</span>
+                                <div class="flex items-center">
+                                    <img v-if="logoUrl" :src="logoUrl" class="h-auto max-h-16 w-auto" alt="Site Logo" />
+                                    <span v-else>TODO</span>
+                                </div>
                             </a>
                         </div>
 
-                        <!-- Search bar -->
-
                         <div class="flex justify-center items-center w-full px-4 sm:px-6 lg:px-8">
-
                             <NavBarSearch v-model="openSearch" />
-
                         </div>
 
-
-
                         <div class="ml-auto flex items-center">
-
-
                             <!-- Wishlist -->
                             <div class="flex lg:ml-6">
                                 <NavLink href="#" class="group -m-2 p-2 flex items-center">
@@ -127,22 +123,20 @@
 
                             <!-- Login/Register -->
                             <template v-if="!$page.props.auth.user">
-                            <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
-                                <NavLink :href="route('login')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Login</NavLink>
-                                <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                                <NavLink :href="route('register')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Register</NavLink>
-                            </div>
+                                <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
+                                    <NavLink :href="route('login')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Login</NavLink>
+                                    <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
+                                    <NavLink :href="route('register')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Register</NavLink>
+                                </div>
                             </template>
 
                             <!-- Settings Dropdown -->
                             <div v-else class="ms-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                <UserCircleIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
-                                            </button>
-
+                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                            <UserCircleIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
+                                        </button>
                                     </template>
 
                                     <template #content>
@@ -174,87 +168,77 @@
                                     </template>
                                 </Dropdown>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
-
-
-
             </nav>
-
 
             <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
-                    <div class="flex h-16 items-center">
+                    <div class="flex items-center h-16">
+                        <!-- Flyout menus -->
+                        <PopoverGroup class="hidden lg:ml-8 lg:block lg:self-stretch">
+                            <div class="flex h-full space-x-8">
+                                <Popover v-for="category in navigation.categories" :key="category.name" class="flex" v-slot="{ open }">
+                                    <div class="relative flex">
+                                        <PopoverButton :class="[open ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800', 'relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out']">{{ category.name }}</PopoverButton>
+                                    </div>
 
-                <!-- Flyout menus -->
-                <PopoverGroup class="hidden lg:ml-8 lg:block lg:self-stretch">
-                    <div class="flex h-full space-x-8">
-                        <Popover v-for="category in navigation.categories" :key="category.name" class="flex" v-slot="{ open }">
-                            <div class="relative flex">
-                                <PopoverButton :class="[open ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-700 hover:text-gray-800', 'relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out']">{{ category.name }}</PopoverButton>
-                            </div>
+                                    <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to="opacity-0">
+                                        <PopoverPanel class="absolute inset-x-0 top-full text-sm text-gray-500">
+                                            <!-- Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow -->
+                                            <div class="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
 
-                            <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                                <PopoverPanel class="absolute inset-x-0 top-full text-sm text-gray-500">
-                                    <!-- Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow -->
-                                    <div class="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
-
-                                    <div class="relative bg-white">
-                                        <div class="mx-auto max-w-7xl px-8">
-                                            <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-                                                <div class="col-start-2 grid grid-cols-2 gap-x-8">
-                                                    <div v-for="item in category.featured" :key="item.name" class="group relative text-base sm:text-sm">
-                                                        <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                                            <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center" />
+                                            <div class="relative bg-white">
+                                                <div class="mx-auto max-w-7xl px-8">
+                                                    <div class="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                                                        <div class="col-start-2 grid grid-cols-2 gap-x-8">
+                                                            <div v-for="item in category.featured" :key="item.name" class="group relative text-base sm:text-sm">
+                                                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                                                    <img :src="item.imageSrc" :alt="item.imageAlt" class="object-cover object-center" />
+                                                                </div>
+                                                                <a :href="item.href" class="mt-6 block font-medium text-gray-900">
+                                                                    <span class="absolute inset-0 z-10" aria-hidden="true" />
+                                                                    {{ item.name }}
+                                                                </a>
+                                                                <p aria-hidden="true" class="mt-1">Shop now</p>
+                                                            </div>
                                                         </div>
-                                                        <a :href="item.href" class="mt-6 block font-medium text-gray-900">
-                                                            <span class="absolute inset-0 z-10" aria-hidden="true" />
-                                                            {{ item.name }}
-                                                        </a>
-                                                        <p aria-hidden="true" class="mt-1">Shop now</p>
-                                                    </div>
-                                                </div>
-                                                <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-                                                    <div v-for="section in category.sections" :key="section.name">
-                                                        <p :id="`${section.name}-heading`" class="font-medium text-gray-900">{{ section.name }}</p>
-                                                        <ul role="list" :aria-labelledby="`${section.name}-heading`" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
-                                                            <li v-for="item in section.items" :key="item.name" class="flex">
-                                                                <a :href="item.href" class="hover:text-gray-800">{{ item.name }}</a>
-                                                            </li>
-                                                        </ul>
+                                                        <div class="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                                                            <div v-for="section in category.sections" :key="section.name">
+                                                                <p :id="`${section.name}-heading`" class="font-medium text-gray-900">{{ section.name }}</p>
+                                                                <ul role="list" :aria-labelledby="`${section.name}-heading`" class="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                                                                    <li v-for="item in section.items" :key="item.name" class="flex">
+                                                                        <a :href="item.href" class="hover:text-gray-800">{{ item.name }}</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </PopoverPanel>
-                            </transition>
-                        </Popover>
+                                        </PopoverPanel>
+                                    </transition>
+                                </Popover>
 
-                        <a v-for="page in navigation.pages" :key="page.name" :href="page.href" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">{{ page.name }}</a>
-                    </div>
-                </PopoverGroup>
+                                <a v-for="page in navigation.pages" :key="page.name" :href="page.href" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">{{ page.name }}</a>
+                            </div>
+                        </PopoverGroup>
                     </div>
                 </div>
-
             </nav>
         </header>
     </div>
-
 
     <main>
         <slot />
     </main>
 
-    <FooterSection />
-
+    <FooterSection :siteSettings="siteSettings"/>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref, computed} from 'vue';
 import {
     Dialog,
     DialogPanel,
@@ -269,18 +253,20 @@ import {
     TabPanels,
     TransitionChild,
     TransitionRoot,
-} from '@headlessui/vue'
-import { Bars3Icon, HeartIcon, ShoppingBagIcon, UserCircleIcon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+} from '@headlessui/vue';
+import {
+    Bars3Icon,
+    HeartIcon,
+    ShoppingBagIcon,
+    UserCircleIcon,
+    XMarkIcon,
+    MagnifyingGlassIcon
+} from '@heroicons/vue/24/outline';
 import NavLink from "@/Components/NavLink.vue";
 import {router} from "@inertiajs/vue3";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from '@/Components/Dropdown.vue';
 import FooterSection from "@/Components/FooterSection.vue";
-import HeroSection from "@/Components/FeaturedCategoriesSection.vue";
-import TrendingProducts from "@/Components/LatestProductsSection.vue";
-import ShopByCategories from "@/Components/ShopByCategoriesSection.vue";
-import FavoriteProducts from "@/Components/FavoriteProductsSection.vue";
-import NewsletterSection from "@/Components/NewsletterSection.vue";
 import NavBarSearch from "@/Components/NavBarSearch.vue";
 
 const navigation = {
@@ -307,38 +293,37 @@ const navigation = {
                     id: 'clothing',
                     name: 'Clothing',
                     items: [
-                        { name: 'Tops', href: '#' },
-                        { name: 'Dresses', href: '#' },
-                        { name: 'Pants', href: '#' },
-                        { name: 'Denim', href: '#' },
-                        { name: 'Sweaters', href: '#' },
-                        { name: 'T-Shirts', href: '#' },
-                        { name: 'Jackets', href: '#' },
-                        { name: 'Activewear', href: '#' },
-                        { name: 'Browse All', href: '#' },
+                        {name: 'Tops', href: '#'},
+                        {name: 'Dresses', href: '#'},
+                        {name: 'Pants', href: '#'},
+                        {name: 'Denim', href: '#'},
+                        {name: 'Sweaters', href: '#'},
+                        {name: 'T-Shirts', href: '#'},
+                        {name: 'Jackets', href: '#'},
+                        {name: 'Activewear', href: '#'},
+                        {name: 'Browse All', href: '#'},
                     ],
                 },
                 {
                     id: 'accessories',
                     name: 'Accessories',
                     items: [
-                        { name: 'Watches', href: '#' },
-                        { name: 'Wallets', href: '#' },
-                        { name: 'Bags', href: '#' },
-                        { name: 'Sunglasses', href: '#' },
-                        { name: 'Hats', href: '#' },
-                        { name: 'Belts', href: '#' },
+                        {name: 'Watches', href: '#'},
+                        {name: 'Wallets', href: '#'},
+                        {name: 'Bags', href: '#'},
+                        {name: 'Sunglasses', href: '#'},
+                        {name: 'Hats', href: '#'},
+                        {name: 'Belts', href: '#'},
                     ],
                 },
                 {
                     id: 'brands',
                     name: 'Brands',
                     items: [
-                        { name: 'Full Nelson', href: '#' },
-                        { name: 'My Way', href: '#' },
-                        { name: 'Re-Arranged', href: '#' },
-                        { name: 'Counterfeit', href: '#' },
-                        { name: 'Significant Other', href: '#' },
+                        {name: 'Re-Arranged', href: '#'},
+                        {name: 'Counterfeit', href: '#'},
+                        {name: 'Full Nelson', href: '#'},
+                        {name: 'My Way', href: '#'},
                     ],
                 },
             ],
@@ -366,50 +351,54 @@ const navigation = {
                     id: 'clothing',
                     name: 'Clothing',
                     items: [
-                        { name: 'Tops', href: '#' },
-                        { name: 'Pants', href: '#' },
-                        { name: 'Sweaters', href: '#' },
-                        { name: 'T-Shirts', href: '#' },
-                        { name: 'Jackets', href: '#' },
-                        { name: 'Activewear', href: '#' },
-                        { name: 'Browse All', href: '#' },
+                        {name: 'Tops', href: '#'},
+                        {name: 'Pants', href: '#'},
+                        {name: 'Sweaters', href: '#'},
+                        {name: 'T-Shirts', href: '#'},
+                        {name: 'Jackets', href: '#'},
+                        {name: 'Activewear', href: '#'},
+                        {name: 'Browse All', href: '#'},
                     ],
                 },
                 {
                     id: 'accessories',
                     name: 'Accessories',
                     items: [
-                        { name: 'Watches', href: '#' },
-                        { name: 'Wallets', href: '#' },
-                        { name: 'Bags', href: '#' },
-                        { name: 'Sunglasses', href: '#' },
-                        { name: 'Hats', href: '#' },
-                        { name: 'Belts', href: '#' },
+                        {name: 'Watches', href: '#'},
+                        {name: 'Wallets', href: '#'},
+                        {name: 'Bags', href: '#'},
+                        {name: 'Sunglasses', href: '#'},
+                        {name: 'Hats', href: '#'},
+                        {name: 'Belts', href: '#'},
                     ],
                 },
                 {
                     id: 'brands',
                     name: 'Brands',
                     items: [
-                        { name: 'Re-Arranged', href: '#' },
-                        { name: 'Counterfeit', href: '#' },
-                        { name: 'Full Nelson', href: '#' },
-                        { name: 'My Way', href: '#' },
+                        {name: 'Re-Arranged', href: '#'},
+                        {name: 'Counterfeit', href: '#'},
+                        {name: 'Full Nelson', href: '#'},
+                        {name: 'My Way', href: '#'},
                     ],
                 },
             ],
         },
     ],
     pages: [
-        { name: 'Company', href: '#' },
-        { name: 'Stores', href: '#' },
+        {name: 'Company', href: '#'},
+        {name: 'Stores', href: '#'},
     ],
 }
 
 const open = ref(false)
 
-defineProps({
+const props = defineProps({
     title: String,
+    siteSettings: {
+        type: Object,
+        default: () => ({site_logo: '', footer_logo: '', footer_text: ''})
+    }
 });
 
 const showingNavigationDropdown = ref(false);
@@ -422,6 +411,9 @@ const openSearch = ref(false);
 
 import useCart from '@/Composables/useCart';
 
-const { cartCount } = useCart();
+const {cartCount} = useCart();
 
+const logoUrl = computed(() => {
+    return props.siteSettings.site_logo ? `/${props.siteSettings.site_logo}` : '';
+});
 </script>

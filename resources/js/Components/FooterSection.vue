@@ -4,10 +4,13 @@
         <div class="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
             <div class="xl:grid xl:grid-cols-3 xl:gap-8">
                 <div class="space-y-8">
-                    <img class="h-7" src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600" alt="Company name" />
-                    <p class="text-sm leading-6 text-gray-600">Making the world a better place through constructing elegant hierarchies.</p>
+                    <a href="/" class="flex">
+                        <span class="sr-only">{{ siteSettings.site_name }}</span>
+                        <img v-if="logoUrl" :src="logoUrl" class="h-16 w-auto pl-8" alt="{{ siteSettings.site_name }} Logo" />
+                    </a>
+                    <p class="text-sm leading-6 text-gray-600">{{ siteSettings.footer_text }}</p>
                     <div class="flex space-x-6">
-                        <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">
+                        <a v-for="item in socialLinks" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500" target="_blank" rel="noopener noreferrer">
                             <span class="sr-only">{{ item.name }}</span>
                             <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
                         </a>
@@ -53,14 +56,15 @@
                 </div>
             </div>
             <div class="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-                <p class="text-xs leading-5 text-gray-500">&copy; 2020 Your Company, Inc. All rights reserved.</p>
+                <p class="text-xs leading-5 text-gray-500">&copy; {{ currentYear }} {{ siteSettings.site_name }}, Inc. All rights reserved.</p>
             </div>
         </div>
     </footer>
 </template>
 
 <script setup>
-import { defineComponent, h } from 'vue'
+import { computed } from 'vue';
+import { defineComponent, h } from 'vue';
 
 const navigation = {
     solutions: [
@@ -86,11 +90,27 @@ const navigation = {
         { name: 'Claim', href: '#' },
         { name: 'Privacy', href: '#' },
         { name: 'Terms', href: '#' },
-    ],
-    social: [
+    ]
+};
+
+const props = defineProps({
+    siteSettings: {
+        type: Object,
+        default: () => ({ footer_logo: '', footer_text: '', site_name: '', facebook_url: '', instagram_url: '', twitter_url: '', youtube_url: '' })
+    }
+});
+
+const logoUrl = computed(() => {
+    return props.siteSettings.footer_logo ? `/${props.siteSettings.footer_logo}` : '';
+});
+
+const currentYear = new Date().getFullYear();
+
+const socialLinks = computed(() => {
+    return [
         {
             name: 'Facebook',
-            href: '#',
+            href: props.siteSettings.facebook_url || '#',
             icon: defineComponent({
                 render: () =>
                     h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -104,7 +124,7 @@ const navigation = {
         },
         {
             name: 'Instagram',
-            href: '#',
+            href: props.siteSettings.instagram_url || '#',
             icon: defineComponent({
                 render: () =>
                     h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -117,8 +137,8 @@ const navigation = {
             }),
         },
         {
-            name: 'X',
-            href: '#',
+            name: 'Twitter',
+            href: props.siteSettings.twitter_url || '#',
             icon: defineComponent({
                 render: () =>
                     h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -130,7 +150,7 @@ const navigation = {
         },
         {
             name: 'YouTube',
-            href: '#',
+            href: props.siteSettings.youtube_url || '#',
             icon: defineComponent({
                 render: () =>
                     h('svg', { fill: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -142,6 +162,6 @@ const navigation = {
                     ]),
             }),
         },
-    ],
-}
+    ];
+});
 </script>

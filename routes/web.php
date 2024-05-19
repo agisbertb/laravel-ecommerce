@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminSiteSettingController;
 use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CheckoutController;
@@ -123,11 +124,12 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
     Route::get('/admin/categories/create', [AdminCategoryController::class, 'create'])->name('admin.categories.create');
     Route::post('/admin/categories', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
+
     //Route::get('/admin/categories/{id}', [AdminCategoryController::class, 'show'])->name('admin.categories.show');
+
     Route::get('/admin/categories/{id}/edit', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
     Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
-
 
     //featured
 
@@ -165,4 +167,9 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'update'])->name('admin.shipping-options.update');
     Route::delete('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'destroy'])->name('admin.shipping-options.destroy');
 
+    // admin site settings route
+
+    Route::get('/admin/site-settings', [AdminSiteSettingController::class, 'index'])->name('admin.site-settings.index');
+    Route::post('/admin/site-settings/update', [AdminSiteSettingController::class, 'update'])->name('admin.site-settings.update');
 });
+

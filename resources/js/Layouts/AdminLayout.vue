@@ -327,6 +327,16 @@ const navigation = reactive([
         ]
     },
 
+    {
+        name: 'Site Settings',
+        href: '/admin/settings',
+        icon: Cog6ToothIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'Site Settings', href: '/admin/site-settings', current: false },
+        ]
+    },
 
 ]);
 
