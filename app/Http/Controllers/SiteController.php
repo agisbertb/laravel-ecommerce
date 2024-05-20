@@ -46,4 +46,21 @@ class SiteController extends Controller
             'siteSettings' => $siteSettings,
         ]);
     }
+
+    // Function for charge products for navigation
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$query}%")
+            ->with('images')
+            ->get()
+            ->map(function ($product) {
+                $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+                $product->url = route('products.show', $product->slug);
+                return $product;
+            });
+
+        return response()->json($products);
+    }
+
 }

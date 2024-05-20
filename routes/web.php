@@ -96,6 +96,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/', [SiteController::class, 'index'])->name('welcome');
+Route::get('/search-products', [SiteController::class, 'search'])->name('search.products');
+
+
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
