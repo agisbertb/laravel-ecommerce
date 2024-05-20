@@ -240,7 +240,6 @@ import {
 import {
     Bars3Icon,
     BellIcon,
-    CalendarIcon,
     ChartPieIcon,
     Cog6ToothIcon,
     DocumentDuplicateIcon,
@@ -250,7 +249,7 @@ import {
     XMarkIcon,
     TagIcon,
     RectangleStackIcon,
-    RectangleGroupIcon
+    CurrencyEuroIcon
 
 } from '@heroicons/vue/24/outline'
 
@@ -311,6 +310,28 @@ const navigation = reactive([
         children: [
             { name: 'All Users', href: '/admin/users', current: false },
             { name: 'Add User', href: '/admin/users/create', current: false },
+        ]
+    },
+
+    {
+        name: 'Orders',
+        href: '/admin/orders',
+        icon: ChartPieIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Orders', href: '/admin/orders', current: false },
+        ]
+    },
+
+    {
+        name: 'Payments',
+        href: '/admin/payments',
+        icon: CurrencyEuroIcon,
+        current: false,
+        isOpen: false,
+        children: [
+            { name: 'All Payments', href: '/admin/payments', current: false },
         ]
     },
 

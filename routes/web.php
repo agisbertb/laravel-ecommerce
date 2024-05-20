@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminSiteSettingController;
@@ -171,6 +172,10 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/shipping-options/{id}/edit', [AdminShippingOptionController::class, 'edit'])->name('admin.shipping-options.edit');
     Route::put('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'update'])->name('admin.shipping-options.update');
     Route::delete('/admin/shipping-options/{id}', [AdminShippingOptionController::class, 'destroy'])->name('admin.shipping-options.destroy');
+
+    // admin orders route
+
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
 
     // admin site settings route
 
