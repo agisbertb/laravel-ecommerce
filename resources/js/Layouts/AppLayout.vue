@@ -234,6 +234,9 @@
         <slot />
     </main>
 
+    <LoadingSpinner :visible="showLoading" />
+
+
     <FooterSection :siteSettings="siteSettings"/>
 </template>
 
@@ -268,6 +271,10 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from '@/Components/Dropdown.vue';
 import FooterSection from "@/Components/FooterSection.vue";
 import NavBarSearch from "@/Components/NavBarSearch.vue";
+
+import { inject } from 'vue';
+
+const showLoading = inject('showLoading');
 
 const navigation = {
     categories: [
