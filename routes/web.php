@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminSiteSettingController;
@@ -176,6 +177,10 @@ Route::middleware(['admin'])->group(function () {
     // admin orders route
 
     Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+
+    // admin payments route
+
+    Route::get('/admin/payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
 
     // admin site settings route
 
