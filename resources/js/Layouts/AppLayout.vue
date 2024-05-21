@@ -91,6 +91,9 @@
                     </div>
                 </div>
             </nav>
+
+            <NAVEXAMPLE />
+
         </header>
     </div>
 
@@ -133,6 +136,7 @@ const logout = () => {
 };
 
 import useCart from '@/Composables/useCart';
+import NAVEXAMPLE from "@/Components/NAVEXAMPLE.vue";
 
 const { cartCount } = useCart();
 
