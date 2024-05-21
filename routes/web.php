@@ -16,6 +16,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RedsysController;
 use App\Http\Controllers\AdminShippingOptionController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -48,6 +49,11 @@ use Inertia\Inertia;
 //        return Inertia::render('Dashboard');
 //    })->name('dashboard');
 //});
+
+// Login with Google Account routes
+
+Route::get('/google/redirect', [SocialiteController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::prefix('redsys')->group(function () {
     Route::get('/', [RedsysController::class, 'index']);
