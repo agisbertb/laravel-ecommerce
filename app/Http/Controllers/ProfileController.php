@@ -11,15 +11,28 @@ class ProfileController extends Controller
 {
     public function index(Request $request)
     {
-        $addresses = Address::where('user_id', $request->user()->id)->get();
-        $orders = $request->user()->orders; // Assuming you have a relationship defined in the User model
+        $addresses = $request->user()->addresses;
+        $orders = $request->user()->orders()->with('details')->get();
+
 
         return Inertia::render('Profile/Index', [
             'user' => $request->user(),
             'addresses' => $addresses,
             'orders' => $orders,
+
         ]);
     }
+
+    public function orders(Request $request)
+    {
+        $orders = $request->user()->orders()->with(['details.product'])->get();
+
+        return Inertia::render('Profile/Orders/Index', [
+            'orders' => $orders,
+
+        ]);
+    }
+
 
     public function addresses(Request $request)
     {
@@ -135,11 +148,4 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Wishlist');
     }
 
-    public function orders(Request $request)
-    {
-        $orders = $request->user()->orders; // Assuming you have a relationship defined in the User model
-        return Inertia::render('Profile/Orders', [
-            'orders' => $orders
-        ]);
-    }
 }
