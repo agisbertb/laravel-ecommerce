@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedsysController;
 use App\Http\Controllers\AdminShippingOptionController;
 use App\Http\Controllers\SiteController;
@@ -49,6 +50,21 @@ use Inertia\Inertia;
 //        return Inertia::render('Dashboard');
 //    })->name('dashboard');
 //});
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/addresses', [ProfileController::class, 'addresses'])->name('profile.addresses.index');
+    Route::get('/profile/addresses/create/{type?}', [ProfileController::class, 'createAddress'])->name('profile.addresses.create');
+    Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
+    Route::delete('/profile/addresses/{id}', [ProfileController::class, 'destroyAddress'])->name('profile.addresses.destroy');
+    Route::get('/profile/addresses/{id}/edit', [ProfileController::class, 'editAddress'])->name('profile.addresses.edit');
+    Route::put('/profile/addresses/{id}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
+    Route::get('/profile/wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+});
+
+
 
 // Login with Google Account routes
 

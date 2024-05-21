@@ -1,32 +1,7 @@
-<script setup>
-import { reactive, defineProps } from 'vue';
-import { router } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-const props = defineProps({
-    type: String,
-    siteSettings: Object,
-});
-
-const form = reactive({
-    type: props.type || '',
-    name: '',
-    address: '',
-    city: '',
-    state: '',
-    country: '',
-    zip_code: '',
-    default: false,
-});
-
-function submit() {
-    router.post('/addresses', form);
-}
-</script>
-
 <template>
-    <AppLayout :siteSettings="siteSettings" title="Add New Address">
-        <section class="max-w-4xl mx-auto mt-10">
+    <MyAccountLayout>
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Edit Address</h2>
             <form @submit.prevent="submit" class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
@@ -73,11 +48,42 @@ function submit() {
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Create
-                    </button>
+                    <PrimaryButton type="submit">
+                        Update
+                    </PrimaryButton>
                 </div>
             </form>
-        </section>
-    </AppLayout>
+        </div>
+    </MyAccountLayout>
 </template>
+
+<script setup>
+import { reactive, defineProps } from 'vue';
+import { router } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import MyAccountLayout from '@/Layouts/MyAccountLayout.vue';
+
+const props = defineProps({
+    address: Object,
+});
+
+const form = reactive({
+    id: props.address.id,
+    name: props.address.name,
+    type: props.address.type,
+    address: props.address.address,
+    city: props.address.city,
+    state: props.address.state,
+    country: props.address.country,
+    zip_code: props.address.zip_code,
+    default: !!props.address.default,
+});
+
+function submit() {
+    router.put(`/profile/addresses/${form.id}`, form, {
+        onSuccess: () => {
+            router.visit('/profile/addresses');
+        }
+    });
+}
+</script>

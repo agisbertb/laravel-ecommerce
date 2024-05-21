@@ -83,7 +83,7 @@ const saveAndContinue = () => {
                                         </div>
                                     </label>
                                 </div>
-                                <Link href="/addresses/create/Shipping" class="flex items-center text-blue-600 hover:underline">
+                                <Link href="/profile/addresses/create/Shipping" class="flex items-center text-blue-600 hover:underline">
                                     + Add another address
                                 </Link>
                             </div>
@@ -114,7 +114,7 @@ const saveAndContinue = () => {
                                         </div>
                                     </label>
                                 </div>
-                                <Link href="/addresses/create/Billing" class="flex items-center text-blue-600 hover:underline">
+                                <Link href="/profile/addresses/create/Billing" class="flex items-center text-blue-600 hover:underline">
                                     + Add another address
                                 </Link>
                             </div>

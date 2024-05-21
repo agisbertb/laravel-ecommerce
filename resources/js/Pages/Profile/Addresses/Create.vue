@@ -1,34 +1,8 @@
-<script setup>
-import { reactive, defineProps } from 'vue';
-import { router } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-const props = defineProps({
-    address: Object,
-    siteSettings: Object,
-});
-
-const form = reactive({
-    id: props.address.id,
-    name: props.address.name,
-    type: props.address.type,
-    address: props.address.address,
-    city: props.address.city,
-    state: props.address.state,
-    country: props.address.country,
-    zip_code: props.address.zip_code,
-    default: !!props.address.default,
-});
-
-function update() {
-    router.put(`/addresses/${props.address.id}`, form);
-}
-</script>
-
 <template>
-    <AppLayout :siteSettings="siteSettings" title="Edit Address">
-        <section class="max-w-4xl mx-auto mt-10">
-            <form @submit.prevent="update" class="space-y-6">
+    <MyAccountLayout>
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Add New Address</h2>
+            <form @submit.prevent="submit" class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" id="name" v-model="form.name" required
@@ -69,15 +43,46 @@ function update() {
                     <label for="default" class="flex items-center space-x-2">
                         <input type="checkbox" id="default" v-model="form.default"
                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        <span class="text-sm font-medium text-gray-700">Set as default</span>
+                        <span class="text-sm font-medium text-gray-700">Set as default address</span>
                     </label>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Update</button>
+                    <PrimaryButton type="submit">
+                        Create
+                    </PrimaryButton>
                 </div>
             </form>
-        </section>
-    </AppLayout>
+        </div>
+    </MyAccountLayout>
 </template>
+
+<script setup>
+import { reactive, defineProps } from 'vue';
+import { router } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import MyAccountLayout from '@/Layouts/MyAccountLayout.vue';
+
+const props = defineProps({
+    type: String,
+});
+
+const form = reactive({
+    type: props.type || '',
+    name: '',
+    address: '',
+    city: '',
+    state: '',
+    country: '',
+    zip_code: '',
+    default: false,
+});
+
+function submit() {
+    router.post('/profile/addresses', form, {
+        onSuccess: () => {
+            router.visit('/profile/addresses');
+        }
+    });
+}
+</script>

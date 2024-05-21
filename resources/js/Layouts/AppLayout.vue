@@ -72,16 +72,8 @@
                                             Manage Account
                                         </div>
 
-                                        <DropdownLink :href="route('profile.show')">
+                                        <DropdownLink :href="route('profile.index')">
                                             Profile
-                                        </DropdownLink>
-
-                                        <DropdownLink :href="route('addresses.index')">
-                                            Addresses
-                                        </DropdownLink>
-
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
-                                            API Tokens
                                         </DropdownLink>
 
                                         <div class="border-t border-gray-200" />
