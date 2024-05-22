@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white">
         <header class="relative bg-white">
-            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-bold text-white sm:px-6 lg:px-8">
                 Get free delivery on orders over $100
             </p>
 
@@ -43,7 +43,7 @@
                             <div class="ml-4 flow-root lg:ml-6">
                                 <NavLink :href="route('cart.index')" class="group flex items-center p-2">
                                     <ShoppingBagIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
-                                    <span class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{{ cartCount }}</span>
+                                    <span class="ml-2 text-sm font-bold text-gray-700 group-hover:text-gray-800">{{ cartCount }}</span>
                                     <span class="sr-only">items in cart, view bag</span>
                                 </NavLink>
                             </div>
@@ -51,9 +51,9 @@
                             <!-- Login/Register -->
                             <template v-if="!$page.props.auth.user">
                                 <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
-                                    <NavLink :href="route('login')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Login</NavLink>
+                                    <NavLink :href="route('login')" class="text-sm font-bold text-gray-500 hover:text-gray-600">Login</NavLink>
                                     <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                                    <NavLink :href="route('register')" class="text-sm font-medium text-gray-500 hover:text-gray-600">Register</NavLink>
+                                    <NavLink :href="route('register')" class="text-sm font-bold text-gray-500 hover:text-gray-600">Register</NavLink>
                                 </div>
                             </template>
 
@@ -61,7 +61,7 @@
                             <div v-else class="ms-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-bold rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
                                             <UserCircleIcon class="h-8 w-8 flex-shrink-0 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
                                         </button>
                                     </template>
@@ -92,8 +92,16 @@
                 </div>
             </nav>
 
-            <NAVEXAMPLE />
-
+            <!-- Nuevo bloque de navegación -->
+            <nav aria-label="Secondary" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="border-b border-gray-200">
+                    <div class="flex items-center h-12">
+                        <div class="ml-4 flex lg:ml-0">
+                            <a href="/categories" class="text-lg font-bold text-gray-500 hover:text-gray-600">All Categories</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </header>
     </div>
 
@@ -117,7 +125,7 @@ import { router } from "@inertiajs/vue3";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from '@/Components/Dropdown.vue';
 import FooterSection from '@/Components/FooterSection.vue';
-import SearchBar from '@/Components/SearchBar.vue'; // Importa el nuevo componente
+import SearchBar from '@/Components/SearchBar.vue';
 
 const open = ref(false);
 
@@ -136,9 +144,8 @@ const logout = () => {
 };
 
 import useCart from '@/Composables/useCart';
-import NAVEXAMPLE from "@/Components/NAVEXAMPLE.vue";
 
-const { cartCount } = useCart();
+const {cartCount} = useCart();
 
 const logoUrl = computed(() => {
     return props.siteSettings.site_logo ? `/${props.siteSettings.site_logo}` : '';
