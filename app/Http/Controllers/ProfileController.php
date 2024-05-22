@@ -16,13 +16,21 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $addresses = $request->user()->addresses;
-        $orders = $request->user()->orders()->with('details')->get();
+        $orders = $request->user()->orders()->with('details.product.images')->get();
         $wishlists = Wishlist::with('product.images')
             ->where('user_id', $request->user()->id)
             ->get();
 
         foreach ($wishlists as $wishlist) {
             $wishlist->product->image_url = $wishlist->product->images->isNotEmpty() ? Storage::url($wishlist->product->images->first()->image_path) : null;
+        }
+
+        foreach ($orders as $order) {
+            foreach ($order->details as $detail) {
+                if ($detail->product && $detail->product->images->isNotEmpty()) {
+                    $detail->product->image_url = Storage::url($detail->product->images->first()->image_path);
+                }
+            }
         }
 
         return Inertia::render('Profile/Index', [
@@ -36,6 +44,14 @@ class ProfileController extends Controller
     public function orders(Request $request)
     {
         $orders = $request->user()->orders()->with(['details.product'])->get();
+
+        foreach ($orders as $order) {
+            foreach ($order->details as $detail) {
+                $detail->product->image_url = $detail->product->images->isNotEmpty() ? Storage::url($detail->product->images->first()->image_path) : null;
+                $detail->product->href = route('products.show', ['slug' => $detail->product->slug]);
+                $detail->product->categoryHref = route('categories.index', ['slug' => $detail->product->category_id]);
+            }
+        }
 
         return Inertia::render('Profile/Orders/Index', [
             'orders' => $orders,
