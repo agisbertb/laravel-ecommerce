@@ -1,5 +1,5 @@
 <template>
-    <MyAccountLayout>
+    <ProfileLayout>
         <div class="space-y-12">
             <section class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                 <div>
@@ -83,7 +83,7 @@
                 </div>
             </section>
         </div>
-    </MyAccountLayout>
+    </ProfileLayout>
 </template>
 
 <script setup>
@@ -91,7 +91,7 @@ import { defineProps } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import DangerButton from "@/Components/DangerButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import MyAccountLayout from '@/Layouts/MyAccountLayout.vue';
+import ProfileLayout from '@/Layouts/ProfileLayout.vue';
 import AddButton from "@/Components/AddButton.vue";
 
 const props = defineProps({

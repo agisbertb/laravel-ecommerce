@@ -1,5 +1,5 @@
 <template>
-    <MyAccountLayout>
+    <ProfileLayout>
         <div>
             <h2 class="text-xl font-semibold mb-4">Edit Address</h2>
             <form @submit.prevent="submit" class="space-y-6">
@@ -54,14 +54,14 @@
                 </div>
             </form>
         </div>
-    </MyAccountLayout>
+    </ProfileLayout>
 </template>
 
 <script setup>
 import { reactive, defineProps } from 'vue';
 import { router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import MyAccountLayout from '@/Layouts/MyAccountLayout.vue';
+import ProfileLayout from '@/Layouts/ProfileLayout.vue';
 
 const props = defineProps({
     address: Object,

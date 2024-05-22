@@ -19,6 +19,7 @@ use App\Http\Controllers\RedsysController;
 use App\Http\Controllers\AdminShippingOptionController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,17 +53,24 @@ use Inertia\Inertia;
 //    })->name('dashboard');
 //});
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/wishlist/check/{productId}', [WishlistController::class, 'check'])->name('wishlist.check');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/addresses', [ProfileController::class, 'addresses'])->name('profile.addresses.index');
-    Route::get('/profile/addresses/create/{type?}', [ProfileController::class, 'createAddress'])->name('profile.addresses.create');
-    Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
-    Route::delete('/profile/addresses/{id}', [ProfileController::class, 'destroyAddress'])->name('profile.addresses.destroy');
-    Route::get('/profile/addresses/{id}/edit', [ProfileController::class, 'editAddress'])->name('profile.addresses.edit');
-    Route::put('/profile/addresses/{id}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
     Route::get('/profile/wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
     Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+
+    Route::prefix('profile/addresses')->name('profile.addresses.')->group(function () {
+        Route::get('/', [AddressController::class, 'index'])->name('index');
+        Route::get('/create/{type?}', [AddressController::class, 'create'])->name('create');
+        Route::post('/', [AddressController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AddressController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AddressController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AddressController::class, 'destroy'])->name('destroy');
+    });
 });
 
 
@@ -78,11 +86,6 @@ Route::prefix('redsys')->group(function () {
     Route::get('/success', [RedsysController::class, 'success'])->name('redsys.success');
     Route::get('/error', [RedsysController::class, 'error'])->name('redsys.error');
 });
-
-
-//Route::post('/payment/process', [RedsysController::class, 'index'])->name('payment.process');
-//Route::post('/payment/redirect', [RedsysController::class, 'success'])->name('payment.success');
-//Route::post('/payment/error', [RedsysController::class, 'error'])->name('payment.error');
 
 
 Route::get('/redsys/success', [RedsysController::class, 'success'])->name('redsys.success');

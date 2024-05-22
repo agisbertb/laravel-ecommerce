@@ -10,33 +10,21 @@ use Inertia\Inertia;
 
 class AddressController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
     public function index()
     {
         $addresses = Address::where('user_id', Auth::id())->get();
 
-        return Inertia::render('Addresses/Index', [
+        return Inertia::render('Profile/Addresses/Index', [
             'addresses' => $addresses
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-
     public function create($type = null)
     {
-        return Inertia::render('Addresses/Create', [
+        return Inertia::render('Profile/Addresses/Create', [
             'type' => $type
         ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
 
     public function store(AddressRequest $request)
     {
@@ -69,26 +57,18 @@ class AddressController extends Controller
             Address::create($validated);
         }
 
-        return to_route('addresses.index');
+        return to_route('profile.addresses.index');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
 
     public function edit(string $id)
     {
         $address = Address::find($id);
         $this->authorize('view', $address);
 
-        return Inertia::render('Addresses/Edit', [
+        return Inertia::render('Profile/Addresses/Edit', [
             'address' => $address
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function update(AddressRequest $request, string $id)
     {
@@ -103,12 +83,8 @@ class AddressController extends Controller
         $this->authorize('update', $address);
         $address->update($request->all());
 
-        return to_route('addresses.index');
+        return to_route('profile.addresses.index');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
 
     public function destroy(string $id)
     {
@@ -131,6 +107,6 @@ class AddressController extends Controller
         } else {
             $address->delete();
         }
-        return to_route('addresses.index');
+        return to_route('profile.addresses.index');
     }
 }
