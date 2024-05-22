@@ -1,10 +1,20 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const siteSettings = page.props.siteSettings || { site_logo: null };
 </script>
 
 <template>
     <Link :href="'/'">
+        <img
+            v-if="siteSettings.site_logo"
+            :src="siteSettings.site_logo"
+            alt="Site Logo"
+            class="w-40 h-40 object-contain"
+        />
         <svg
+            v-else
             class="w-16 h-16"
             viewBox="0 0 48 48"
             fill="none"
