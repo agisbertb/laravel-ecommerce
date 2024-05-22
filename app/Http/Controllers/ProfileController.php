@@ -72,4 +72,14 @@ class ProfileController extends Controller
             'wishlist' => $wishlists,
         ]);
     }
+
+    public function destroyWishlistItem($id)
+    {
+        $wishlistItem = Wishlist::findOrFail($id);
+        $this->authorize('delete', $wishlistItem); // Asegúrate de autorizar la acción
+        $wishlistItem->delete();
+
+        return back()->with('success', 'Item removed from wishlist');
+    }
+
 }

@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/wishlist', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
+    Route::delete('/profile/wishlist/{id}', [ProfileController::class, 'destroyWishlistItem'])->name('wishlist.destroy');
     Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
 
     Route::prefix('profile/addresses')->name('profile.addresses.')->group(function () {

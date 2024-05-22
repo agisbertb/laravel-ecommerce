@@ -33,7 +33,7 @@
                         <div class="ml-auto flex items-center">
                             <!-- Wishlist -->
                             <div class="flex lg:ml-6">
-                                <NavLink href="#" class="group -m-2 p-2 flex items-center">
+                                <NavLink :href="route('profile.wishlist')" class="group -m-2 p-2 flex items-center">
                                     <HeartIcon class="h-8 w-8 text-gray-500 group-hover:text-gray-600" aria-hidden="true" />
                                     <span class="sr-only">Wishlist</span>
                                 </NavLink>
@@ -97,7 +97,7 @@
                 <div class="border-b border-gray-200">
                     <div class="flex items-center h-12">
                         <div class="ml-4 flex lg:ml-0">
-                            <a href="/categories" class="text-lg font-bold text-gray-500 hover:text-gray-600">All Categories</a>
+                            <Link :href="route('categories.index')" class="text-lg font-bold text-gray-500 hover:text-gray-600">All Categories</Link>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ import {
     UserCircleIcon,
 } from '@heroicons/vue/24/outline';
 import NavLink from "@/Components/NavLink.vue";
-import { router } from "@inertiajs/vue3";
+import { router, Link } from "@inertiajs/vue3";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from '@/Components/Dropdown.vue';
 import FooterSection from '@/Components/FooterSection.vue';

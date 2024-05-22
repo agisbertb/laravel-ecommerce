@@ -4,7 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Address;
+use App\Models\Wishlist;
 use App\Policies\AddressPolicy;
+use App\Policies\WishlistPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Address::class => AddressPolicy::class,
+        Wishlist::class => WishlistPolicy::class,
     ];
 
     /**
