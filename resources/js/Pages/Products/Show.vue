@@ -1,6 +1,6 @@
 
 <template>
-    <AppLayout title="Dashboard">
+    <AppLayout :siteSettings="siteSettings" title="Dashboard">
     <div class="bg-white">
 
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -133,7 +133,8 @@ import { StarIcon } from '@heroicons/vue/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
-    product: Object
+    product: Object,
+    siteSettings: Object,
 });
 
 import useCart from '@/Composables/useCart';

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminSiteSettingController;
 use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -122,6 +123,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/', [SiteController::class, 'index'])->name('welcome');
 Route::get('/search-products', [SiteController::class, 'search'])->name('search.products');
 
+
+Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.index');
+Route::get('/categories/{category:slug}', [CategoriesController::class, 'show'])->name('categories.show');
 
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
