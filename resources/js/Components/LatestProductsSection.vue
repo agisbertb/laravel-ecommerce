@@ -3,10 +3,10 @@
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <div class="md:flex md:items-center md:justify-between">
                 <h2 class="text-2xl font-bold tracking-tight text-gray-900">Latest products</h2>
-                <a href="#" class="hidden text-sm font-medium text-blue-600 hover:text-blue-500 md:block">
-                    Shop the collection
+                <Link href="/products" class="hidden text-sm font-semibold text-blue-600 hover:text-blue-500 sm:block">
+                    Browse all products
                     <span aria-hidden="true"> &rarr;</span>
-                </a>
+                </Link>
             </div>
 
             <div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
@@ -27,10 +27,10 @@
             </div>
 
             <div class="mt-8 text-sm md:hidden">
-                <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
-                    Shop the collection
+                <Link href="/products" class="hidden text-sm font-semibold text-blue-600 hover:text-blue-500 sm:block">
+                    Browse all products
                     <span aria-hidden="true"> &rarr;</span>
-                </a>
+                </Link>
             </div>
         </div>
     </div>
@@ -38,6 +38,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     products: Array,

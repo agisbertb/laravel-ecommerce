@@ -3,10 +3,10 @@
         <div class="py-16 sm:py-24 xl:mx-auto xl:max-w-7xl xl:px-8">
             <div class="px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:px-0">
                 <h2 class="text-2xl font-bold tracking-tight text-gray-900">Shop by Category</h2>
-                <a href="#" class="hidden text-sm font-semibold text-blue-600 hover:text-blue-500 sm:block">
+                <Link href="/categories" class="hidden text-sm font-semibold text-blue-600 hover:text-blue-500 sm:block">
                     Browse all categories
                     <span aria-hidden="true"> &rarr;</span>
-                </a>
+                </Link>
             </div>
 
             <div class="mt-4 flow-root">
@@ -26,10 +26,10 @@
             </div>
 
             <div class="mt-6 px-4 sm:hidden">
-                <a href="#" class="block text-sm font-semibold text-blue-600 hover:text-blue-500">
+                <Link href="/categories" class="hidden text-sm font-semibold text-blue-600 hover:text-blue-500 sm:block">
                     Browse all categories
                     <span aria-hidden="true"> &rarr;</span>
-                </a>
+                </Link>
             </div>
         </div>
     </div>
@@ -37,6 +37,7 @@
 
 <script setup>
 import { defineProps, computed } from 'vue';
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     categories: Array

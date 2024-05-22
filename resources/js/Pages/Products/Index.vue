@@ -106,7 +106,7 @@
 
                 <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">All Products</h1>
 
                         <div class="flex items-center">
                             <Menu as="div" class="relative inline-block text-left">
@@ -134,11 +134,7 @@
                                     </MenuItems>
                                 </transition>
                             </Menu>
-
-                            <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-                                <span class="sr-only">View grid</span>
-                                <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-                            </button>
+                            
                             <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
                                 <span class="sr-only">Filters</span>
                                 <FunnelIcon class="h-5 w-5" aria-hidden="true" />

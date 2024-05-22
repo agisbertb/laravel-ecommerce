@@ -44,7 +44,7 @@
                     <div class="border-b border-gray-200">
                         <div class="-mx-px grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
                             <div v-for="product in products.data" :key="product.id" class="group relative p-4 sm:p-6">
-                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
+                                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 duration-300 ease-in-out group-hover:scale-110">
                                     <Link :href="route('products.show', product.slug)">
                                         <img :src="product.image_url" :alt="product.imageAlt" class="h-full w-full object-cover object-center" />
                                     </Link>

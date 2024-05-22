@@ -18,8 +18,8 @@ import NewsletterSection from "@/Components/NewsletterSection.vue";
 import ShopByCategories from "@/Components/ShopByCategoriesSection.vue";
 import FavoriteProducts from "@/Components/FavoriteProductsSection.vue";
 import LatestProductsSection from "@/Components/LatestProductsSection.vue";
-import { defineProps } from 'vue';
 import FeaturedCategoriesSection from "@/Components/FeaturedCategoriesSection.vue";
+import { defineProps } from 'vue';
 
 const props = defineProps({
     categories: Array,
