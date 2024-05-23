@@ -59,9 +59,9 @@
                                     <div class="mt-3 flex flex-col items-center">
                                         <p class="sr-only">{{ product.rating }} out of 5 stars</p>
                                         <div class="flex items-center">
-                                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating" :class="[product.rating > rating ? 'text-yellow-400' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']" aria-hidden="true" />
+                                            <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating" :class="[product.average_rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']" aria-hidden="true" />
                                         </div>
-                                        <p class="mt-1 text-sm text-gray-500">{{ product.reviewCount }} reviews</p>
+                                        <p class="mt-1 text-sm text-gray-500">{{ product.total_reviews }} reviews</p>
                                     </div>
                                     <p class="mt-4 text-base font-medium text-gray-900">{{ product.price }} €</p>
                                 </div>

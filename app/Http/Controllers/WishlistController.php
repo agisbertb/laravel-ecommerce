@@ -18,13 +18,13 @@ class WishlistController extends Controller
 
         if ($wishlist) {
             $wishlist->delete();
-            return response()->json(['status' => 'removed']);
+            return back()->with('success', 'The product has been removed from your wishlist.');
         } else {
             Wishlist::create([
                 'user_id' => Auth::id(),
                 'product_id' => $request->product_id,
             ]);
-            return response()->json(['status' => 'added']);
+            return back()->with('success', 'The product has been added to your wishlist.');
         }
     }
 
@@ -34,3 +34,4 @@ class WishlistController extends Controller
         return response()->json(['isInWishlist' => $isInWishlist]);
     }
 }
+

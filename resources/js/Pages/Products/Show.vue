@@ -11,8 +11,8 @@
                                 <Tab v-for="image in product.images" :key="image.id" class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4" v-slot="{ selected }">
                                     <span class="sr-only">{{ image.name }}</span>
                                     <span class="absolute inset-0 overflow-hidden rounded-md">
-                    <img :src="image.url" alt="" class="h-full w-full object-cover object-center" />
-                  </span>
+                                        <img :src="image.url" alt="" class="h-full w-full object-cover object-center" />
+                                    </span>
                                     <span :class="[selected ? 'ring-blue-500' : 'ring-transparent', 'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2']" aria-hidden="true" />
                                 </Tab>
                             </TabList>
@@ -39,12 +39,11 @@
                             <h3 class="sr-only">Reviews</h3>
                             <div class="flex items-center">
                                 <div class="flex items-center">
-                                    <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating" :class="[product.rating > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']" aria-hidden="true" />
+                                    <StarIcon v-for="rating in [0, 1, 2, 3, 4]" :key="rating" :class="[reviews.average > rating ? 'text-yellow-400' : 'text-gray-300', 'h-5 w-5 flex-shrink-0']" aria-hidden="true" />
                                 </div>
-                                <p class="sr-only">{{ product.rating }} out of 5 stars</p>
+                                <p class="sr-only">{{ reviews.average }} out of 5 stars</p>
                             </div>
                         </div>
-
                         <div class="mt-6">
                             <h3 class="sr-only">Description</h3>
                             <div class="mt-6 text-base text-gray-700 break-words overflow-hidden" v-html="product.description"></div>
@@ -54,7 +53,7 @@
                             <div class="mt-10 flex">
                                 <PrimaryButton @click="handleAddToCart" class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full">Add to bag</PrimaryButton>
                                 <div type="button" class="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-                                    <add-to-wishlist-button :product-id="product.id"></add-to-wishlist-button>
+                                    <AddToWishlistButton :product-id="product.id" @click="handleToggleWishlist" />
                                 </div>
                             </div>
                         </form>
@@ -67,9 +66,9 @@
                                         <DisclosureButton class="group relative flex w-full items-center justify-between py-6 text-left">
                                             <span :class="[open ? 'text-blue-600' : 'text-gray-900', 'text-sm font-medium']">{{ detail.name }}</span>
                                             <span class="ml-6 flex items-center">
-                        <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
-                        <MinusIcon v-else class="block h-6 w-6 text-blue-400 group-hover:text-blue-500" aria-hidden="true" />
-                      </span>
+                                                <PlusIcon v-if="!open" class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                                                <MinusIcon v-else class="block h-6 w-6 text-blue-400 group-hover:text-blue-500" aria-hidden="true" />
+                                            </span>
                                         </DisclosureButton>
                                     </h3>
                                     <DisclosurePanel as="div" class="prose prose-sm pb-6">
@@ -166,12 +165,17 @@
         <AlertNotification v-if="showSuccessNotification" :title="successTitle" :message="successMessage" :type="'success'" v-model:visible="showSuccessNotification" />
         <AlertNotification v-if="showErrorNotification" :title="errorTitle" :message="errorMessage" :type="'error'" v-model:visible="showErrorNotification" />
         <AlertNotification v-if="showCartNotification" title="Product Added" message="Product has been added to your cart." :type="'success'" v-model:visible="showCartNotification" />
+        <AlertNotification v-if="showWishlistNotification" :title="wishlistTitle" :message="wishlistMessage" :type="'success'" v-model:visible="showWishlistNotification" />
+
+
     </AppLayout>
 </template>
 
+
+
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { usePage, useForm } from '@inertiajs/vue3';
+import {usePage, useForm, router} from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {
     Disclosure,
@@ -190,6 +194,7 @@ import AlertNotification from '@/Components/AlertNotification.vue';
 import useCart from '@/Composables/useCart';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import RelatedProductsSection from "@/Components/RelatedProductsSection.vue";
+import axios from 'axios';
 
 const props = defineProps({
     product: Object,
@@ -211,10 +216,13 @@ const form = useForm({
 const showReviewForm = ref(false);
 const showSuccessNotification = ref(false);
 const showErrorNotification = ref(false);
+const showWishlistNotification = ref(false);
 const successTitle = ref('');
 const successMessage = ref('');
 const errorTitle = ref('');
 const errorMessage = ref('');
+const wishlistTitle = ref('');
+const wishlistMessage = ref('');
 const { addToCart, showCartNotification } = useCart();
 
 const handleAddToCart = async (event) => {
@@ -236,9 +244,19 @@ watch(showCartNotification, (newVal) => {
     if (newVal) {
         setTimeout(() => {
             showCartNotification.value = false;
-        }, 3000);
+        }, 5000);
     }
 });
+
+const handleToggleWishlist = async () => {
+    try {
+        await router.post('/wishlist/toggle', {
+            product_id: props.product.id,
+        });
+    } catch (error) {
+        console.error("Error updating wishlist:", error);
+    }
+};
 
 function toggleReviewForm() {
     showReviewForm.value = !showReviewForm.value;

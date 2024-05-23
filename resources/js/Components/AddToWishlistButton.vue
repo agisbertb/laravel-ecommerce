@@ -7,7 +7,7 @@
 
 <script setup>
 import {ref, computed, onMounted} from 'vue';
-import axios from 'axios';
+import {router} from '@inertiajs/vue3';
 import {HeartIcon as HeartIconOutline} from '@heroicons/vue/24/outline';
 import {HeartIcon as HeartIconSolid} from '@heroicons/vue/24/solid';
 
@@ -23,14 +23,18 @@ const checkWishlist = async () => {
 };
 
 const toggleWishlist = async () => {
-    const response = await axios.post('/wishlist/toggle', {product_id: props.productId});
-    isInWishlist.value = response.data.status === 'added';
+    try {
+        await router.post('/wishlist/toggle', {
+            product_id: props.productId,
+        });
+    } catch (error) {
+        console.error("Error toggling wishlist:", error);
+    }
 };
 
 const buttonClass = computed(() => ({
-    '': true, // Esta clase está vacía porque no necesitamos cambiar el fondo
+    '': true,
 }));
 
 onMounted(checkWishlist);
 </script>
-

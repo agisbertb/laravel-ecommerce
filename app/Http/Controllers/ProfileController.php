@@ -76,7 +76,7 @@ class ProfileController extends Controller
     public function destroyWishlistItem($id)
     {
         $wishlistItem = Wishlist::findOrFail($id);
-        $this->authorize('delete', $wishlistItem); // Asegúrate de autorizar la acción
+        $this->authorize('delete', $wishlistItem);
         $wishlistItem->delete();
 
         return back()->with('success', 'Item removed from wishlist');

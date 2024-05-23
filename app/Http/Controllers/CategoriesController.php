@@ -71,7 +71,7 @@ class CategoriesController extends Controller
     public function show(Category $category)
     {
         $order = request()->input('order', 'popularity_desc');
-        $products = Product::with('images', 'tags', 'categories')
+        $products = Product::with(['images', 'tags', 'categories', 'reviews'])
             ->whereHas('categories', function ($query) use ($category) {
                 $query->where('categories.id', $category->id);
             })
@@ -90,6 +90,8 @@ class CategoriesController extends Controller
             ->paginate(20)
             ->through(function ($product) {
                 $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
+                $product->average_rating = $product->reviews->avg('rating');
+                $product->total_reviews = $product->reviews->count();
                 return $product;
             });
 
@@ -98,5 +100,6 @@ class CategoriesController extends Controller
             'products' => $products,
         ]);
     }
+
 
 }

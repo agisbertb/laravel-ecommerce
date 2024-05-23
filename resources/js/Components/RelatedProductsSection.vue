@@ -17,7 +17,7 @@
                             </h3>
                             <p class="mt-1 text-sm text-gray-500">{{ relatedProduct.color }}</p>
                         </div>
-                        <p class="text-sm font-medium text-gray-900">{{ relatedProduct.price }}</p>
+                        <p class="text-sm font-medium text-gray-900">{{ relatedProduct.price }} €</p>
                     </div>
                 </div>
             </div>
