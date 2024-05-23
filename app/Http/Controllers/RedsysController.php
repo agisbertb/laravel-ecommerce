@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ShippingOption;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,29 +32,29 @@ class RedsysController extends Controller
         try {
             $cartItems = $cart->details;
 
-            // Calculem el total de la comanda
+            // Calculate the total amount of the order
             $orderAmount = $cartItems->reduce(function ($carry, $item) {
                 return $carry + ($item->quantity * $item->price);
             }, 0);
 
-            // Obtener el costo de envío de la sesión
+            // Get the shipping cost
             $shippingOptionId = session('shipping_option_id');
             $shippingOption = ShippingOption::find($shippingOptionId);
             $shippingCost = $shippingOption ? $shippingOption->price : 0;
 
-            // Sumar el costo de envío al total de la orden
+            // Add the shipping cost to the total amount
             $totalAmount = $orderAmount + $shippingCost;
 
-            // Creem una nova comanda
+            // Create the order
             $order = Order::create([
                 'user_id' => $user->id,
-                'billing_address_id' => session('billing_address_id'), // Updated
-                'shipping_address_id' => session('shipping_address_id'), // Updated
+                'billing_address_id' => session('billing_address_id'),
+                'shipping_address_id' => session('shipping_address_id'),
                 'total' => $totalAmount,
                 'status' => 'pending',
             ]);
 
-            // Creem els detalls de la comanda a OrdersDetails
+            // Create the order details
             foreach ($cartItems as $item) {
                 OrderDetail::create([
                     'order_id' => $order->id,
@@ -63,23 +64,22 @@ class RedsysController extends Controller
                 ]);
             }
 
-            // Generem un codi d'ordre
+            // Generate a unique order code
             $orderCode = time();
 
-            // Creem un nou pagament
             $payment = Payment::create([
                 'order_id' => $order->id,
-                'amount' => $totalAmount, // Utilizar el monto total con envío
+                'amount' => $totalAmount,
                 'status' => 'pending',
                 'method' => 'Redsys',
                 'transaction_id' => $orderCode,
             ]);
 
-            // Configuració de Redsys
+            // Redsys payment gateway
             $key = config('redsys.key');
             $code = config('redsys.merchantcode');
 
-            Redsys::setAmount($totalAmount); // Utilizar el monto total con envío
+            Redsys::setAmount($totalAmount);
             Redsys::setOrder(time());
             Redsys::setMerchantcode($code);
             Redsys::setCurrency('978');
@@ -99,14 +99,14 @@ class RedsysController extends Controller
             Redsys::setMerchantSignature($signature);
             $form = Redsys::createForm();
 
-            // Canviem l'estat del carret a processat
+            // Change the status of the cart to processed
             $cart->update(['status' => 'processed']);
 
-            DB::commit(); // Confirmem la transacció
+            DB::commit();
 
             return response()->json(['form' => $form]);
         } catch (Exception $e) {
-            DB::rollBack(); // Revertim la transacció en caso d'error
+            DB::rollBack();
             Log::error('Error in RedsysController@index: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -119,7 +119,7 @@ class RedsysController extends Controller
 
         if (is_null($parameters) || !isset($parameters["Ds_Response"])) {
             return Inertia::render('Checkout/Error', [
-                'error' => 'No se pudieron obtener los parámetros del comerciante o Ds_Response no está presente.',
+                'error' => 'Could not get merchant parameters or Ds_Response is not present.',
                 'parameters' => $parameters
             ]);
         }
@@ -133,27 +133,35 @@ class RedsysController extends Controller
 
         $payment = Payment::where('transaction_id', $DsOrder)->first();
         if (!$payment) {
-            return Inertia::render('Checkout/Error', ['error' => 'No se pudo encontrar el pago asociado con el pedido.']);
+            return Inertia::render('Checkout/Error', ['error' => 'The payment associated with the order could not be found.']);
         }
 
         if ($payment->status === 'paid') {
-            return Inertia::render('Checkout/Error', ['error' => 'Este pago ya ha sido procesado.']);
+            return Inertia::render('Checkout/Error', ['error' => 'This payment has already been processed.']);
         }
 
-        // Actualizem l'estat del pagament a pagat
+        // Update the payment status to paid
         $payment->status = 'paid';
         $payment->save();
 
         $order = Order::find($payment->order_id);
         if (!$order || $order->status !== 'pending') {
-            return Inertia::render('Checkout/Error', ['error' => 'El pedido no se pudo encontrar o ya ha sido pagado.']);
+            return Inertia::render('Checkout/Error', ['error' => 'The order could not be found or has already been paid for.']);
         }
 
-        // Actualitzem l'estat de la comanda a pagat
+        // Update the order status to paid
         $order->status = 'paid';
         $order->save();
 
-        // Eliminem el carrito de l'usuari
+        // Update the stock of the products in the order
+        foreach ($order->details as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+        }
+
         $cart = Cart::where('user_id', $order->user_id)->first();
         if ($cart) {
             $cart->delete();
@@ -163,6 +171,7 @@ class RedsysController extends Controller
 
         return redirect()->route('cart.success');
     }
+
 
 
     public function error(Request $request)

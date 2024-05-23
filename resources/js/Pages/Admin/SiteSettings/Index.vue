@@ -38,15 +38,15 @@
 
                         <div class="sm:hidden">
                             <label for="tabs" class="sr-only">Select a tab</label>
-                            <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" @change="selectTab">
+                            <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500" @change="selectTab">
                                 <option v-for="tab in tabs" :key="tab.name" :value="tab.name" :selected="tab.current">{{ tab.name }}</option>
                             </select>
                         </div>
                         <div class="hidden sm:block">
                             <div class="border-b border-gray-200">
                                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                                    <a v-for="tab in tabs" :key="tab.name" @click="selectTab(tab.name)" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
-                                        <component :is="tab.icon" :class="[tab.current ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
+                                    <a v-for="tab in tabs" :key="tab.name" @click="selectTab(tab.name)" :class="[tab.current ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
+                                        <component :is="tab.icon" :class="[tab.current ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
                                         <span>{{ tab.name }}</span>
                                     </a>
                                 </nav>
@@ -70,7 +70,7 @@
                                             <PhotoIcon v-if="!previews.site_logo" class="mx-auto h-12 w-12 text-gray-400" />
                                             <img v-if="previews.site_logo" :src="previews.site_logo" alt="Site Logo Preview" class="mx-auto h-24 w-24 object-cover rounded-full"/>
                                             <div class="flex text-sm text-gray-600">
-                                                <label for="site_logo" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label for="site_logo" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Upload a file</span>
                                                     <input id="site_logo" name="site_logo" type="file" class="sr-only" @change="handleFileChange">
                                                 </label>
@@ -93,7 +93,7 @@
                                             <PhotoIcon v-if="!previews.footer_logo" class="mx-auto h-12 w-12 text-gray-400" />
                                             <img v-if="previews.footer_logo" :src="previews.footer_logo" alt="Footer Logo Preview" class="mx-auto h-24 w-24 object-cover rounded-full"/>
                                             <div class="flex text-sm text-gray-600">
-                                                <label for="footer_logo" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label for="footer_logo" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Upload a file</span>
                                                     <input id="footer_logo" name="footer_logo" type="file" class="sr-only" @change="handleFileChange">
                                                 </label>
@@ -112,7 +112,7 @@
                                             <PhotoIcon v-if="!previews.favicon" class="mx-auto h-12 w-12 text-gray-400" />
                                             <img v-if="previews.favicon" :src="previews.favicon" alt="Favicon Preview" class="mx-auto h-24 w-24 object-cover rounded-full"/>
                                             <div class="flex text-sm text-gray-600">
-                                                <label for="favicon" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label for="favicon" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Upload a file</span>
                                                     <input id="favicon" name="favicon" type="file" class="sr-only" @change="handleFileChange">
                                                 </label>
@@ -167,7 +167,7 @@
                                             <PhotoIcon v-if="!previews.og_image" class="mx-auto h-12 w-12 text-gray-400" />
                                             <img v-if="previews.og_image" :src="previews.og_image" alt="Open Graph Image Preview" class="mx-auto h-24 w-24 object-cover rounded-full"/>
                                             <div class="flex text-sm text-gray-600">
-                                                <label for="og_image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label for="og_image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Upload a file</span>
                                                     <input id="og_image" name="og_image" type="file" class="sr-only" @change="handleFileChange">
                                                 </label>
@@ -199,7 +199,7 @@
                                             <PhotoIcon v-if="!previews.twitter_image" class="mx-auto h-12 w-12 text-gray-400" />
                                             <img v-if="previews.twitter_image" :src="previews.twitter_image" alt="Twitter Image Preview" class="mx-auto h-24 w-24 object-cover rounded-full"/>
                                             <div class="flex text-sm text-gray-600">
-                                                <label for="twitter_image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label for="twitter_image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Upload a file</span>
                                                     <input id="twitter_image" name="twitter_image" type="file" class="sr-only" @change="handleFileChange">
                                                 </label>
