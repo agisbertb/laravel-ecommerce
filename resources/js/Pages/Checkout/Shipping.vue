@@ -8,7 +8,8 @@ import { CheckIcon, ClockIcon } from "@heroicons/vue/20/solid/index.js";
 const props = defineProps({
     cartDetails: Array,
     cartTotal: Number,
-    shippingOptions: Array
+    shippingOptions: Array,
+    siteSettings: Object,
 });
 
 const selectedShippingOption = ref('');
@@ -37,7 +38,7 @@ const saveShippingOption = () => {
 </script>
 
 <template>
-    <CartLayout title="Shipping Options">
+    <CartLayout title="Shipping Options" :siteSettings="siteSettings">
         <div class="bg-white">
             <div class="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shipping Options</h1>

@@ -6,7 +6,6 @@
                 <FavoriteProducts :products="favoriteProducts" />
                 <ShopByCategories :categories="categories" />
                 <LatestProductsSection :products="latestProducts" />
-                <NewsletterSection />
             </div>
         </div>
     </AppLayout>
@@ -14,7 +13,6 @@
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import NewsletterSection from "@/Components/NewsletterSection.vue";
 import ShopByCategories from "@/Components/ShopByCategoriesSection.vue";
 import FavoriteProducts from "@/Components/FavoriteProductsSection.vue";
 import LatestProductsSection from "@/Components/LatestProductsSection.vue";

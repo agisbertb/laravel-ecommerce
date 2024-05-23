@@ -1,36 +1,32 @@
 <template>
     <div class="bg-white">
         <header class="relative bg-white">
-            <p class="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-bold text-white sm:px-6 lg:px-8">
-                Get free delivery on orders over $100
-            </p>
-
             <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
                     <div class="flex items-center h-24">
-                        <!-- Botón para menú móvil -->
+                        <!-- Mobile menu -->
                         <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="open = true">
                             <span class="absolute -inset-0.5" />
                             <span class="sr-only">Open menu</span>
                             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                         </button>
-
                         <!-- Logo -->
                         <div class="ml-4 flex lg:ml-0">
                             <a href="/">
                                 <span class="sr-only">{{ siteSettings.site_name }}</span>
                                 <div class="flex items-center">
                                     <img v-if="logoUrl" :src="logoUrl" class="h-auto max-h-16 w-auto" alt="Site Logo" />
-                                    <span v-else>TODO</span>
+                                    <span v-else>LOGO HERE</span>
                                 </div>
                             </a>
                         </div>
 
-                        <!-- Buscador -->
+                        <!-- Search Bar -->
                         <SearchBar />
 
-                        <!-- Iconos de wishlist, carrito y login -->
+                        <!-- Icons wishlist, cart y login -->
                         <div class="ml-auto flex items-center">
+
                             <!-- Wishlist -->
                             <div class="flex lg:ml-6">
                                 <NavLink :href="route('profile.wishlist')" class="group -m-2 p-2 flex items-center">
@@ -92,7 +88,7 @@
                 </div>
             </nav>
 
-            <!-- Nuevo bloque de navegación -->
+            <!-- Sub Navigation -->
             <nav aria-label="Secondary" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
                     <div class="flex items-center h-12">

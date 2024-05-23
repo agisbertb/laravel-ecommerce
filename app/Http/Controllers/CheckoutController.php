@@ -90,8 +90,6 @@ class CheckoutController extends Controller
         return redirect()->route('cart.payment');
     }
 
-
-
     public function payment()
     {
         $user = Auth::user();
@@ -110,7 +108,6 @@ class CheckoutController extends Controller
             'paymentMethods' => $paymentMethods,
         ]);
     }
-
 
     public function review()
     {

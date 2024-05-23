@@ -1,5 +1,5 @@
 <template>
-    <CartLayout title="Payment Method">
+    <CartLayout title="Payment Method" :siteSettings="siteSettings">
         <div class="bg-white">
             <div class="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Payment Method</h1>
@@ -64,7 +64,9 @@ const selectedPaymentMethod = ref('');
 const props = defineProps({
     cartTotal: Number,
     shippingPrice: Number,
-    paymentMethods: Array
+    paymentMethods: Array,
+    siteSettings: Object,
+
 });
 
 const savePaymentMethod = async () => {
@@ -76,8 +78,6 @@ const savePaymentMethod = async () => {
     try {
         const response = await axios.get('/redsys');
         const {form} = response.data;
-
-        // Create a form and submit it to the Redsys URL
         const tempForm = document.createElement('div');
         tempForm.innerHTML = form;
         const actualForm = tempForm.querySelector('form');

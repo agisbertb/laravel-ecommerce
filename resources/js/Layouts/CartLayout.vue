@@ -5,10 +5,13 @@
                 <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center py-4">
                         <!-- Logo -->
-                        <div class="flex-shrink-0">
-                            <a href="#">
-                                <span class="sr-only">Your Company</span>
-                                <img class="h-10 w-auto" src="https://cdn.pccomponentes.com/img/logos/logo-pccomponentes.svg" alt="Your Company Logo" />
+                        <div class="ml-4 flex lg:ml-0">
+                            <a href="/">
+                                <span class="sr-only">{{ siteSettings.site_name }}</span>
+                                <div class="flex items-center">
+                                    <img v-if="logoUrl" :src="logoUrl" class="h-auto max-h-16 w-auto" alt="Site Logo" />
+                                    <span v-else>LOGO HERE</span>
+                                </div>
                             </a>
                         </div>
                         <!-- Steps Navigation -->
@@ -63,16 +66,27 @@
             <slot />
         </main>
 
-        <FooterCartSection />
+        <FooterSection :siteSettings="siteSettings"/>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import {onMounted, ref, defineProps, computed} from 'vue'
 import { CheckIcon } from '@heroicons/vue/24/solid'
-import FooterCartSection from "@/Components/FooterCartSection.vue";
+import FooterSection from "@/Components/FooterSection.vue";
 
-// Define steps with href links
+const props = defineProps({
+    title: String,
+    siteSettings: {
+        type: Object,
+        default: () => ({site_logo: '', footer_logo: '', footer_text: ''}),
+    },
+});
+
+const logoUrl = computed(() => {
+    return props.siteSettings.site_logo ? `/${props.siteSettings.site_logo}` : '';
+});
+
 const steps = ref([
     { id: '01', name: 'My Cart', href: '/cart', status: 'upcoming' },
     { id: '02', name: 'Shipping Address', href: '/cart/address', status: 'upcoming' },
@@ -85,7 +99,6 @@ onMounted(() => {
     const currentPath = window.location.pathname
     const currentStepIndex = steps.value.findIndex(step => step.href === currentPath)
 
-    // Update the status of each step based on the current step
     steps.value.forEach((step, index) => {
         if (index < currentStepIndex) {
             step.status = 'complete'
@@ -99,7 +112,7 @@ onMounted(() => {
 </script>
 
 <style>
-/* Additional styling for layout consistency, if necessary */
+
 nav[aria-label="Progress"] ol li {
     flex: 1 1 auto;
 }

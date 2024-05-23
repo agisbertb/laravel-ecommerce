@@ -18,6 +18,11 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    siteSettings: {
+        type: Object,
+        required: true,
+        default: () => ({}),
+    },
 });
 
 // Select the default shipping and billing address
@@ -49,7 +54,7 @@ const saveAndContinue = () => {
 </script>
 
 <template>
-    <CartLayout title="Shipping Address">
+    <CartLayout title="Shipping Address" :siteSettings="siteSettings">
         <div class="bg-white">
             <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shipping Address</h1>

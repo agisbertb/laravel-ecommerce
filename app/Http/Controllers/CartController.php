@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -21,8 +22,11 @@ class CartController extends Controller
             $detail->product->image_url = $detail->product->images->isNotEmpty() ? Storage::url($detail->product->images->first()->image_path) : null;
         });
 
+        $siteSettings = SiteSetting::all()->pluck('value', 'key')->toArray();
+
         return Inertia::render('Cart/Index', [
             'cartDetails' => $cartDetails,
+            'siteSettings' => $siteSettings,
         ]);
     }
 
