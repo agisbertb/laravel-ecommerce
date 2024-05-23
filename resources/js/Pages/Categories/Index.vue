@@ -60,7 +60,7 @@
                                                             :name="`categories[]`"
                                                             :value="category.id"
                                                             type="checkbox"
-                                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                             v-model="selectedCategories"
                                                             @change="applyFilters"
                                                         />
@@ -88,7 +88,7 @@
                                                             :name="`tags[]`"
                                                             :value="tag.id"
                                                             type="checkbox"
-                                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                             v-model="selectedTags"
                                                             @change="applyFilters"
                                                         />
@@ -135,7 +135,6 @@
                                 </transition>
                             </Menu>
 
-
                             <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
                                 <span class="sr-only">Filters</span>
                                 <FunnelIcon class="h-5 w-5" aria-hidden="true" />
@@ -167,7 +166,7 @@
                                                     :name="`categories[]`"
                                                     :value="category.id"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                    class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                     v-model="selectedCategories"
                                                     @change="applyFilters"
                                                 />
@@ -195,7 +194,7 @@
                                                     :name="`tags[]`"
                                                     :value="tag.id"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                    class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                     v-model="selectedTags"
                                                     @change="applyFilters"
                                                 />
@@ -208,32 +207,29 @@
 
                             <!-- Product grid -->
                             <div class="lg:col-span-3">
-                                <div class="-mx-px grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-                                    <div v-for="product in products" :key="product.id" class="group relative border-b border-r border-gray-200 p-4 sm:p-6">
-                                        <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
-                                            <img :src="product.image_url" :alt="product.name" class="h-full w-full object-cover object-center" />
-                                        </div>
-                                        <div class="pb-4 pt-10 text-center">
-                                            <h3 class="text-sm font-medium text-gray-900">
-                                                <a :href="product.href">
-                                                    <span aria-hidden="true" class="absolute inset-0" />
-                                                    {{ product.name }}
-                                                </a>
-                                            </h3>
-                                            <div class="mt-3 flex flex-col items-center">
-                                                <p class="sr-only">{{ product.rating }} out of 5 stars</p>
-                                                <div class="flex items-center">
-                                                    <StarIcon
-                                                        v-for="rating in [0, 1, 2, 3, 4]"
-                                                        :key="rating"
-                                                        :class="[product.rating > rating ? 'text-yellow-400' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
-                                                        aria-hidden="true"
-                                                    />
-                                                </div>
-                                                <p class="mt-1 text-sm text-gray-500">{{ product.reviewCount }} reviews</p>
+                                <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+                                    <div v-for="product in products" :key="product.id" class="group relative">
+                                        <Link :href="route('products.show', product.slug)" class="block">
+                                            <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75 duration-300 ease-in-out group-hover:scale-110">
+                                                <img :src="product.image_url" :alt="product.name" class="h-full w-full object-cover object-center" />
                                             </div>
-                                            <p class="mt-4 text-base font-medium text-gray-900">{{ product.price }} €</p>
-                                        </div>
+                                            <div class="mt-4 text-center">
+                                                <h3 class="text-sm font-medium text-gray-900">
+                                                    {{ product.name }}
+                                                </h3>
+                                                <div class="mt-2 flex items-center justify-center">
+                                                    <div class="flex items-center">
+                                                        <StarIcon
+                                                            v-for="rating in [0, 1, 2, 3, 4]"
+                                                            :key="rating"
+                                                            :class="[product.average_rating > rating ? 'text-yellow-400' : 'text-gray-200', 'h-5 w-5 flex-shrink-0']"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <p class="mt-4 text-base font-medium text-gray-900">{{ product.price }} €</p>
+                                            </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -247,7 +243,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { usePage, router } from '@inertiajs/vue3'
+import { usePage, router, Link } from '@inertiajs/vue3'
 import {
     Dialog,
     DialogPanel,
@@ -262,7 +258,7 @@ import {
     TransitionRoot,
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, StarIcon } from '@heroicons/vue/20/solid'
 import AppLayout from '@/Layouts/AppLayout.vue'
 
 const { products, categories, tags, selectedCategories: serverSelectedCategories, selectedTags: serverSelectedTags, categoriesOpen: serverCategoriesOpen, tagsOpen: serverTagsOpen } = usePage().props

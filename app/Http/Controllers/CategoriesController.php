@@ -17,7 +17,7 @@ class CategoriesController extends Controller
         $selectedTags = $request->input('tags', []);
         $order = $request->input('order');
 
-        $products = Product::with('images', 'tags', 'categories')
+        $products = Product::with(['images', 'tags', 'categories', 'reviews'])
             ->when($order, function ($query, $order) {
                 [$criteria, $direction] = explode('_', $order);
                 $column = $criteria === 'price' ? 'price' : 'stock';
@@ -46,11 +46,8 @@ class CategoriesController extends Controller
             ->get()
             ->map(function ($product) {
                 $product->image_url = $product->images->isNotEmpty() ? Storage::url($product->images->first()->image_path) : null;
-                $product->tagNames = $product->tags->pluck('name')->toArray();
-                $product->categoryNames = $product->categories->pluck('name')->toArray();
-
-                unset($product->images);
-
+                $product->average_rating = $product->reviews->avg('rating');
+                $product->total_reviews = $product->reviews->count();
                 return $product;
             });
 
