@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RedsysController;
 use App\Http\Controllers\AdminShippingOptionController;
@@ -123,6 +124,11 @@ Route::middleware(['auth'])->group(function () {
 
 
 });
+
+Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store']);
+Route::put('/products/{product}/reviews/{review}', [ProductReviewController::class, 'update']);
+Route::delete('/products/{product}/reviews/{review}', [ProductReviewController::class, 'destroy']);
+
 
 Route::get('/', [SiteController::class, 'index'])->name('welcome');
 Route::get('/search-products', [SiteController::class, 'search'])->name('search.products');

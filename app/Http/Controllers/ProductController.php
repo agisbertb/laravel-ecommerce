@@ -72,25 +72,6 @@ class ProductController extends Controller
         ]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -110,11 +91,39 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug)
+    public function show($slug)
     {
-        $product = Product::with(['images', 'categories', 'tags'])->where('slug', $slug)->firstOrFail();
-        return Inertia::render('Products/Show', ['product' => $product]);
+        $product = Product::with(['images', 'categories', 'tags', 'reviews', 'reviews.user'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $reviews = $product->reviews;
+        $averageRating = $reviews->avg('rating');
+        $totalCount = $reviews->count();
+        $ratingsCount = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            $ratingsCount[] = [
+                'rating' => $i,
+                'count' => $reviews->where('rating', $i)->count()
+            ];
+        }
+
+        $userReview = $reviews->where('user_id', auth()->id())->first();
+        $featuredReviews = $reviews->take(5);
+
+        return Inertia::render('Products/Show', [
+            'product' => $product,
+            'reviews' => [
+                'average' => $averageRating,
+                'totalCount' => $totalCount,
+                'counts' => $ratingsCount,
+                'featured' => $featuredReviews,
+                'userReview' => $userReview
+            ]
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

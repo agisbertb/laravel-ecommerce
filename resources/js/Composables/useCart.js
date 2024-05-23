@@ -1,12 +1,13 @@
 import { ref, computed, reactive, watch, onMounted } from 'vue';
 import { router } from '@inertiajs/vue3';
-import axios from 'axios';  // Asegúrate de que axios esté importado
+import axios from 'axios';
 
 const cartItems = ref([]);
+const showCartNotification = ref(false);
 
 const loadCartFromServer = async () => {
     try {
-        const response = await axios.get('/cart/get');  // Asegúrate de que esta ruta devuelve los detalles del carrito
+        const response = await axios.get('/cart/get');
         cartItems.value = response.data.cartDetails.map(item => reactive(item));
         saveCart();
     } catch (error) {
@@ -28,7 +29,6 @@ const saveCart = () => {
 const cartCount = computed(() => cartItems.value.reduce((total, item) => total + item.quantity, 0));
 
 export default function useCart() {
-
     onMounted(async () => {
         loadCartFromLocalStorage();
         await loadCartFromServer();
@@ -53,6 +53,11 @@ export default function useCart() {
                 cartItems.value.push(newItem);
             }
             saveCart();
+
+            showCartNotification.value = true;
+            setTimeout(() => {
+                showCartNotification.value = false;
+            }, 3000);
 
             console.log("Product added successfully");
         } catch (error) {
@@ -122,5 +127,6 @@ export default function useCart() {
         updateCartDetail,
         removeCartDetail,
         clearCart,
+        showCartNotification
     };
 }
