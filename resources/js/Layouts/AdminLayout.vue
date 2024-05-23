@@ -27,11 +27,6 @@
                             <!-- Sidebar component, swap this element with another sidebar if you like -->
                             <div
                                 class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
-                                <div class="flex h-16 shrink-0 items-center">
-                                    <img class="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                        alt="Your Company" />
-                                </div>
                                 <nav class="flex flex-1 flex-col">
                                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
                                         <li>
@@ -83,10 +78,6 @@
             <div class="m-4 rounded-lg overflow-hidden bg-gray-100">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 p-6 ring-1 ring-white/10 rounded-2xl h-screen">
-                <div class="flex h-16 shrink-0 items-center">
-                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company" />
-                </div>
                 <!-- Componente Sidebar -->
                 <nav class="flex flex-1 flex-col">
                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -121,27 +112,6 @@
                                 </li>
                             </ul>
                         </li>
-<!--                        <li>-->
-<!--                            <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>-->
-<!--                            <ul role="list" class="-mx-2 mt-2 space-y-1">-->
-<!--                                <li v-for="team in teams" :key="team.name">-->
-<!--                                    <a :href="team.href"-->
-<!--                                        :class="[team.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">-->
-<!--                                        <span-->
-<!--                                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">{{-->
-<!--            team.initial }}</span>-->
-<!--                                        <span class="truncate">{{ team.name }}</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
-                        <li class="mt-auto mb-4">
-                            <a href="#"
-                                class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
-                                <Cog6ToothIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
-                                Settings
-                            </a>
-                        </li>
                     </ul>
                 </nav>
             </div>
@@ -170,10 +140,6 @@
                             placeholder="Search..." type="search" name="search" />
                     </form>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
-                        <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">View notifications</span>
-                            <BellIcon class="h-6 w-6" aria-hidden="true" />
-                        </button>
 
                         <!-- Separator -->
                         <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
