@@ -112,6 +112,24 @@ class ProductController extends Controller
         $userReview = $reviews->where('user_id', auth()->id())->first();
         $featuredReviews = $reviews->take(5);
 
+        $relatedProducts = Product::with('images')
+            ->whereHas('categories', function ($query) use ($product) {
+                return $query->whereIn('categories.id', $product->categories->pluck('id'));
+            })
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get()
+            ->map(function ($relatedProduct) {
+                return [
+                    'id' => $relatedProduct->id,
+                    'name' => $relatedProduct->name,
+                    'href' => route('products.show', $relatedProduct->slug),
+                    'imageSrc' => $relatedProduct->images->first() ? Storage::url($relatedProduct->images->first()->image_path) : null,
+                    'imageAlt' => $relatedProduct->name,
+                    'price' => $relatedProduct->price,
+                ];
+            });
+
         return Inertia::render('Products/Show', [
             'product' => $product,
             'reviews' => [
@@ -120,7 +138,8 @@ class ProductController extends Controller
                 'counts' => $ratingsCount,
                 'featured' => $featuredReviews,
                 'userReview' => $userReview
-            ]
+            ],
+            'relatedProducts' => $relatedProducts,
         ]);
     }
 

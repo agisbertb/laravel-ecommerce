@@ -158,6 +158,10 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Related products -->
+            <RelatedProductsSection :relatedProducts="relatedProducts" />
+
         </div>
         <AlertNotification v-if="showSuccessNotification" :title="successTitle" :message="successMessage" :type="'success'" v-model:visible="showSuccessNotification" />
         <AlertNotification v-if="showErrorNotification" :title="errorTitle" :message="errorMessage" :type="'error'" v-model:visible="showErrorNotification" />
@@ -168,7 +172,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {
     Disclosure,
@@ -186,11 +189,13 @@ import AddToWishlistButton from '@/Components/AddToWishlistButton.vue';
 import AlertNotification from '@/Components/AlertNotification.vue';
 import useCart from '@/Composables/useCart';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import RelatedProductsSection from "@/Components/RelatedProductsSection.vue";
 
 const props = defineProps({
     product: Object,
     siteSettings: Object,
-    reviews: Object
+    reviews: Object,
+    relatedProducts: Array,
 });
 
 const { auth } = usePage().props;
