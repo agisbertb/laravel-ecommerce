@@ -2,7 +2,6 @@
 
     @include('cookie-consent::dialogContents')
 
-    @vite('resources/js/cookie-consent.js')
 
     <script>
 
