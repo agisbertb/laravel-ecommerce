@@ -1,0 +1,1 @@
+nav[aria-label=Progress] ol li{flex:1 1 auto}nav[aria-label=Progress] ol li a{display:flex;align-items:center}nav[aria-label=Progress] ol li a span{display:flex;align-items:center}nav[aria-label=Progress] ol li span{display:flex;align-items:center}nav[aria-label=Progress] ol li span.cursor-not-allowed a{pointer-events:none}
