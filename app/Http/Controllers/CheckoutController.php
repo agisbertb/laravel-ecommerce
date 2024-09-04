@@ -50,11 +50,12 @@ class CheckoutController extends Controller
 
         // Fetch cart details to display products
         $cartDetails = $cart->details->map(function ($detail) {
+            $price = $detail->product->price ?? 0;
             return [
                 'id' => $detail->id,
                 'product' => [
                     'name' => $detail->product->name,
-                    'price' => $detail->price,
+                    'price' => is_numeric($price) ? (float) $price : 0,
                     'image' => $detail->product->image_url = $detail->product->images->isNotEmpty() ? Storage::url($detail->product->images->first()->image_path) : null,
                     'stock' => $detail->product->stock,
                 ],
@@ -64,7 +65,16 @@ class CheckoutController extends Controller
         });
 
         $cartTotal = $cartDetails->sum('subtotal');
-        $shippingOptions = ShippingOption::all();
+        $shippingOptions = ShippingOption::all()->map(function ($option) {
+            $price = $option->price ?? 0;
+            $estimated_delivery = $option->estimated_delivery ?? 'N/A';
+            return [
+                'id' => $option->id,
+                'name' => $option->name,
+                'price' => is_numeric($price) ? (float) $price : 0,
+                'estimated_delivery' => $estimated_delivery,
+            ];
+        });
 
         return Inertia::render('Checkout/Shipping', [
             'cartDetails' => $cartDetails,
@@ -98,13 +108,16 @@ class CheckoutController extends Controller
         $cartTotal = $cart ? $cart->details->sum('subtotal') : 0;
         $shippingPrice = session('shipping_price', 0);
 
+        if (!is_numeric($shippingPrice)) {
+            $shippingPrice = 0;
+        }
         $paymentMethods = [
             ['id' => 'credit_card', 'name' => 'Credit or debit card']
         ];
 
         return Inertia::render('Checkout/Payment', [
-            'cartTotal' => $cartTotal,
-            'shippingPrice' => $shippingPrice,
+            'cartTotal' => (float)$cartTotal,
+            'shippingPrice' => (float)$shippingPrice,
             'paymentMethods' => $paymentMethods,
         ]);
     }
