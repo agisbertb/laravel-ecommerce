@@ -307,9 +307,7 @@ const applyFilters = () => {
 }
 
 const sortOptions = [
-    {name: 'Most Popular', href: '#', order: 'popularity_desc', current: true},
-    {name: 'Best Rating', href: '#', order: 'rating_desc', current: false},
-    {name: 'Newest', href: '#', order: 'newest_desc', current: false},
+    {name: 'Newest', href: '#', order: 'newest_desc', current: true},
     {name: 'Price: Low to High', href: '#', order: 'price_asc', current: false},
     {name: 'Price: High to Low', href: '#', order: 'price_desc', current: false},
 ]

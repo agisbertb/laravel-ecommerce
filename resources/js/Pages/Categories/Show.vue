@@ -98,9 +98,7 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import { Link, router } from '@inertiajs/vue3'
 
 const sortOptions = [
-    {name: 'Most Popular', order: 'popularity_desc', current: true},
-    {name: 'Best Rating', order: 'rating_desc', current: false},
-    {name: 'Newest', order: 'newest_desc', current: false},
+    {name: 'Newest', order: 'newest_desc', current: true},
     {name: 'Price: Low to High', order: 'price_asc', current: false},
     {name: 'Price: High to Low', order: 'price_desc', current: false},
 ]

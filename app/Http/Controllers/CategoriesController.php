@@ -67,7 +67,7 @@ class CategoriesController extends Controller
 
     public function show(Category $category)
     {
-        $order = request()->input('order', 'popularity_desc');
+        $order = request()->input('order', 'newest_desc');
         $products = Product::with(['images', 'tags', 'categories', 'reviews'])
             ->whereHas('categories', function ($query) use ($category) {
                 $query->where('categories.id', $category->id);
@@ -78,10 +78,6 @@ class CategoriesController extends Controller
                     return $query->orderBy('created_at', $direction);
                 } elseif ($criteria === 'price') {
                     return $query->orderBy('price', $direction);
-                } elseif ($criteria === 'rating') {
-                    return $query->orderBy('average_rating', $direction);
-                } else {
-                    return $query->orderBy('popularity', $direction);
                 }
             })
             ->paginate(20)
@@ -97,6 +93,4 @@ class CategoriesController extends Controller
             'products' => $products,
         ]);
     }
-
-
 }
