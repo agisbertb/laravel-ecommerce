@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('image')->nullable();
             $table->boolean('favorite')->default(false);
-            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
