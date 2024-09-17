@@ -4,18 +4,13 @@
             <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
                     <div class="flex items-center h-24">
-                        <!-- Mobile menu -->
-                        <button type="button" class="relative rounded-md bg-white p-2 text-gray-400 lg:hidden" @click="open = true">
-                            <span class="absolute -inset-0.5" />
-                            <span class="sr-only">Open menu</span>
-                            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-                        </button>
+
                         <!-- Logo -->
-                        <div class="ml-4 flex lg:ml-0">
+                        <div class="flex sm:ml-0 lg:ml-0">
                             <a href="/">
                                 <span class="sr-only">{{ siteSettings.site_name }}</span>
                                 <div class="flex items-center">
-                                    <img v-if="logoUrl" :src="logoUrl" class="h-auto max-h-16 w-auto" alt="Site Logo" />
+                                    <img v-if="logoUrl" :src="logoUrl" class="h-8 sm:h-auto sm:max-h-16 w-auto" alt="Site Logo" />
                                     <span v-else>LOGO HERE</span>
                                 </div>
                             </a>
@@ -46,10 +41,10 @@
 
                             <!-- Login/Register -->
                             <template v-if="!$page.props.auth.user">
-                                <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
+                                <div class="lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-4 flow-root lg:ml-6">
                                     <NavLink :href="route('login')" class="text-sm font-bold text-gray-500 hover:text-gray-600">Login</NavLink>
-                                    <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
-                                    <NavLink :href="route('register')" class="text-sm font-bold text-gray-500 hover:text-gray-600">Register</NavLink>
+                                    <span class="hidden lg:block h-6 w-px bg-gray-200" aria-hidden="true" />
+                                    <NavLink :href="route('register')" class="hidden lg:block text-sm font-bold text-gray-500 hover:text-gray-600">Register</NavLink>
                                 </div>
                             </template>
 
@@ -92,7 +87,7 @@
             <nav aria-label="Secondary" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="border-b border-gray-200">
                     <div class="flex items-center h-12">
-                        <div class="ml-4 flex lg:ml-0">
+                        <div class="flex sm:ml-0 lg:ml-0">
                             <Link :href="route('categories.index')" class="text-lg font-bold text-gray-500 hover:text-gray-600">All Categories</Link>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <template>
-    <div class="relative flex-1 flex justify-center px-2 lg:ml-6 lg:justify-center" ref="searchContainerRef">
+    <div class="relative flex-1 flex justify-center px-2 sm:ml-6 lg:ml-6 lg:justify-center hidden sm:block" ref="searchContainerRef">
         <div v-if="openSearch" class="fixed inset-0 bg-black bg-opacity-50 z-10" @click="closeSearch"></div>
-        <div class="max-w-2xl w-full relative z-20"> <!-- Añadido z-20 para asegurarse de que esté por encima de la overlay -->
+        <div class="max-w-2xl w-full relative z-20">
             <label for="search" class="sr-only">Search</label>
             <div class="relative">
                 <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
