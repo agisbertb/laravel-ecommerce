@@ -134,10 +134,6 @@ const saveAndContinue = () => {
                                 <span class="text-gray-600">Subtotal:</span>
                                 <span class="font-bold">{{ cartTotal }}€</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Shipping:</span>
-                                <span>Free</span>
-                            </div>
                             <div class="flex justify-between mt-4 border-t border-gray-200 pt-4">
                                 <span class="font-bold text-lg">Total:</span>
                                 <span class="font-bold text-lg">{{ cartTotal }}€</span>
