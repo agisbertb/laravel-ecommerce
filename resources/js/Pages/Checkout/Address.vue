@@ -132,7 +132,7 @@ const saveAndContinue = () => {
                         <div class="mt-6">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Subtotal:</span>
-                                <span class="font-bold">${{ cartTotal }}</span>
+                                <span class="font-bold">{{ cartTotal }}€</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Shipping:</span>
@@ -140,7 +140,7 @@ const saveAndContinue = () => {
                             </div>
                             <div class="flex justify-between mt-4 border-t border-gray-200 pt-4">
                                 <span class="font-bold text-lg">Total:</span>
-                                <span class="font-bold text-lg">${{ cartTotal }}</span>
+                                <span class="font-bold text-lg">{{ cartTotal }}€</span>
                             </div>
                         </div>
                         <div class="mt-6 flex justify-center">

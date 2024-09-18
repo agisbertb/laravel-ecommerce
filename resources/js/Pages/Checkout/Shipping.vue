@@ -59,8 +59,8 @@ const saveShippingOption = () => {
                                                     <a :href="`/products/${detail.product.id}`" class="font-medium text-gray-700 hover:text-gray-800">{{ detail.product.name }}</a>
                                                 </h3>
                                             </div>
-                                            <p class="mt-1 text-sm font-medium text-gray-900">{{ detail.product.price.toFixed(2) }} € x {{ detail.quantity }}</p>
-                                            <p class="mt-1 text-sm font-medium text-gray-900">Subtotal: {{ detail.subtotal.toFixed(2) }} €</p>
+                                            <p class="mt-1 text-sm font-medium text-gray-900">{{ detail.product.price.toFixed(2) }}€ x {{ detail.quantity }}</p>
+                                            <p class="mt-1 text-sm font-medium text-gray-900">Subtotal: {{ detail.subtotal.toFixed(2) }}€</p>
                                         </div>
                                     </div>
                                     <p class="mt-4 flex space-x-2 text-sm text-gray-700">
@@ -82,7 +82,7 @@ const saveShippingOption = () => {
                                     <input type="radio" name="shipping" :value="option.id" class="form-radio" v-model="selectedShippingOption" />
                                     <span class="ml-2">{{ option.name }}</span>
                                 </label>
-                                <p>{{ option.price.toFixed(2) }} €</p>
+                                <p>{{ option.price.toFixed(2) }}€</p>
                                 <p>Delivery: {{ option.estimated_delivery }}</p>
                             </div>
                         </div>
@@ -95,17 +95,17 @@ const saveShippingOption = () => {
                             <div class="mt-6">
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Subtotal:</span>
-                                    <span class="font-bold">{{ cartTotal.toFixed(2) }} €</span>
+                                    <span class="font-bold">{{ cartTotal.toFixed(2) }}€</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Shipping:</span>
-                                    <span v-if="selectedShippingOption">{{ shippingOptions.find(option => option.id == selectedShippingOption).price.toFixed(2) }} €</span>
+                                    <span v-if="selectedShippingOption">{{ shippingOptions.find(option => option.id == selectedShippingOption).price.toFixed(2) }}€</span>
                                     <span v-else>-</span>
                                 </div>
                                 <div class="flex justify-between mt-4 border-t border-gray-200 pt-4">
                                     <span class="font-bold text-lg">Total:</span>
                                     <span class="font-bold text-lg">
-                                        {{ (cartTotal + (selectedShippingOption ? shippingOptions.find(option => option.id == selectedShippingOption).price : 0)).toFixed(2) }} €
+                                        {{ (cartTotal + (selectedShippingOption ? shippingOptions.find(option => option.id == selectedShippingOption).price : 0)).toFixed(2) }}€
                                     </span>
                                 </div>
                             </div>
