@@ -32,7 +32,7 @@
                                                         <a :href="`/products/${detail.product.id}`" class="font-medium text-gray-700 hover:text-gray-800">{{ detail.product.name }}</a>
                                                     </h3>
                                                 </div>
-                                                <p class="mt-1 text-sm font-medium text-gray-900">${{ detail.price }}</p>
+                                                <p class="mt-1 text-sm font-medium text-gray-900">{{ detail.price }}€</p>
                                             </div>
                                             <div class="mt-4 sm:mt-0 sm:pr-9">
                                                 <label :for="`quantity-${index}`" class="sr-only">Quantity, {{ detail.product.name }}</label>
