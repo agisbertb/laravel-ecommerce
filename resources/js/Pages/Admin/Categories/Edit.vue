@@ -148,7 +148,7 @@ function removeImage() {
                                     <div class="space-y-1 text-center">
                                         <PhotoIcon class="mx-auto h-12 w-12 text-gray-400" />
                                         <div class="flex text-sm text-gray-600">
-                                            <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                 <span>Upload a file</span>
                                                 <input id="image" name="image" type="file" class="sr-only" @change="handleImageChange">
                                             </label>

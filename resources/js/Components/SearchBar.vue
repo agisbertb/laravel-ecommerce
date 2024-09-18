@@ -13,7 +13,7 @@
                     v-model="searchQuery"
                     @focus="openSearch = true"
                     @input="fetchResults"
-                    class="block w-full pl-10 pr-10 py-2 border border-transparent rounded-md leading-5 bg-gray-100 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white focus:border-white focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                    class="block w-full pl-10 pr-10 py-2 border border-transparent rounded-md leading-5 bg-gray-100 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white focus:border-white focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                     placeholder="Search"
                     type="search"
                 />

@@ -73,16 +73,16 @@
                 <!-- Pagination Section -->
                 <nav aria-label="Pagination" class="mx-auto mt-6 flex max-w-7xl justify-between px-4 text-sm font-medium text-gray-700 sm:px-6 lg:px-8">
                     <div class="min-w-0 flex-1">
-                        <a @click.prevent="changePage(products.prev_page_url)" class="inline-flex h-10 items-center rounded-md border border-gray-300 bg-white px-4 hover:bg-gray-100 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-indigo-600" :class="{ 'cursor-not-allowed': !products.prev_page_url }" :aria-disabled="!products.prev_page_url">Previous</a>
+                        <a @click.prevent="changePage(products.prev_page_url)" class="inline-flex h-10 items-center rounded-md border border-gray-300 bg-white px-4 hover:bg-gray-100 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-blue-600" :class="{ 'cursor-not-allowed': !products.prev_page_url }" :aria-disabled="!products.prev_page_url">Previous</a>
                     </div>
                     <div class="hidden space-x-2 sm:flex">
                         <template v-for="page in products.last_page" :key="page">
-                            <a v-if="page === '...' || page === products.current_page || Math.abs(page - products.current_page) < 3" @click.prevent="changePage(page)" :class="[page === products.current_page ? 'border-indigo-600 ring-1 ring-indigo-600' : 'border-gray-300', 'inline-flex h-10 items-center rounded-md border bg-white px-4 hover:bg-gray-100 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-indigo-600']">{{ page }}</a>
+                            <a v-if="page === '...' || page === products.current_page || Math.abs(page - products.current_page) < 3" @click.prevent="changePage(page)" :class="[page === products.current_page ? 'border-blue-600 ring-1 ring-blue-600' : 'border-gray-300', 'inline-flex h-10 items-center rounded-md border bg-white px-4 hover:bg-gray-100 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-blue-600']">{{ page }}</a>
                             <span v-else-if="Math.abs(page - products.current_page) === 3" class="inline-flex h-10 items-center px-1.5 text-gray-500">...</span>
                         </template>
                     </div>
                     <div class="flex min-w-0 flex-1 justify-end">
-                        <a @click.prevent="changePage(products.next_page_url)" class="inline-flex h-10 items-center rounded-md border border-gray-300 bg-white px-4 hover:bg-gray-100 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-indigo-600" :class="{ 'cursor-not-allowed': !products.next_page_url }" :aria-disabled="!products.next_page_url">Next</a>
+                        <a @click.prevent="changePage(products.next_page_url)" class="inline-flex h-10 items-center rounded-md border border-gray-300 bg-white px-4 hover:bg-gray-100 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-25 focus:ring-offset-1 focus:ring-offset-blue-600" :class="{ 'cursor-not-allowed': !products.next_page_url }" :aria-disabled="!products.next_page_url">Next</a>
                     </div>
                 </nav>
             </main>

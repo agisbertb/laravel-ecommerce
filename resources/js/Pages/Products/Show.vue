@@ -125,7 +125,7 @@
                                 <form @submit.prevent="submitReview">
                                     <div>
                                         <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
-                                        <select v-model="form.rating" id="rating" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <select v-model="form.rating" id="rating" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                             <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
                                         </select>
                                     </div>

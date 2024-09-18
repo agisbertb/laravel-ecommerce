@@ -60,7 +60,7 @@
                                                             :name="`categories[]`"
                                                             :value="category.id"
                                                             type="checkbox"
-                                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                             v-model="selectedCategories"
                                                             @change="applyFilters"
                                                         />
@@ -88,7 +88,7 @@
                                                             :name="`tags[]`"
                                                             :value="tag.id"
                                                             type="checkbox"
-                                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                             v-model="selectedTags"
                                                             @change="applyFilters"
                                                         />
@@ -134,7 +134,7 @@
                                     </MenuItems>
                                 </transition>
                             </Menu>
-                            
+
                             <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
                                 <span class="sr-only">Filters</span>
                                 <FunnelIcon class="h-5 w-5" aria-hidden="true" />
@@ -166,7 +166,7 @@
                                                     :name="`categories[]`"
                                                     :value="category.id"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                    class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                     v-model="selectedCategories"
                                                     @change="applyFilters"
                                                 />
@@ -194,7 +194,7 @@
                                                     :name="`tags[]`"
                                                     :value="tag.id"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                    class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                     v-model="selectedTags"
                                                     @change="applyFilters"
                                                 />

@@ -8,7 +8,7 @@
                             <span class="absolute left-0 top-0 h-full w-1 bg-transparent group-hover:bg-gray-200 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" aria-hidden="true" />
                             <span :class="[stepIdx !== 0 ? 'lg:pl-9' : '', 'flex items-start px-6 py-5 text-sm font-medium']">
                 <span class="flex-shrink-0">
-                  <span class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600">
+                  <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
                     <CheckIcon class="h-6 w-6 text-white" aria-hidden="true" />
                   </span>
                 </span>
@@ -19,15 +19,15 @@
               </span>
                         </a>
                         <a v-else-if="step.status === 'current'" :href="step.href" aria-current="step">
-                            <span class="absolute left-0 top-0 h-full w-1 bg-indigo-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" aria-hidden="true" />
+                            <span class="absolute left-0 top-0 h-full w-1 bg-blue-600 lg:bottom-0 lg:top-auto lg:h-1 lg:w-full" aria-hidden="true" />
                             <span :class="[stepIdx !== 0 ? 'lg:pl-9' : '', 'flex items-start px-6 py-5 text-sm font-medium']">
                 <span class="flex-shrink-0">
-                  <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-indigo-600">
-                    <span class="text-indigo-600">{{ step.id }}</span>
+                  <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600">
+                    <span class="text-blue-600">{{ step.id }}</span>
                   </span>
                 </span>
                 <span class="ml-4 mt-0.5 flex min-w-0 flex-col">
-                  <span class="text-sm font-medium text-indigo-600">{{ step.name }}</span>
+                  <span class="text-sm font-medium text-blue-600">{{ step.name }}</span>
                   <span class="text-sm font-medium text-gray-500">{{ step.description }}</span>
                 </span>
               </span>
