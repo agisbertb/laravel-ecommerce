@@ -63,12 +63,12 @@
                             <dl class="mt-6 space-y-4">
                                 <div class="flex items-center justify-between">
                                     <dt class="text-sm text-gray-600">Subtotal</dt>
-                                    <dd class="text-sm font-medium text-gray-900">${{ cartTotal }}</dd>
+                                    <dd class="text-sm font-medium text-gray-900">{{ cartTotal }}€</dd>
                                 </div>
                                 <!-- Add shipping and tax if needed -->
                                 <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                                     <dt class="text-base font-medium text-gray-900">Order total</dt>
-                                    <dd class="text-base font-medium text-gray-900">${{ cartTotal }}</dd>
+                                    <dd class="text-base font-medium text-gray-900">{{ cartTotal }}€</dd>
                                 </div>
                             </dl>
                             <div class="mt-6 flex justify-center">
