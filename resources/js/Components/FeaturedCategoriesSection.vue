@@ -9,7 +9,7 @@
                 </Link>
             </div>
 
-            <div class="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
+            <div class="mt-16 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
                 <!-- Category left -->
                 <div v-if="categories.length > 0" class="group aspect-h-1 aspect-w-2 overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-1 sm:row-span-2">
                     <img :src="'/storage/' + categories[0].image" :alt="categories[0].description" class="object-cover object-center group-hover:opacity-75 duration-300 ease-in-out group-hover:scale-110" />

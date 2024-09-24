@@ -1,6 +1,6 @@
 <template>
     <AppLayout :siteSettings="siteSettings" title="Welcome">
-        <div class="py-12 bg-white">
+        <div class="pb-12 bg-white">
             <div class="max-w-7xl mx-auto sm:px-0 lg:px-0">
                 <FeaturedCategoriesSection :categories="featuredCategories"/>
                 <FavoriteProducts :products="favoriteProducts" />
